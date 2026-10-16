@@ -437,6 +437,15 @@
     });
   }
 
+  /* ---------- menu: highlight the link of the section in the middle of the screen ---------- */
+  {
+    const OWNER = { films: 'films', reels: 'reels', cases: 'reels', grade: 'reels', snow: 'photos', photos: 'photos', clients: 'about', about: 'about', services: 'about', contact: 'contact' };
+    const links = $$('#nav a[href^="#"]'), mark = id => links.forEach(l => l.classList.toggle('is-here', !!id && l.getAttribute('href') === '#' + id));
+    // a thin line across the middle of the screen: whichever section crosses it owns the menu
+    const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) mark(OWNER[e.target.id]); }), { rootMargin: '-45% 0px -54% 0px' });
+    ['top', ...Object.keys(OWNER)].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+  }
+
   /* ---------- case studies ---------- */
   function renderCases() {
     const box = $('#caseList'); if (!box) return; box.innerHTML = '';

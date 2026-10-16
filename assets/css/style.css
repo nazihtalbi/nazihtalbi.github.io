@@ -1063,3 +1063,13 @@ body.is-gated .wa-float { display: none; }
   .case--flip .case__media { order: 0; }
   .case__bts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* ---------- menu: the section on screen is highlighted ---------- */
+@media (min-width: 761px) {
+  .bar__nav a:not(.bar__cta) { position: relative; padding: .35rem .15rem; transition: color .3s; }
+  .bar__nav a:not(.bar__cta)::after { content: ''; position: absolute; inset-inline: .15rem; bottom: -.15rem; height: 2px; border-radius: 2px; background: var(--tungsten); transform: scaleX(0); transition: transform .45s var(--ease); }
+  .bar__nav a.is-here { color: var(--bone); }
+  .bar__nav a.is-here::after { transform: scaleX(1); }
+  .bar__nav .bar__cta.is-here { box-shadow: 0 0 0 3px rgba(245, 184, 65, .3); }
+}
+@media (max-width: 760px) { .bar__nav a.is-here:not(.bar__cta) { color: var(--tungsten); } }

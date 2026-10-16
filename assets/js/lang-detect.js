@@ -1,7 +1,7 @@
 /* Picks the starting language before the page is drawn (so Arabic never flashes left-to-right).
    Order of priority:
    1. ?lang=xx in the address (useful for sharing a link in a given language)
-   3. Algeria (from the browser's region or time zone): Arabic
+   3. Algeria (from the browser's region or time zone): English
    4. the browser's preferred language, if it is Arabic, French or German
    5. the country's language (from region or time zone): Arabic / French / German
    6. English */
@@ -42,7 +42,8 @@
   var base = prefs.map(function (l) { return l.slice(0, 2).toLowerCase(); });
 
   function suggest() {
-    if (where === 'DZ' || country === 'DZ') return { lang: 'ar', why: 'country' };
+    // visitors in Algeria are offered English first (they can still pick Arabic or French on the welcome screen)
+    if (where === 'DZ' || country === 'DZ') return { lang: 'en', why: 'country' };
     if (base[0] === 'ar' || base[0] === 'fr' || base[0] === 'de') return { lang: base[0], why: 'browser' };
     var byCountry = countryLang(where) || countryLang(country);
     if (byCountry) return { lang: byCountry, why: 'country' };
