@@ -6,7 +6,9 @@ window.DATA = (() => {
   // While it is empty, "Send message" opens the visitor's email app instead.
   const FORM_KEY = '5f5e5b51-6deb-44fd-84a2-9a055283fe1b';
 
-  const V = 'assets/media/video/', P = 'assets/media/photos/', L = 'assets/media/logos/';
+  // pages in a language folder (fr/, ar/, de/) set window.SITE_ROOT = '../'
+  const R = window.SITE_ROOT || '';
+  const V = R + 'assets/media/video/', P = R + 'assets/media/photos/', L = R + 'assets/media/logos/';
 
   const CLIENTS = {
     almaahed: { name: 'Almaahed International', logo: L + 'almaahed.png' },
@@ -327,5 +329,42 @@ window.DATA = (() => {
   const MIXED = []; let k = 0;
   while (MIXED.length < PHOTOS.length && k < 100000) { const c = order[k++ % order.length]; if (pools[c] && pools[c].length) MIXED.push(pools[c].shift()); }
 
-  return { FORM_KEY, V, CLIENTS, TYPE, FILMS: FILMS.filter(f => !f.hidden), REELS, SPOTLIGHT, REEL_GROUPS, CLIENT_INFO, CLIENT_FILM, PHOTOS: MIXED, COVER, COVERS, CATS: keys, CAT_LABELS };
+  // Case studies: the brief, what I did, behind-the-scenes stills (assets/media/site/) and the finished work.
+  const S = R + 'assets/media/site/';
+  const CASES = [
+    { client: 'masaar', cover: 'masaar-event', play: 'masaar-shortfilm',
+      title: { en: 'Launching Masaar', fr: 'Le lancement de Masaar', ar: 'إطلاق مسار', de: 'Der Start von Masaar' },
+      brief: { en: 'Masaar is a youth programme with its own app. They needed to introduce the young team behind it, cover the public launch with speakers on stage and a full hall, and keep their pages alive in the weeks after.',
+        fr: "Masaar est un programme pour les jeunes, avec sa propre application. Il fallait présenter la jeune équipe qui le porte, couvrir le lancement public, avec des intervenants sur scène et une salle comble, puis faire vivre leurs pages les semaines suivantes.",
+        ar: 'مسار برنامج موجّه للشباب وله تطبيقه الخاص. كان المطلوب تقديم الفريق الشاب الذي يقف وراءه، وتغطية حفل الإطلاق بمتحدثيه وقاعته الممتلئة، ثم إبقاء صفحاتهم نشطة في الأسابيع التالية.',
+        de: 'Masaar ist ein Jugendprogramm mit eigener App. Es galt, das junge Team dahinter vorzustellen, den öffentlichen Launch mit Rednern auf der Bühne und vollem Saal zu filmen und die Kanäle in den Wochen danach zu bespielen.' },
+      did: [
+        { en: 'A short film about the team, from their first meeting to the night the results were announced', fr: "Un court métrage sur l'équipe, de la première réunion au soir de l'annonce des résultats", ar: 'فيلم قصير عن الفريق، من أول لقاء إلى ليلة إعلان النتائج', de: 'Ein Kurzfilm über das Team, vom ersten Treffen bis zum Abend der Ergebnisse' },
+        { en: 'The opening ceremony filmed from the stage to the back row, with drone shots inside the hall', fr: "La cérémonie d'ouverture filmée de la scène au dernier rang, avec des plans de drone dans la salle", ar: 'حفل الافتتاح مصوَّرًا من المنصة إلى آخر صف، مع لقطات درون داخل القاعة', de: 'Die Eröffnungsfeier, gefilmt von der Bühne bis zur letzten Reihe, mit Drohnenaufnahmen im Saal' },
+        { en: 'Reels for the app launch and the weeks that followed', fr: "Des reels pour le lancement de l'application et les semaines suivantes", ar: 'ريلز لإطلاق التطبيق وللأسابيع التي تلته', de: 'Reels zum App-Launch und für die Wochen danach' } ],
+      bts: [
+        [S + 'case-masaar-1.webp', { en: 'On set', fr: 'Sur le tournage', ar: 'أثناء التصوير', de: 'Am Set' }],
+        [S + 'case-masaar-2.webp', { en: 'A drone flight inside the hall', fr: 'Un vol de drone dans la salle', ar: 'تحليق الدرون داخل القاعة', de: 'Drohnenflug im Saal' }],
+        [S + 'case-masaar-3.webp', { en: "The drone's live view", fr: 'Le retour vidéo du drone', ar: 'البث المباشر من الدرون', de: 'Das Livebild der Drohne' }],
+        [S + 'case-masaar-4.webp', { en: 'At the sound desk', fr: 'À la régie son', ar: 'عند طاولة الصوت', de: 'Am Tonpult' }] ],
+      films: ['masaar-shortfilm', 'masaar-event'] },
+    { client: 'almaahed', cover: 'almaahed-documentary', play: 'almaahed-documentary',
+      title: { en: 'Almaahed International, all year round', fr: "Almaahed International, toute l'année", ar: 'Almaahed International على مدار السنة', de: 'Almaahed International, das ganze Jahr' },
+      brief: { en: 'A language institute that wanted a steady flow of films and photos: who they are, their big days, and regular content for their social media.',
+        fr: 'Un institut de langues qui voulait des films et des photos en continu : qui ils sont, leurs grands jours et du contenu régulier pour leurs réseaux sociaux.',
+        ar: 'معهد لغات أراد تدفقًا مستمرًا من الأفلام والصور: من هم، وأيامهم الكبرى، ومحتوى منتظمًا لمنصاتهم.',
+        de: 'Ein Sprachinstitut, das laufend Filme und Fotos wollte: wer sie sind, ihre großen Tage und regelmäßige Inhalte für Social Media.' },
+      did: [
+        { en: "A documentary in which teachers, students and parents speak, and the institute's official short film", fr: "Un documentaire où parlent enseignants, élèves et parents, et le court métrage officiel de l'institut", ar: 'فيلم وثائقي يتحدث فيه الأساتذة والطلبة والأولياء، والفيلم القصير الرسمي للمعهد', de: 'Ein Dokumentarfilm, in dem Lehrkräfte, Schüler und Eltern zu Wort kommen, und der offizielle Kurzfilm des Instituts' },
+        { en: "Event films: graduation and World Teachers' Day, Ramadan", fr: "Des films d'événements : remise des diplômes et Journée des enseignants, Ramadan", ar: 'أفلام فعاليات: حفل التخرج واليوم العالمي للمعلم، ورمضان', de: 'Eventfilme: Abschlussfeier und Weltlehrertag, Ramadan' },
+        { en: 'Reel series: announcements I present on camera, and testimonials from teachers and students', fr: "Des séries de reels : des annonces que je présente face caméra et des témoignages d'enseignants et d'élèves", ar: 'سلاسل ريلز: إعلانات أقدّمها أمام الكاميرا، وشهادات أساتذة وطلبة', de: 'Reel-Serien: Ankündigungen, die ich vor der Kamera präsentiere, und Stimmen von Lehrkräften und Schülern' },
+        { en: 'Photography in classes and at events', fr: 'Des photos en classe et lors des événements', ar: 'تصوير فوتوغرافي في الأقسام وخلال الفعاليات', de: 'Fotos im Unterricht und bei Veranstaltungen' } ],
+      bts: [
+        [S + 'case-almaahed-1.webp', { en: 'A camera running quietly during class', fr: 'Une caméra qui tourne discrètement pendant le cours', ar: 'كاميرا تصوّر بهدوء أثناء الدرس', de: 'Eine Kamera läuft leise im Unterricht' }],
+        [S + 'case-almaahed-2.webp', { en: "Filming at the students' eye level", fr: 'Filmer à hauteur des élèves', ar: 'التصوير بمستوى نظر الطلبة', de: 'Auf Augenhöhe der Schüler gefilmt' }],
+        [S + 'case-almaahed-3.webp', { en: 'The interview set for the documentary', fr: "Le plateau d'interview du documentaire", ar: 'ديكور المقابلات في الفيلم الوثائقي', de: 'Das Interview-Set für die Doku' }] ],
+      films: ['almaahed-documentary', 'almaahed-shortfilm', 'graduation-2026', 'ramadan'] },
+  ];
+
+  return { FORM_KEY, V, CLIENTS, TYPE, FILMS: FILMS.filter(f => !f.hidden), REELS, SPOTLIGHT, REEL_GROUPS, CLIENT_INFO, CLIENT_FILM, PHOTOS: MIXED, COVER, COVERS, CATS: keys, CAT_LABELS, CASES };
 })();

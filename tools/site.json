@@ -1,0 +1,10 @@
+{
+  "url": "https://nazih002.github.io/",
+  "note": "The website's public address, ending with /. Change it if you publish somewhere else, then run Update website.bat.",
+  "seo": {
+    "en": { "title": "Nazih Talbi | Videographer & Photographer in Algeria", "description": "Nazih Talbi, videographer and photographer in Algeria: event films, documentaries, short films, ads, reels and photography for schools, institutions and brands." },
+    "fr": { "title": "Nazih Talbi | Vidéaste et photographe en Algérie", "description": "Nazih Talbi, vidéaste et photographe en Algérie : films d'événements, documentaires, courts métrages, publicités, reels et photographie pour écoles, institutions et marques." },
+    "ar": { "title": "نزيه طالبي | مصور فيديو ومصور فوتوغرافي في الجزائر", "description": "نزيه طالبي، مصور فيديو ومصور فوتوغرافي في الجزائر: أفلام فعاليات، أفلام وثائقية، أفلام قصيرة، إعلانات، ريلز وتصوير فوتوغرافي للمدارس والمؤسسات والعلامات التجارية." },
+    "de": { "title": "Nazih Talbi | Videograf & Fotograf in Algerien", "description": "Nazih Talbi, Videograf und Fotograf in Algerien: Eventfilme, Dokumentarfilme, Kurzfilme, Werbung, Reels und Fotografie für Schulen, Institutionen und Marken." }
+  }
+}

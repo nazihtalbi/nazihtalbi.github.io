@@ -44,7 +44,9 @@ window.I18N = {
     nameFirst: 'Nazih', nameLast: 'Talbi', fullName: 'Nazih Talbi',
     gradeKicker: 'Colour grading', gradeTitle: 'From flat to film', gradeIntro: 'Filmed in RAW and log to hold every detail in the highlights and shadows, then graded by hand: natural skin, true colour and cinematic contrast. Drag the line to compare.', gradeBefore: 'S-Log3 — Original', gradeAfter: 'Professionally Color Graded', gradeHint: 'Drag to compare', gradeRange: 'Compare the original log footage with the graded version', gradeS1: 'Log to Rec.709', gradeS2: 'Exposure and white balance', gradeS3: 'Natural skin tones', gradeS4: 'Contrast and film look', gradeShot: 'Sony ZV-E10, 4K, S-Log3',
     gradeBeforeBraw: 'Blackmagic RAW — Original', gradeShotBraw: 'Blackmagic Pocket Cinema Camera 4K, Blackmagic RAW', gradeTabBraw: 'Blackmagic RAW', gradeTabSlog: 'Sony S-Log3', gradeChoose: 'Choose a shot',
-    ctaReel: 'Watch the showreel', reelTitle: 'Showreel 2026', waFloat: 'Message me on WhatsApp',
+    waTip: "Let's talk about your project", ctaReel: 'Watch the showreel', reelTitle: 'Showreel 2026', waFloat: 'Message me on WhatsApp',
+    casesTitle: 'Case studies', casesIntro: 'Two projects from start to finish: what the client asked for, how it was filmed, and what they received.', caseBrief: 'The brief', caseDid: 'What I did', caseBts: 'Behind the scenes', caseResult: 'The result', caseReels: '{n} reels', casePlay: 'Watch the film',
+    seoTitle: "Nazih Talbi | Videographer & Photographer in Algeria", seoDesc: "Nazih Talbi, videographer and photographer in Algeria: event films, documentaries, short films, ads, reels and photography for schools, institutions and brands.",
     sendWa: 'Send on WhatsApp', sendMail: 'Send by email', mailSubject: 'New project', msgHello: 'Hello Nazih,', msgFrom: 'Name', msgType: 'Project type',
     toTop: 'Back to top'
   },
@@ -92,7 +94,9 @@ window.I18N = {
     nameFirst: 'Nazih', nameLast: 'Talbi', fullName: 'Nazih Talbi',
     gradeKicker: 'Étalonnage', gradeTitle: 'Du log au cinéma', gradeIntro: "Filmé en RAW et en log pour garder chaque détail dans les hautes lumières et les ombres, puis étalonné à la main : une peau naturelle, des couleurs justes et un contraste cinéma. Faites glisser la ligne pour comparer.", gradeBefore: 'S-Log3 — Original', gradeAfter: 'Étalonnage professionnel', gradeHint: 'Glissez pour comparer', gradeRange: "Comparer l'image S-Log3 d'origine et la version étalonnée", gradeS1: 'Log vers Rec.709', gradeS2: 'Exposition et balance des blancs', gradeS3: 'Tons chair naturels', gradeS4: 'Contraste et rendu film', gradeShot: 'Sony ZV-E10, 4K, S-Log3',
     gradeBeforeBraw: 'Blackmagic RAW — Original', gradeShotBraw: 'Blackmagic Pocket Cinema Camera 4K, Blackmagic RAW', gradeTabBraw: 'Blackmagic RAW', gradeTabSlog: 'Sony S-Log3', gradeChoose: 'Choisir un plan',
-    ctaReel: 'Voir le showreel', reelTitle: 'Showreel 2026', waFloat: "M'écrire sur WhatsApp",
+    waTip: 'Parlons de votre projet', ctaReel: 'Voir le showreel', reelTitle: 'Showreel 2026', waFloat: "M'écrire sur WhatsApp",
+    casesTitle: 'Études de cas', casesIntro: "Deux projets du début à la fin : la demande du client, le tournage et ce qu'il a reçu.", caseBrief: 'La demande', caseDid: "Ce que j'ai fait", caseBts: 'Les coulisses', caseResult: 'Le résultat', caseReels: '{n} reels', casePlay: 'Voir le film',
+    seoTitle: "Nazih Talbi | Vidéaste et photographe en Algérie", seoDesc: "Nazih Talbi, vidéaste et photographe en Algérie : films d'événements, documentaires, courts métrages, publicités, reels et photographie pour écoles, institutions et marques.",
     sendWa: 'Envoyer sur WhatsApp', sendMail: 'Envoyer par e-mail', mailSubject: 'Nouveau projet', msgHello: 'Bonjour Nazih,', msgFrom: 'Nom', msgType: 'Type de projet',
     toTop: 'Retour en haut'
   },
@@ -140,7 +144,9 @@ window.I18N = {
     nameFirst: 'نزيه', nameLast: 'طالبي', fullName: 'نزيه طالبي',
     gradeKicker: 'تدريج الألوان', gradeTitle: 'من الصورة الخام إلى السينما', gradeIntro: 'صُوّر بصيغة RAW ونظام Log للحفاظ على كل التفاصيل في الإضاءات العالية والظلال، ثم دُرّجت ألوانه يدويًا: بشرة طبيعية وألوان حقيقية وتباين سينمائي. اسحب الخط للمقارنة.', gradeBefore: 'S-Log3 — الأصلي', gradeAfter: 'تدريج ألوان احترافي', gradeHint: 'اسحب للمقارنة', gradeRange: 'قارن لقطة S-Log3 الأصلية بالنسخة المدرّجة', gradeS1: 'من Log إلى Rec.709', gradeS2: 'التعريض وتوازن الأبيض', gradeS3: 'ألوان بشرة طبيعية', gradeS4: 'التباين والطابع السينمائي', gradeShot: 'Sony ZV-E10، دقة 4K، S-Log3',
     gradeBeforeBraw: 'Blackmagic RAW — الأصلي', gradeShotBraw: 'Blackmagic Pocket Cinema Camera 4K، بصيغة Blackmagic RAW', gradeTabBraw: 'Blackmagic RAW', gradeTabSlog: 'Sony S-Log3', gradeChoose: 'اختر لقطة',
-    ctaReel: 'شاهد الشوريل', reelTitle: 'شوريل 2026', waFloat: 'راسلني على واتساب',
+    waTip: 'لنتحدث عن مشروعك', ctaReel: 'شاهد الشوريل', reelTitle: 'شوريل 2026', waFloat: 'راسلني على واتساب',
+    casesTitle: 'دراسات حالة', casesIntro: 'مشروعان من البداية إلى النهاية: ما طلبه العميل، وكيف صُوّر العمل، وما الذي استلمه.', caseBrief: 'المطلوب', caseDid: 'ما قمت به', caseBts: 'كواليس التصوير', caseResult: 'النتيجة', caseReels: '{n} ريلز', casePlay: 'شاهد الفيلم',
+    seoTitle: "نزيه طالبي | مصور فيديو ومصور فوتوغرافي في الجزائر", seoDesc: "نزيه طالبي، مصور فيديو ومصور فوتوغرافي في الجزائر: أفلام فعاليات، أفلام وثائقية، أفلام قصيرة، إعلانات، ريلز وتصوير فوتوغرافي للمدارس والمؤسسات والعلامات التجارية.",
     sendWa: 'أرسل عبر واتساب', sendMail: 'أرسل عبر البريد', mailSubject: 'مشروع جديد', msgHello: 'مرحبًا نزيه،', msgFrom: 'الاسم', msgType: 'نوع المشروع',
     toTop: 'العودة إلى الأعلى'
   },
@@ -188,7 +194,9 @@ window.I18N = {
     nameFirst: 'Nazih', nameLast: 'Talbi', fullName: 'Nazih Talbi',
     gradeKicker: 'Color Grading', gradeTitle: 'Von flach zu filmisch', gradeIntro: 'In RAW und Log gedreht, um jedes Detail in Lichtern und Schatten zu bewahren, dann von Hand gegradet: natürliche Haut, echte Farben und Kinokontrast. Ziehen Sie die Linie zum Vergleichen.', gradeBefore: 'S-Log3 — Original', gradeAfter: 'Professionell gegradet', gradeHint: 'Zum Vergleichen ziehen', gradeRange: 'Original-S-Log3-Aufnahme mit der gegradeten Version vergleichen', gradeS1: 'Log zu Rec.709', gradeS2: 'Belichtung und Weißabgleich', gradeS3: 'Natürliche Hauttöne', gradeS4: 'Kontrast und Film-Look', gradeShot: 'Sony ZV-E10, 4K, S-Log3',
     gradeBeforeBraw: 'Blackmagic RAW — Original', gradeShotBraw: 'Blackmagic Pocket Cinema Camera 4K, Blackmagic RAW', gradeTabBraw: 'Blackmagic RAW', gradeTabSlog: 'Sony S-Log3', gradeChoose: 'Aufnahme wählen',
-    ctaReel: 'Showreel ansehen', reelTitle: 'Showreel 2026', waFloat: 'Schreib mir auf WhatsApp',
+    waTip: 'Lass uns über dein Projekt sprechen', ctaReel: 'Showreel ansehen', reelTitle: 'Showreel 2026', waFloat: 'Schreib mir auf WhatsApp',
+    casesTitle: 'Fallstudien', casesIntro: 'Zwei Projekte von Anfang bis Ende: was der Kunde wollte, wie gedreht wurde und was er bekommen hat.', caseBrief: 'Die Aufgabe', caseDid: 'Was ich gemacht habe', caseBts: 'Hinter den Kulissen', caseResult: 'Das Ergebnis', caseReels: '{n} Reels', casePlay: 'Film ansehen',
+    seoTitle: "Nazih Talbi | Videograf & Fotograf in Algerien", seoDesc: "Nazih Talbi, Videograf und Fotograf in Algerien: Eventfilme, Dokumentarfilme, Kurzfilme, Werbung, Reels und Fotografie für Schulen, Institutionen und Marken.",
     sendWa: 'Per WhatsApp senden', sendMail: 'Per E-Mail senden', mailSubject: 'Neues Projekt', msgHello: 'Hallo Nazih,', msgFrom: 'Name', msgType: 'Projektart',
     toTop: 'Nach oben'
   }

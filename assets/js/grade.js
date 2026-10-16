@@ -4,7 +4,7 @@
 (() => {
   const cmp = document.getElementById('cmp'); if (!cmp) return;
   const canvas = document.getElementById('cmpCanvas'), ctx = canvas.getContext('2d', { alpha: false }), video = document.getElementById('cmpVideo'), range = document.getElementById('cmpRange');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, V = 'assets/media/video/';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, V = (window.SITE_ROOT || '') + 'assets/media/video/';
   // the shots: Blackmagic RAW (Pocket Cinema Camera 4K) and Sony S-Log3 (ZV-E10)
   const CLIPS = {
     braw: { src: V + 'grade-braw.mp4', before: V + 'grade-braw-before.webp', after: V + 'grade-braw-after.webp', label: 'gradeBeforeBraw', shot: 'gradeShotBraw' },

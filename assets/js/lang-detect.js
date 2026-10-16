@@ -52,6 +52,8 @@
   }
 
   var fromUrl = (location.search.match(/[?&]lang=(en|fr|ar|de)\b/) || [])[1];
+  // the /fr/, /ar/ and /de/ pages open in their own language
+  if (!fromUrl) fromUrl = document.documentElement.getAttribute('data-page-lang');
   // the language is not remembered between visits: every visit starts with the welcome screen.
   // A ?lang=xx link only changes which language is suggested.
   try { localStorage.removeItem('lang'); } catch (e) {}

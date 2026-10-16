@@ -22,9 +22,9 @@
     $$('[data-i18n-label]').forEach(n => n.setAttribute('aria-label', t(n.dataset.i18nLabel)));
     $('#langCode').textContent = lang.toUpperCase();
     $$('#langMenu button').forEach(b => b.setAttribute('aria-current', b.dataset.lang === lang ? 'true' : 'false'));
-    document.title = `${t('fullName')} | ${t('role')}`; $('.about__portrait img').alt = t('fullName');
+    document.title = t('seoTitle'); { const m = document.querySelector('meta[name="description"]'); if (m) m.content = t('seoDesc'); } $('.about__portrait img').alt = t('fullName');
     syncHeroPause();
-    renderFilms(); renderSpot(); renderReelChips(); renderReels(); renderPhotoChips(); renderWall(); renderClients(); renderTypes();
+    renderFilms(); renderSpot(); renderReelChips(); renderReels(); renderPhotoChips(); renderWall(); renderClients(); renderCases(); renderTypes();
   }
 
   /* ---------- gate ---------- */
@@ -195,11 +195,16 @@
 
   /* ---------- showreel: the hero's main button plays it in the same player as the films ---------- */
   const reelTitle = () => Object.fromEntries(Object.keys(window.I18N).map(l => [l, window.I18N[l].reelTitle]));
-  $('#reelBtn').addEventListener('click', () => openPlayer({ slug: 'showreel', title: reelTitle(), dur: '1:18' }));
+  $('#reelBtn').addEventListener('click', () => openPlayer({ slug: 'showreel', title: reelTitle(), dur: '1:22' }));
 
   /* ---------- WhatsApp button on phones: appears once the visitor scrolls past the hero ---------- */
   const waFloat = $('#waFloat');
-  new IntersectionObserver(es => waFloat.classList.toggle('is-shown', !es[0].isIntersecting), { threshold: .15 }).observe($('#top'));
+  let tipShown = false;
+  new IntersectionObserver(es => {
+    const show = !es[0].isIntersecting; waFloat.classList.toggle('is-shown', show);
+    // the first time it appears, the bubble says hello for a few seconds
+    if (show && !tipShown) { tipShown = true; setTimeout(() => { waFloat.classList.add('tip-on'); setTimeout(() => waFloat.classList.remove('tip-on'), 5000); }, 1800); }
+  }, { threshold: .15 }).observe($('#top'));
 
   /* ---------- films screen ---------- */
   let filmIdx = 0;
@@ -429,6 +434,39 @@
         li.querySelector('.client__body').append(go);
       }
       ul.append(li);
+    });
+  }
+
+  /* ---------- case studies ---------- */
+  function renderCases() {
+    const box = $('#caseList'); if (!box) return; box.innerHTML = '';
+    D.CASES.forEach((cs, k) => {
+      const c = D.CLIENTS[cs.client], film = s => D.FILMS.find(f => f.slug === s), reels = D.REELS.filter(r => r.client === cs.client);
+      const art = el('article', 'case' + (k % 2 ? ' case--flip' : ''));
+      art.innerHTML = `<header class="case__head"><span class="case__logo"><img src="${c.logo}" alt="" loading="lazy"></span>
+          <div><p class="case__client">${esc(tx(c.name))}</p><h3 class="case__title">${esc(tx(cs.title))}</h3></div></header>
+        <div class="case__grid">
+          <button class="case__media" type="button"><img src="${D.V + cs.cover}.webp" alt="" loading="lazy"><span class="case__play"><span class="sr">${esc(t('casePlay'))}</span></span></button>
+          <div class="case__text"><h4 class="case__h">${esc(t('caseBrief'))}</h4><p class="case__brief">${esc(tx(cs.brief))}</p>
+            <h4 class="case__h">${esc(t('caseDid'))}</h4><ul class="case__did">${cs.did.map(d => `<li>${esc(tx(d))}</li>`).join('')}</ul></div>
+        </div>
+        <h4 class="case__h">${esc(t('caseBts'))}</h4>
+        <div class="case__bts">${cs.bts.map(([src, cap]) => `<figure><img src="${src}" alt="${esc(tx(cap))}" loading="lazy" width="1200" height="900"><figcaption>${esc(tx(cap))}</figcaption></figure>`).join('')}</div>
+        <h4 class="case__h">${esc(t('caseResult'))}</h4><ul class="case__out"></ul>`;
+      art.querySelector('.case__media').addEventListener('click', () => openPlayer(film(cs.play), 'horizontal'));
+      const out = art.querySelector('.case__out');
+      cs.films.map(film).filter(Boolean).forEach(f => {
+        const b = el('button', 'case__item'); b.type = 'button';
+        b.innerHTML = `<span class="case__item-play" aria-hidden="true"></span><span>${esc(tx(f.title))}</span><small dir="ltr">${esc(f.dur || '')}</small>`;
+        b.addEventListener('click', () => openPlayer(f, 'horizontal')); { const li = el('li'); li.append(b); out.append(li); }
+      });
+      if (reels.length) {
+        const b = el('button', 'case__item case__item--reels'); b.type = 'button';
+        b.innerHTML = `<span class="case__item-play" aria-hidden="true"></span><span>${esc(t('caseReels').replace('{n}', reels.length))}</span>`;
+        b.addEventListener('click', () => { reelFilter = reels.every(r => r.group === reels[0].group) ? reels[0].group : 'all'; renderReelChips(); renderReels(); $('#reels').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' }); });
+        { const li = el('li'); li.append(b); out.append(li); }
+      }
+      box.append(art);
     });
   }
 
