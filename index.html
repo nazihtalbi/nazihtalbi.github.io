@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nazih Talbi | Photographer & filmmaker</title>
+<meta name="description" content="Nazih Talbi, photographer and filmmaker. Event films, documentaries, short films, commercials, reels and photography.">
+<meta property="og:title" content="Nazih Talbi | Photographer & filmmaker">
+<meta property="og:description" content="Event films, documentaries, short films, commercials, reels and photography.">
+<meta property="og:image" content="assets/media/video/graduation-2026.webp">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23000'/><path d='M14 14h12v4h-8v8h-4zM50 14v12h-4v-8h-8v-4zM14 50V38h4v8h8v4zM50 50H38v-4h8v-8h4z' fill='%23F5B841'/><circle cx='32' cy='32' r='5' fill='%23F5B841'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/lang-detect.js"></script>
+</head>
+<body class="is-gated">
+
+<a class="skip" href="#films" data-i18n="skip">Skip to the films</a>
+
+<!-- Language gate: shown on every visit, sits over the hero footage seen through a viewfinder -->
+<div class="gate" id="gate" data-step="hello" role="dialog" aria-modal="true" aria-labelledby="gate-name">
+  <div class="gate__cam" aria-hidden="true">
+    <span class="gate__rec"><i></i>REC</span>
+    <span class="gate__tc" id="gateTc">00:00:00:00</span>
+    <span class="gate__meta">4K · 24 fps · ISO 400</span>
+  </div>
+  <div class="gate__top" id="gateTop">
+    <p class="gate__hey" id="gate-name"><span class="sr" id="gateSr">Hey, I'm Nazih and this is my portfolio.</span><span class="gate__hey1" aria-hidden="true"><span id="heyA">Hey, I'm</span> <span class="gate__gold" id="heyName">Nazih</span></span><span class="gate__hey2" id="heyB" aria-hidden="true">and this is my portfolio.</span></p>
+  </div>
+  <div class="gate__choose">
+    <div class="gate__hello" id="gateHello">
+      <div class="gate__actions">
+        <button class="gate__continue" id="gateContinue"><span id="gateContinueTx">Continue in English</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+        <button class="gate__change" id="gateChange"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9M12 3c-2.5 2.6-3.8 5.6-3.8 9s1.3 6.4 3.8 9"/></svg><span id="gateChangeTx">Change language</span></button>
+      </div>
+    </div>
+    <div class="gate__pick" id="gatePick">
+    <button class="gate__back" id="gateBack"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6"/></svg><span id="gateBackTx">Back</span></button>
+    <p class="gate__ask" aria-hidden="true">
+      <span lang="en">Choose your language</span>
+      <span lang="fr">Choisissez votre langue</span>
+      <span lang="ar" dir="rtl">اختر لغتك</span>
+      <span lang="de">Wählen Sie Ihre Sprache</span>
+    </p>
+    <div class="gate__langs" aria-label="Choose your language / Choisissez votre langue / اختر لغتك / Wählen Sie Ihre Sprache">
+    <button class="gate__lang" data-lang="en" lang="en" dir="ltr" style="--i:0">
+      <span class="gate__code" aria-hidden="true">EN</span>
+      <b>English</b>
+      <span class="gate__line">Enter the portfolio</span>
+      <span class="gate__go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </button>
+    <button class="gate__lang" data-lang="fr" lang="fr" dir="ltr" style="--i:1">
+      <span class="gate__code" aria-hidden="true">FR</span>
+      <b>Français</b>
+      <span class="gate__line">Entrer dans le portfolio</span>
+      <span class="gate__go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </button>
+    <button class="gate__lang" data-lang="ar" lang="ar" dir="rtl" style="--i:2">
+      <span class="gate__code" aria-hidden="true">AR</span>
+      <b>العربية</b>
+      <span class="gate__line">الدخول إلى المعرض</span>
+      <span class="gate__go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </button>
+    <button class="gate__lang" data-lang="de" lang="de" dir="ltr" style="--i:3">
+      <span class="gate__code" aria-hidden="true">DE</span>
+      <b>Deutsch</b>
+      <span class="gate__line">Zum Portfolio</span>
+      <span class="gate__go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+    </button>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- ambient glow: three soft lights drifting behind the dark sections, slowly changing colour -->
+<div class="aura" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<header class="bar" id="bar">
+  <a class="bar__name" href="#top" data-i18n="fullName">Nazih Talbi</a>
+  <nav class="bar__nav" id="nav" aria-label="Main">
+    <a href="#films" data-i18n="nav.films">Films</a>
+    <a href="#reels" data-i18n="nav.reels">Reels</a>
+    <a href="#photos" data-i18n="nav.photos">Photography</a>
+    <a href="#about" data-i18n="nav.about">About</a>
+    <a href="#contact" class="bar__cta" data-i18n="nav.contact">Contact</a>
+  </nav>
+  <div class="bar__lang">
+    <button class="bar__langbtn" id="langBtn" aria-haspopup="true" aria-expanded="false"><span class="sr" data-i18n="lang">Language</span><span id="langCode">EN</span></button>
+    <div class="bar__langmenu" id="langMenu" hidden>
+      <button data-lang="en" lang="en">English</button>
+      <button data-lang="fr" lang="fr">Français</button>
+      <button data-lang="ar" lang="ar">العربية</button>
+      <button data-lang="de" lang="de">Deutsch</button>
+    </div>
+  </div>
+  <button class="bar__menu" id="menuBtn" aria-controls="nav" aria-expanded="false"><span data-i18n="menu">Menu</span></button>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <div class="hero__frame">
+      <div class="hero__ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+      <video class="hero__video" id="heroVideo" src="assets/media/video/hero-loop.mp4" poster="assets/media/video/hero-loop.webp" muted loop playsinline autoplay preload="auto"></video>
+      <i class="vf vf--tl"></i><i class="vf vf--tr"></i><i class="vf vf--bl"></i><i class="vf vf--br"></i>
+    </div>
+    <div class="hero__content">
+      <h1 class="hero__title"><span data-i18n="nameFirst">Nazih</span> <span data-i18n="nameLast">Talbi</span></h1>
+      <p class="hero__role" data-i18n="role">Photographer &amp; filmmaker</p>
+      <p class="hero__line" data-i18n="heroLine">I film and photograph schools, institutions and brands: events, documentaries, short films, ads and reels, from the shoot to the final grade.</p>
+      <div class="hero__actions">
+        <button class="btn btn--tungsten btn--reel" type="button" id="reelBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span data-i18n="ctaReel">Watch the showreel</span></button>
+        <a class="btn btn--ghost" href="#contact" data-i18n="ctaContact">Start a project</a>
+      </div>
+    </div>
+    <button class="hero__pause" id="heroPause" aria-pressed="false"><span class="sr" data-i18n="pauseHero">Pause background video</span></button>
+  </section>
+
+  <section class="films" id="films" aria-labelledby="films-title">
+    <div class="sec-head">
+      <h2 class="sec-title" id="films-title" data-i18n="filmsTitle">Films</h2>
+      <p class="sec-intro" data-i18n="filmsIntro">Event films, documentaries and short films made for the institutions and brands I work with.</p>
+    </div>
+    <div class="screen">
+      <div class="glow glow--stage"><div class="screen__stage">
+        <img class="screen__poster" id="screenPoster" alt="" decoding="async">
+        <video class="screen__preview" id="screenPreview" muted loop playsinline preload="none"></video>
+        <button class="screen__play" id="screenPlay"><span class="screen__playicon" aria-hidden="true"></span><span id="screenPlayLabel" data-i18n="playFilm">Play film</span></button>
+      </div></div>
+      <div class="screen__info">
+        <p class="screen__client" id="screenClient"></p>
+        <h3 class="screen__title" id="screenTitle"></h3>
+        <p class="screen__desc" id="screenDesc"></p>
+      </div>
+      <ol class="playlist" id="playlist"></ol>
+    </div>
+  </section>
+
+  <section class="reels" id="reels" aria-labelledby="reels-title">
+    <div class="sec-head">
+      <h2 class="sec-title" id="reels-title" data-i18n="reelsTitle">Reels</h2>
+      <p class="sec-intro" data-i18n="reelsIntro">Short vertical films for Instagram, Facebook and TikTok: cinematic ads, mini documentaries and content where I present on camera.</p>
+    </div>
+    <article class="spot" id="spot" aria-labelledby="spotTitle">
+      <div class="glow glow--spot"><button class="spot__media" id="spotPlay">
+        <img id="spotPoster" alt="">
+        <video id="spotPreview" muted loop playsinline preload="none"></video>
+        <span class="spot__play" aria-hidden="true"></span>
+        <span class="sr" data-i18n="playReel">Watch the reel</span>
+      </button></div>
+      <div class="spot__text">
+        <p class="spot__kicker" data-i18n="spotKicker">Featured reel</p>
+        <h3 class="spot__title" id="spotTitle"></h3>
+        <p class="spot__desc" id="spotDesc"></p>
+        <dl class="spot__meta">
+          <div><dt data-i18n="spotRole">My role</dt><dd id="spotCredits"></dd></div>
+          <div><dt data-i18n="spotFor">Made for</dt><dd id="spotClient"></dd></div>
+          <div><dt data-i18n="spotLength">Length</dt><dd id="spotDur" dir="ltr"></dd></div>
+        </dl>
+        <button class="btn btn--tungsten" id="spotBtn" data-i18n="playReel">Watch the reel</button>
+      </div>
+    </article>
+    <div class="chips" id="reelChips" role="group" aria-label="Filter reels"></div>
+    <div class="reelgrid" id="reelGrid"></div>
+    <div class="wall__more"><button class="btn btn--ghost" id="reelMore">Show more reels</button></div>
+  </section>
+
+  <!-- Colour grading: the same S-Log3 shot, before and after, with a draggable divider -->
+  <section class="grade" id="grade" aria-labelledby="grade-title">
+    <div class="sec-head">
+      <div>
+        <p class="grade__kicker" data-i18n="gradeKicker">Colour grading</p>
+        <h2 class="sec-title" id="grade-title" data-i18n="gradeTitle">From flat to film</h2>
+      </div>
+      <p class="sec-intro" data-i18n="gradeIntro">Filmed in RAW and log to hold every detail in the highlights and shadows, then graded by hand: natural skin, true colour and cinematic contrast. Drag the line to compare.</p>
+    </div>
+    <div class="glow glow--grade">
+      <div class="cmp" id="cmp" style="--pos: 50%">
+        <img class="cmp__img cmp__img--before" src="assets/media/video/grade-braw-before.webp" alt="" decoding="async" loading="lazy">
+        <img class="cmp__img cmp__img--after" src="assets/media/video/grade-braw-after.webp" alt="" decoding="async" loading="lazy">
+        <canvas class="cmp__canvas" id="cmpCanvas" aria-hidden="true"></canvas>
+        <video class="cmp__src" id="cmpVideo" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <span class="cmp__label cmp__label--before" id="cmpBefore" data-i18n="gradeBeforeBraw">Blackmagic RAW — Original</span>
+        <span class="cmp__label cmp__label--after" data-i18n="gradeAfter">Professionally Color Graded</span>
+        <span class="cmp__line" aria-hidden="true"><span class="cmp__knob"><svg viewBox="0 0 24 24"><path d="M9 6 3 12l6 6M15 6l6 6-6 6"/></svg></span></span>
+        <span class="cmp__hint" data-i18n="gradeHint">Drag to compare</span>
+        <input class="cmp__range" id="cmpRange" type="range" min="0" max="100" step="0.1" value="50" data-i18n-label="gradeRange" aria-label="Compare the original S-Log3 footage with the graded version">
+      </div>
+    </div>
+    <div class="grade__tabs" role="group" data-i18n-label="gradeChoose" aria-label="Choose a shot">
+      <button class="grade__tab" type="button" data-clip="braw" aria-pressed="true"><img src="assets/media/video/grade-braw-after.webp" alt="" loading="lazy" decoding="async"><span data-i18n="gradeTabBraw">Blackmagic RAW</span></button>
+      <button class="grade__tab" type="button" data-clip="slog" aria-pressed="false"><img src="assets/media/video/grade-after.webp" alt="" loading="lazy" decoding="async"><span data-i18n="gradeTabSlog">Sony S-Log3</span></button>
+    </div>
+    <ol class="grade__steps">
+      <li><span data-i18n="gradeS1">Log to Rec.709</span></li>
+      <li><span data-i18n="gradeS2">Exposure and white balance</span></li>
+      <li><span data-i18n="gradeS3">Natural skin tones</span></li>
+      <li><span data-i18n="gradeS4">Contrast and film look</span></li>
+    </ol>
+    <p class="grade__shot" id="gradeShot" data-i18n="gradeShotBraw">Blackmagic Pocket Cinema Camera 4K, Blackmagic RAW</p>
+  </section>
+
+  <section class="snow" id="snow" aria-labelledby="snow-title">
+    <div class="snow__track">
+      <div class="snow__stage">
+        <div class="snow__frames">
+          <figure class="snow__frame" style="--i:0"><img src="assets/media/site/snow-1.webp" alt="" decoding="async"></figure>
+          <figure class="snow__frame" style="--i:1"><img src="assets/media/site/snow-2.webp" alt="" loading="lazy" decoding="async"></figure>
+          <figure class="snow__frame" style="--i:2"><img src="assets/media/site/snow-3.webp" alt="" loading="lazy" decoding="async"></figure>
+          <figure class="snow__frame" style="--i:3"><img src="assets/media/site/snow-4.webp" alt="" loading="lazy" decoding="async"></figure>
+          <figure class="snow__frame" style="--i:4"><img src="assets/media/site/snow-5.webp" alt="" loading="lazy" decoding="async"></figure>
+        </div>
+        <canvas class="snow__flakes" id="snowFlakes" aria-hidden="true"></canvas>
+        <div class="snow__text">
+          <h2 class="snow__title" id="snow-title" data-i18n="snowTitle">First snow</h2>
+          <p class="snow__line" data-i18n="snowText">The morning the street turned white. Shot between the flakes, before anyone thought to go inside.</p>
+        </div>
+        <div class="snow__strip" aria-label="Photos">
+          <button class="snow__thumb" data-i="0"><img src="assets/media/site/snow-1.webp" alt="" loading="lazy" decoding="async"><span class="sr">1</span></button>
+          <button class="snow__thumb" data-i="1"><img src="assets/media/site/snow-2.webp" alt="" loading="lazy" decoding="async"><span class="sr">2</span></button>
+          <button class="snow__thumb" data-i="2"><img src="assets/media/site/snow-3.webp" alt="" loading="lazy" decoding="async"><span class="sr">3</span></button>
+          <button class="snow__thumb" data-i="3"><img src="assets/media/site/snow-4.webp" alt="" loading="lazy" decoding="async"><span class="sr">4</span></button>
+          <button class="snow__thumb" data-i="4"><img src="assets/media/site/snow-5.webp" alt="" loading="lazy" decoding="async"><span class="sr">5</span></button>
+        </div>
+        <p class="snow__count" aria-hidden="true"><b id="snowNow">01</b> / <span id="snowAll">05</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="photos" id="photos" aria-labelledby="photos-title">
+    <div class="sec-head">
+      <h2 class="sec-title" id="photos-title" data-i18n="photosTitle">Photography</h2>
+      <p class="sec-intro" data-i18n="photosIntro">Classrooms, celebrations and receptions. Real moments, photographed quietly.</p>
+    </div>
+    <figure class="lead" id="lead" hidden>
+      <button class="lead__img" id="leadBtn"><img id="leadImg" alt="" decoding="async" loading="lazy"><span class="lead__glow" aria-hidden="true"></span><span class="lead__veil" aria-hidden="true"></span><span class="lead__title" id="leadTitle" aria-hidden="true"></span></button>
+      <figcaption class="lead__cap" id="leadCat"></figcaption>
+    </figure>
+    <div class="photos__bar">
+      <div class="chips chips--light" id="photoChips" role="group" aria-label="Filter photos"></div>
+      <p class="photos__count" id="photoCount"></p>
+    </div>
+    <div class="wall" id="wall"></div>
+    <div class="wall__more"><button class="btn btn--dark" id="moreBtn" data-i18n="showMore">Show more photos</button></div>
+  </section>
+
+  <section class="clients" id="clients" aria-labelledby="clients-title">
+    <div class="sec-head">
+      <h2 class="sec-title" id="clients-title" data-i18n="clientsTitle">Who I've worked with</h2>
+    </div>
+    <ul class="clientlist" id="clientList"></ul>
+  </section>
+
+  <section class="about" id="about" aria-labelledby="about-title">
+    <figure class="about__portrait"><img src="assets/media/site/me-01-md.webp" srcset="assets/media/site/me-01-md.webp 900w, assets/media/site/me-01.webp 1264w" sizes="(max-width: 900px) 100vw, 45vw" alt="Nazih Talbi" loading="lazy" decoding="async" width="1264" height="843"><div class="lens" id="lens" aria-hidden="true"></div></figure>
+    <div class="about__text">
+      <h2 class="sec-title" id="about-title" data-i18n="aboutTitle">The eye behind the camera</h2>
+      <p data-i18n="about1">I'm Nazih Talbi, a photographer and filmmaker from Algeria. I've worked freelance since 2022 on short films, commercials and social media content, and since 2024 I've been the photographer and videographer at Almaahed International.</p>
+      <p data-i18n="about2">I'm also a state-certified process engineer (M.Sc.). That training shows in how I work: careful planning before the shoot, and attention to every detail in the edit, the colour grade and the motion graphics.</p>
+      <dl class="facts">
+        <div><dt data-i18n="f.base">Based in</dt><dd data-i18n="f.baseV">Algeria</dd></div>
+        <div><dt data-i18n="f.lang">Languages</dt><dd data-i18n="f.langV">Arabic, French, English, German</dd></div>
+        <div><dt data-i18n="f.tools">Tools</dt><dd>Premiere Pro, After Effects, Photoshop, Lightroom, Illustrator</dd></div>
+        <div><dt data-i18n="f.edu">Education</dt><dd data-i18n="f.eduV">M.Sc. in process engineering</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="services" id="services" aria-labelledby="services-title">
+    <div class="sec-head">
+      <h2 class="sec-title" id="services-title" data-i18n="servicesTitle">What I can make for you</h2>
+    </div>
+    <ul class="svc">
+      <li><img src="assets/media/site/svc-01-xs.webp" alt="" loading="lazy"><div><h3 data-i18n="svc1">Event coverage</h3><p data-i18n="svc1d">Photos and video of ceremonies, graduations, conferences and openings, delivered as a photo set and a short event film.</p></div></li>
+      <li><img src="assets/media/site/me-04-xs.webp" alt="" loading="lazy"><div><h3 data-i18n="svc2">Commercials &amp; promo films</h3><p data-i18n="svc2d">From the idea and script to the shoot, the edit and the final grade.</p></div></li>
+      <li><img src="assets/media/site/me-05-xs.webp" alt="" loading="lazy" class="svc__tall"><div><h3 data-i18n="svc3">Social media content</h3><p data-i18n="svc3d">Reels and short videos made for vertical screens, with subtitles and animated titles.</p></div></li>
+      <li><img src="assets/media/site/me-06-xs.webp" alt="" loading="lazy"><div><h3 data-i18n="svc4">Motion graphics &amp; post-production</h3><p data-i18n="svc4d">Motion design, 3D titles, colour grading and sound clean-up in Premiere Pro and After Effects.</p></div></li>
+    </ul>
+    <h3 class="steps__title" data-i18n="processTitle">How a project runs</h3>
+    <ol class="steps">
+      <li><h4 data-i18n="st1">We talk</h4><p data-i18n="st1d">You tell me what you need, who it's for and when. A call or a message is enough.</p></li>
+      <li><h4 data-i18n="st2">I plan</h4><p data-i18n="st2d">Locations, timing, light and a shot list built around what matters most to you.</p></li>
+      <li><h4 data-i18n="st3">We shoot</h4><p data-i18n="st3d">Calm and discreet on the day. I direct only when it helps.</p></li>
+      <li><h4 data-i18n="st4">You receive</h4><p data-i18n="st4d">Edited photos and a graded film, ready to post, in the formats each platform needs.</p></li>
+    </ol>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="contact__left">
+      <h2 class="contact__title" id="contact-title" data-i18n="contactTitle">Let's make your next film</h2>
+      <p class="sec-intro" data-i18n="contactIntro">Tell me about your project. I usually reply within a day.</p>
+      <ul class="contact__links">
+        <li><a href="https://wa.me/213779072740" target="_blank" rel="noopener"><span data-i18n="whatsapp">WhatsApp</span><b dir="ltr">+213 779 07 27 40</b></a></li>
+        <li><a href="mailto:nazihhtalbi@gmail.com"><span data-i18n="email">Email</span><b>nazihhtalbi@gmail.com</b></a></li>
+        <li><a href="https://instagram.com/NA_Z_IH1" target="_blank" rel="noopener"><span>Instagram</span><b dir="ltr">@NA_Z_IH1</b></a></li>
+      </ul>
+    </div>
+    <form class="composer glow" id="composer" novalidate>
+      <label><span data-i18n="fName">Your name</span><input name="name" autocomplete="name"></label>
+      <label><span data-i18n="fContact">Your email or phone</span><input name="contact" autocomplete="email" data-i18n-ph="fContactPh" placeholder="So I can reply to you"></label>
+      <!-- spam trap: real visitors never see or fill this -->
+      <input type="checkbox" name="botcheck" class="sr" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label><span data-i18n="fType">Project type</span>
+        <select name="type" id="fTypeSel"></select>
+      </label>
+      <label><span data-i18n="fMsg">Your message</span><textarea name="msg" rows="5" data-i18n-ph="fMsgPh" placeholder="What, where and when?"></textarea></label>
+      <p class="composer__err" id="composerErr" role="alert" hidden data-i18n="fErr">Write a short message first.</p>
+      <div class="composer__send">
+        <button class="btn btn--tungsten" type="submit" value="send" id="composerSend" data-i18n="send">Send message</button>
+        <button class="btn btn--ghost" type="submit" value="wa" data-i18n="sendWa">Send on WhatsApp</button>
+      </div>
+      <!-- shown over the form once the message is sent: plane takes off, ring and tick draw, the thanks types in -->
+      <div class="sent" id="composerOk" role="status" tabindex="-1" hidden>
+        <div class="sent__mark" aria-hidden="true">
+          <span class="sent__plane"><svg viewBox="0 0 32 32"><path d="M2 15 30 3 22 29 15 19Z"/><path d="M15 19 30 3" class="sent__fold"/></svg></span>
+          <svg class="sent__badge" viewBox="0 0 120 120"><circle class="sent__ring" cx="60" cy="60" r="52" pathLength="1"/><path class="sent__tick" d="M38 62 54 77 84 45" pathLength="1"/></svg>
+          <span class="sent__sparks"><i style="--a:0deg"></i><i style="--a:45deg"></i><i style="--a:90deg"></i><i style="--a:135deg"></i><i style="--a:180deg"></i><i style="--a:225deg"></i><i style="--a:270deg"></i><i style="--a:315deg"></i></span>
+        </div>
+        <h3 class="sent__title" id="sentTitle"></h3>
+        <p class="sent__body" id="sentBody"></p>
+        <button class="btn btn--ghost sent__again" type="button" id="sentAgain" data-i18n="sentAgain">Send another message</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>© <span id="year">2026</span> <span data-i18n="fullName">Nazih Talbi</span></span>
+  <span data-i18n="role">Photographer &amp; filmmaker</span>
+  <a href="#top" data-i18n="toTop">Back to top</a>
+</footer>
+
+<!-- Video player -->
+<dialog class="player" id="player" aria-labelledby="playerTitle">
+  <div class="player__inner">
+    <div class="player__media" id="playerMedia"></div>
+    <div class="player__meta"><p id="playerClient"></p><h3 id="playerTitle"></h3></div>
+    <button class="player__close" id="playerClose"><span class="sr" data-i18n="close">Close</span></button>
+  </div>
+</dialog>
+
+<!-- Photo lightbox -->
+<dialog class="lightbox" id="lightbox" aria-label="Photo">
+  <figure class="lightbox__fig"><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button class="lightbox__nav lightbox__prev" id="lbPrev"><span class="sr" data-i18n="prev">Previous</span></button>
+  <button class="lightbox__nav lightbox__next" id="lbNext"><span class="sr" data-i18n="next">Next</span></button>
+  <button class="player__close" id="lbClose"><span class="sr" data-i18n="close">Close</span></button>
+</dialog>
+
+<a class="wa-float" id="waFloat" href="https://wa.me/213779072740" target="_blank" rel="noopener" data-stat="whatsapp-float"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.2A12.7 12.7 0 0 0 5.1 22.4L3.3 28.8l6.6-1.7A12.7 12.7 0 1 0 16 3.2zm0 23.2a10.5 10.5 0 0 1-5.4-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.5 10.5 0 1 1 16 26.4zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.6 8.6 0 0 1-4.3-3.7c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.7 3.7 0 0 0-1.1 2.7 6.5 6.5 0 0 0 1.3 3.4 14.6 14.6 0 0 0 5.7 5c2.1.9 2.9 1 4 .8a3.4 3.4 0 0 0 2.2-1.6 2.8 2.8 0 0 0 .2-1.6c-.1-.1-.3-.2-.6-.3z"/></svg><span class="sr" data-i18n="waFloat">Message me on WhatsApp</span></a>
+<script src="assets/js/stats.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/photos-data.js"></script>
+<script src="assets/js/videos-data.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/grade.js"></script>
+</body>
+</html>

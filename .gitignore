@@ -1,0 +1,14 @@
+# Only the website (index.html + assets/) and its tools go to GitHub.
+# Original photos and videos stay on this computer (they are far too big for GitHub).
+_Originals (not on the website)/
+Photography - put your photos here/
+Videos - put your videos here/
+
+# working files of the update tools (rebuilt automatically)
+tools/.photo-cache/
+tools/.video-cache.json
+tools/.lock
+*.tmp
+Thumbs.db
+desktop.ini
+.DS_Store
