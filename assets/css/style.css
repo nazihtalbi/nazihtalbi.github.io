@@ -1445,3 +1445,6 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
 
 /* once the visitor has scrolled past the first screen, its looping effects stop working in the background */
 body.hero-off .hero *, body.hero-off .hero *::before, body.hero-off .hero *::after { animation-play-state: paused !important; }
+/* phones: the mini floats clear above the WhatsApp button (and its rings) */
+@media (max-width: 760px) { .buddy { bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 6rem); } }
+@media (max-width: 760px) { .buddy { width: 96px; height: 148px; } }

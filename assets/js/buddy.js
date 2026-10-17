@@ -68,8 +68,6 @@
     say.textContent = text; box.classList.add('is-talking'); clearTimeout(sayT); sayT = setTimeout(() => box.classList.remove('is-talking'), ms); };
   const once = (cls, ms) => { box.classList.remove(cls); void box.offsetWidth; box.classList.add(cls); setTimeout(() => box.classList.remove(cls), ms); };
   me.addEventListener('click', () => { speak(T('buddyHi')); once('is-hop', 800); wave(); });
-  const contact = $('#contact'); let pointed = false;
-  if (contact && 'IntersectionObserver' in window) new IntersectionObserver(es => { if (es[0].isIntersecting && !pointed && box.classList.contains('is-on')) { pointed = true; speak(T('buddyContact'), 4200); wave(); } }, { threshold: .35 }).observe(contact);
   document.addEventListener('click', e => { if (e.target.closest('#nav a, .gate__opt, .client__go, .case__item--reels')) { once('is-dash', 1000); play([['walk']], 0, 900); } });
   // arriving in a section (also when scrolling back to it): he presents it and says a word about the work there
   let here = null, sayIn = 0;
@@ -79,19 +77,23 @@
       if (e.target.id === here) return; here = e.target.id; clearTimeout(sayIn);
       sayIn = setTimeout(() => {
         const id = here; if (!id || !box.classList.contains('is-on')) return;
-        const line = T('buddy.' + id); if (!line || line === 'buddy.' + id) return;
-        speak(line, 4800);
+        // at Contact he waves and invites the visitor to write on WhatsApp
+        const line = id === 'contact' ? T('buddyContact') : T('buddy.' + id); if (!line || line === 'buddy.' + id) return;
+        speak(line, 4800); if (id === 'contact') wave();
       }, 650);
     }), { rootMargin: '-42% 0px -42% 0px' });
-    ['films', 'reels', 'cases', 'grade', 'snow', 'photos', 'clients', 'about', 'services'].forEach(id => { const s = document.getElementById(id); if (s) secIO.observe(s); });
+    ['films', 'reels', 'cases', 'grade', 'snow', 'photos', 'clients', 'about', 'services', 'contact'].forEach(id => { const s = document.getElementById(id); if (s) secIO.observe(s); });
   }
 
   if (reduce) return;
 
   // ---------- where he floats: a vertical spot on the edge (moved by --by, eased in CSS) ----------
   const range = () => innerHeight * (lite ? .12 : .2);
+  // the lowest his feet may go: above the WhatsApp button when it is showing, so it never covers him
+  const wa = $('#waFloat');
+  const floor = () => { if (wa && wa.classList.contains('is-shown')) { const r = wa.getBoundingClientRect(); if (r.width && r.left < box.getBoundingClientRect().right + 40) return r.top - 26; } return innerHeight - 24; };
   const band = () => { const h = box.offsetHeight, base = box.getBoundingClientRect().top - (parseFloat(box.style.getPropertyValue('--by')) || 0);
-    return [Math.max(-range(), 96 - base), Math.min(range(), innerHeight - 24 - h - base)]; };
+    return [Math.max(-range(), 96 - base), Math.min(range(), floor() - h - base)]; };
   const goTo = y => { const [lo, hi] = band(); box.style.setProperty('--by', Math.round(Math.max(lo, Math.min(hi, y))) + 'px'); };
   // idle life: drift to a new spot, look around, now and then a photo
   let watching = null, idleLife = 0;
@@ -163,7 +165,8 @@
     run();
   }
   const run = () => { if (!running) { running = true; lastT = performance.now(); requestAnimationFrame(step); } };
-  const wake = () => { box.classList.remove('is-resting'); clearTimeout(idleT); idleT = setTimeout(() => box.classList.add('is-resting'), 5000); run(); };
+  let room = 46;   // how far the flight may carry him down before reaching the floor
+  const wake = () => { if (!running) room = Math.max(0, Math.min(46, floor() - box.getBoundingClientRect().bottom)); box.classList.remove('is-resting'); clearTimeout(idleT); idleT = setTimeout(() => box.classList.add('is-resting'), 5000); run(); };
   addEventListener('scroll', () => { if (box.classList.contains('is-on')) { wake(); settle(); } }, { passive: true });
   addEventListener('resize', size);
 
@@ -171,8 +174,8 @@
     const dt = Math.min(.05, (now - lastT) / 1000 || .016); lastT = now;
     const y = scrollY, dy = y - lastY; lastY = y;
     vel += (dy / Math.max(dt, .001) - vel) * .18;
-    const target = Math.max(-46, Math.min(46, vel * .035));
-    offV += ((target - off) * 90 - offV * 14) * dt; off += offV * dt;
+    const target = Math.max(-46, Math.min(room, vel * .035));
+    offV += ((target - off) * 90 - offV * 14) * dt; off += offV * dt; if (off > room) { off = room; offV = Math.min(0, offV); }
     rot += (Math.max(-9, Math.min(9, vel * .006)) - rot) * Math.min(1, dt * 6);
     me.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg)`;
     if (!CW) size();
