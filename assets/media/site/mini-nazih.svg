@@ -130,6 +130,5 @@
     </g>
     <path d="M67 51.4 L70.8 50.8 M82.8 51.4 L86.6 50.8" stroke="#FFFFFF" stroke-width=".9" stroke-linecap="round" opacity=".75"/>
     <path d="M79 52.6 Q80 51.6 81 52.6 M79 50.4 L81 50.4 M65.2 52.4 L62.8 51.6 M94.8 52.4 L97.2 51.6" stroke="#D9D2C4" stroke-width="1.05" fill="none" stroke-linecap="round"/>
-    <path d="M96.7 50 L96.7 64 Q96.2 78 88.6 84.6" stroke="rgba(246,214,150,.3)" stroke-width=".8" fill="none" stroke-linecap="round"/>
   </g>
 </svg>
