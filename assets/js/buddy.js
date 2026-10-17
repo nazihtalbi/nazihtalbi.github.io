@@ -14,11 +14,28 @@
   const T = k => { const I = window.I18N || {}, l = document.documentElement.lang; return (I[l] && I[l][k]) || (I.en && I.en[k]) || ''; };
   const WORK = '.playlist__item, .screen__stage, .vcard, .spot__media, .tile, .lead, .case__media, .case__bts figure, .snow__frame, .cmp';
 
-  // the drawing is placed inline so his head, eyes and camera can move (ids prefixed so they never clash with the page)
-  const img = me.querySelector('img');
-  if (img && 'fetch' in window) fetch(img.getAttribute('src')).then(r => (r.ok ? r.text() : Promise.reject())).then(svg => {
-    me.innerHTML = svg.replace(/id="([\w-]+)"/g, 'id="mn-$1"').replace(/url\(#([\w-]+)\)/g, 'url(#mn-$1)');
-  }).catch(() => {});
+  // poses from his character sheet: one sprite, one cell per pose (front, turnaround, wave, arms crossed, walk, wow, joy)
+  const F = { front: 0, q3: 1, left: 2, right: 3, back: 4, q3back: 5, wave: 6, crossed: 7, walk: 8, wow: 9, joy: 10 };
+  const img = me.querySelector('img'), sheet = ((img && img.getAttribute('src')) || 'assets/media/site/mini-nazih.svg').replace(/mini-nazih\.svg$/, 'mini-sprite.webp');
+  me.innerHTML = '<span class="buddy__bob"><span class="buddy__pose"></span></span>';
+  const pose = me.querySelector('.buddy__pose'); pose.style.backgroundImage = `url("${sheet}")`;
+  const show = (name, flip) => { pose.style.setProperty('--f', F[name]); pose.style.setProperty('--flip', flip ? -1 : 1); };
+  // the page is on his left when he stands on the right edge (and the other way round in Arabic)
+  const toPage = () => document.documentElement.dir !== 'rtl';
+  let idlePose = 'front', busy = false, seqT = [];
+  const rest = () => { if (busy) return;
+    if (box.classList.contains('is-watching') || box.classList.contains('is-talking')) show('q3', toPage()); else show(idlePose); };
+  // a short sequence of poses, then back to rest
+  const play = (frames, step = 110, hold = 0) => {
+    seqT.forEach(clearTimeout); seqT = []; busy = true;
+    frames.forEach(([n, fl], i) => seqT.push(setTimeout(() => show(n, fl), i * step)));
+    seqT.push(setTimeout(() => { busy = false; rest(); }, (frames.length - 1) * step + step + hold));
+  };
+  const wave = () => play([['wave', toPage()]], 0, 1700);
+  // a real turn on the spot, through the turnaround views of the sheet
+  const spin = () => play([['front'], ['q3'], ['left'], ['q3back'], ['back'], ['q3back', true], ['right'], ['q3', true], ['front']], 95);
+  new MutationObserver(rest).observe(box, { attributes: true, attributeFilter: ['class'] });
+  show('front');
 
   // show after the hero, hide while the welcome screen or the phone menu is up
   let past = false;
@@ -35,10 +52,10 @@
   let sayT = 0;
   const speak = (text, ms = 3200) => { say.textContent = text; box.classList.add('is-talking'); clearTimeout(sayT); sayT = setTimeout(() => box.classList.remove('is-talking'), ms); };
   const once = (cls, ms) => { box.classList.remove(cls); void box.offsetWidth; box.classList.add(cls); setTimeout(() => box.classList.remove(cls), ms); };
-  me.addEventListener('click', () => { speak(T('buddyHi')); once('is-hop', 800); once('is-wave', 1700); });
+  me.addEventListener('click', () => { speak(T('buddyHi')); once('is-hop', 800); wave(); });
   const contact = $('#contact'); let pointed = false;
-  if (contact && 'IntersectionObserver' in window) new IntersectionObserver(es => { if (es[0].isIntersecting && !pointed && box.classList.contains('is-on')) { pointed = true; speak(T('buddyContact'), 4200); } }, { threshold: .35 }).observe(contact);
-  document.addEventListener('click', e => { if (e.target.closest('#nav a, .gate__opt, .client__go, .case__item--reels')) once('is-dash', 1000); });
+  if (contact && 'IntersectionObserver' in window) new IntersectionObserver(es => { if (es[0].isIntersecting && !pointed && box.classList.contains('is-on')) { pointed = true; speak(T('buddyContact'), 4200); wave(); } }, { threshold: .35 }).observe(contact);
+  document.addEventListener('click', e => { if (e.target.closest('#nav a, .gate__opt, .client__go, .case__item--reels')) { once('is-dash', 1000); play([['walk']], 0, 900); } });
   // arriving in a section for the first time: he turns to it and says a word about the work there
   const said = new Set(); let here = null, sayIn = 0;
   if ('IntersectionObserver' in window) {
@@ -47,7 +64,7 @@
       sayIn = setTimeout(() => {
         const id = here; if (said.has(id) || !box.classList.contains('is-on') || box.classList.contains('is-talking')) return;
         const line = T('buddy.' + id); if (!line || line === 'buddy.' + id) return;
-        said.add(id); speak(line, 4800); once('is-wave', 1700);
+        said.add(id); speak(line, 4800); wave();
       }, 700);
     }), { rootMargin: '-42% 0px -42% 0px' });
     ['films', 'reels', 'cases', 'grade', 'snow', 'photos', 'clients', 'about', 'services'].forEach(id => { const s = document.getElementById(id); if (s) secIO.observe(s); });
@@ -67,12 +84,13 @@
     idleLife = setTimeout(() => {
       if (box.classList.contains('is-on') && !watching && !document.hidden) {
         const r = Math.random();
-        if (r < .32) goTo((Math.random() * 2 - 1) * range());     // drift to a new spot
-        else if (r < .47) once('is-look', 1900);                  // look around (head)
-        else if (r < .62) once('is-peek', 2600);                  // 3D turn towards the page, then back
-        else if (r < .67) once('is-spin', 1900);                  // a full turn around (rare)
-        else if (r < .82) once('is-wave', 1700);                  // a wave
-        else snap();                                             // a photo
+        if (r < .3) goTo((Math.random() * 2 - 1) * range());      // drift to a new spot
+        else if (r < .44) play([['q3', toPage()], ['front'], ['q3', !toPage()], ['front']], 520);   // look around
+        else if (r < .56) play([['q3', toPage()]], 0, 2400);     // turn towards the page for a moment
+        else if (r < .62) spin();                                 // a full turn around (rare)
+        else if (r < .74) wave();                                 // a wave
+        else if (r < .86) { idlePose = idlePose === 'front' ? 'crossed' : 'front'; rest(); }   // arms crossed, or back
+        else snap();                                             // a reaction
       }
       life();
     }, 3500 + Math.random() * 3500);
@@ -103,16 +121,16 @@
     if (w) { watch(w); unwatch(6500); } else if (!hover) unwatch(0);
   }, 900); };
 
-  // ---------- taking a photo: camera up, flash, sparks from the lens ----------
+  // ---------- a reaction to the work: wow or joy, with a little burst of sparks ----------
   function snap() {
     if (!box.classList.contains('is-on')) return;
-    once('is-snap', 1200);
-    setTimeout(() => { once('is-flash', 600); const b = me.getBoundingClientRect(), c = cv.getBoundingClientRect();
-      burst(b.left - c.left + b.width * .5, b.top - c.top + b.height * .46, 16); }, 380);
+    play([[Math.random() < .5 ? 'wow' : 'joy']], 0, 1300); once('is-hop', 800);
+    setTimeout(() => { const b = me.getBoundingClientRect(), c = cv.getBoundingClientRect();
+      burst(b.left - c.left + b.width * .5, b.top - c.top + b.height * .22, 14); }, 200);
   }
 
   // ---------- flight: follows scroll speed with a soft spring, leaning into the direction of travel ----------
-  let lastY = scrollY, vel = 0, off = 0, offV = 0, rot = 0, running = false, idleT = 0, lastT = 0;
+  let lastY = scrollY, vel = 0, off = 0, offV = 0, rot = 0, running = false, idleT = 0, lastT = 0, striding = false;
   const P = [], sprite = document.createElement('canvas'); sprite.width = sprite.height = 32;
   { const s = sprite.getContext('2d'), rg = s.createRadialGradient(16, 16, 0, 16, 16, 16);
     rg.addColorStop(0, 'rgba(255,246,220,1)'); rg.addColorStop(.25, 'rgba(246,214,150,.85)'); rg.addColorStop(1, 'rgba(226,170,90,0)'); s.fillStyle = rg; s.fillRect(0, 0, 32, 32); }
@@ -139,6 +157,8 @@
     me.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg)`;
     if (!CW) size();
     const speed = Math.abs(vel);
+    // flying fast: he strides through the air
+    const fast = speed > 900; if (fast !== striding) { striding = fast; if (fast && !busy) show('walk'); else rest(); }
     if (speed > 60 && P.length < MAX) {
       const n = Math.min(3, 1 + (speed / 900) | 0), b = me.getBoundingClientRect(), c = cv.getBoundingClientRect();
       for (let i = 0; i < n; i++) P.push({ x: b.left - c.left + b.width / 2 + (Math.random() - .5) * 18, y: b.top - c.top + b.height * .88 + (Math.random() - .5) * 10, vx: (Math.random() - .5) * 30, vy: -Math.sign(vel) * (30 + Math.random() * 60) + (Math.random() - .5) * 20, life: 0, max: .6 + Math.random() * .9, r: .8 + Math.random() * 1.8 });
