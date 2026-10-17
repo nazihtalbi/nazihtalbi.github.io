@@ -1114,7 +1114,7 @@ body.is-gated .wa-float { display: none; }
 
 /* ---------- phones and tablets: keep the GPU free for scrolling ---------- */
 @media (max-width: 760px), (hover: none) {
-  .motion .aura i { animation: none; }
+  .motion .aura i:nth-child(n) { animation: none; }
   .aura i { will-change: auto; }
   .motion .hero__frame::before { animation: none; }
 }
@@ -1409,15 +1409,17 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
 .hero__float img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 34px 44px rgba(0, 0, 0, .6)); }
 .hero__glow { position: absolute; left: -70%; right: -70%; top: 4%; bottom: 8%; border-radius: 50%; opacity: .85;
   background: radial-gradient(ellipse at 50% 40%, rgba(246, 196, 120, .32), rgba(226, 150, 70, .12) 38%, transparent 66%); }
-.hero__shine { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: .9;
-  -webkit-mask: url(../media/site/nazih-crossed.webp) center / 100% 100% no-repeat; mask: url(../media/site/nazih-crossed.webp) center / 100% 100% no-repeat;
-  background: linear-gradient(105deg, transparent 42%, rgba(255, 236, 200, .55) 50%, transparent 58%) 120% 0 / 320% 100% no-repeat; }
+.hero__shine { position: absolute; inset: 0; overflow: hidden; pointer-events: none; mix-blend-mode: screen; opacity: .9;
+  -webkit-mask: url(../media/site/nazih-crossed.webp) center / 100% 100% no-repeat; mask: url(../media/site/nazih-crossed.webp) center / 100% 100% no-repeat; }
+/* the light band moves with a transform (no repaint each frame) */
+.hero__shine::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 100%; transform: translateX(-110%);
+  background: linear-gradient(105deg, transparent 20%, rgba(255, 236, 200, .55) 50%, transparent 80%); }
 .motion .hero__float { animation: heroFloat 6.5s ease-in-out infinite; }
 @keyframes heroFloat { 0%, 100% { transform: none; } 50% { transform: translateY(-1.6%); } }
 .motion .hero__glow { animation: heroGlow 5s ease-in-out infinite alternate; }
 @keyframes heroGlow { from { opacity: .55; transform: scale(.94); } to { opacity: 1; transform: scale(1.04); } }
-.motion .hero__shine { animation: heroShine 8s ease-in-out 2.4s infinite; }
-@keyframes heroShine { 0% { background-position: 120% 0; } 22%, 100% { background-position: -20% 0; } }
+.motion .hero__shine::before { animation: heroShine 8s ease-in-out 2.4s infinite; }
+@keyframes heroShine { 0% { transform: translateX(-110%); } 22%, 100% { transform: translateX(110%); } }
 @media (max-width: 760px) {
   .hero__me { height: min(40svh, calc(100svh - 30rem)); inset-inline-end: auto; inset-inline-start: calc(var(--pad) - 2vw); bottom: max(25.5rem, 50svh); }
   /* on the welcome screen: standing on the corner of the viewfinder; afterwards he moves over to stand on the name */
@@ -1434,3 +1436,12 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
 .buddy.is-watching { transition: opacity .6s ease, transform 1.3s cubic-bezier(.4, 0, .2, 1); }
 .motion .buddy__say.is-swap { animation: saySwap .4s cubic-bezier(.3, .7, .2, 1); }
 @keyframes saySwap { from { opacity: .2; transform: translateY(6px) scale(.97); } }
+
+/* colour grading compare, lighter while dragging: the divider moves on the compositor, the stills hide under the video */
+.cmp__line { left: 0; transform: translate3d(var(--x, 50%), 0, 0); will-change: transform; }
+.cmp.is-video .cmp__img { visibility: hidden; }
+.cmp__canvas { transform: translateZ(0); }
+.cmp.is-dragging .cmp__knob { transition: none; }
+
+/* once the visitor has scrolled past the first screen, its looping effects stop working in the background */
+body.hero-off .hero *, body.hero-off .hero *::before, body.hero-off .hero *::after { animation-play-state: paused !important; }

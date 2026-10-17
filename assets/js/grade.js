@@ -6,16 +6,20 @@
   const canvas = document.getElementById('cmpCanvas'), ctx = canvas.getContext('2d', { alpha: false }), video = document.getElementById('cmpVideo'), range = document.getElementById('cmpRange');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, V = (window.SITE_ROOT || '') + 'assets/media/video/';
   // the shots: Blackmagic RAW (Pocket Cinema Camera 4K) and Sony S-Log3 (ZV-E10)
+  // phones get a lighter copy (800 px wide instead of 1600): much easier to decode and draw while dragging
+  const M = matchMedia('(max-width: 900px)').matches ? '-m' : '';
   const CLIPS = {
-    braw: { src: V + 'grade-braw.mp4', before: V + 'grade-braw-before.webp', after: V + 'grade-braw-after.webp', label: 'gradeBeforeBraw', shot: 'gradeShotBraw' },
-    slog: { src: V + 'grade-compare.mp4', before: V + 'grade-before.webp', after: V + 'grade-after.webp', label: 'gradeBefore', shot: 'gradeShot' },
+    braw: { src: V + 'grade-braw' + M + '.mp4', before: V + 'grade-braw-before.webp', after: V + 'grade-braw-after.webp', label: 'gradeBeforeBraw', shot: 'gradeShotBraw' },
+    slog: { src: V + 'grade-compare' + M + '.mp4', before: V + 'grade-before.webp', after: V + 'grade-after.webp', label: 'gradeBefore', shot: 'gradeShot' },
   };
   let clip = 'braw', SRC = CLIPS.braw.src;
   const tr = k => { const I = window.I18N || {}, l = document.documentElement.lang; return (I[l] && I[l][k]) || (I.en && I.en[k]) || ''; };
-  let pos = 0.5, visible = false, touched = false, sweeping = 0, drawQueued = false;
+  let dragging = false, pos = 0.5, visible = false, touched = false, sweeping = 0, drawQueued = false;
 
   // ---- drawing ------------------------------------------------------------------------------
-  const size = () => { const w = Math.min(1600, Math.round(cmp.clientWidth * Math.min(2, devicePixelRatio || 1))); canvas.width = w; canvas.height = Math.round(w * 9 / 16); draw(); };
+  let boxW = 0; const line = cmp.querySelector('.cmp__line');
+  const size = () => { boxW = cmp.clientWidth; line.style.transform = 'translate3d(' + Math.round(boxW * pos) + 'px,0,0)';
+    const w = Math.min(M ? 900 : 1600, Math.round(boxW * Math.min(2, devicePixelRatio || 1))); canvas.width = w; canvas.height = Math.round(w * 9 / 16); draw(); };
   function draw() {
     if (video.readyState < 2 || !canvas.width) return;
     if (!cmp.classList.contains('is-video')) cmp.classList.add('is-video');
@@ -24,25 +28,28 @@
     if (x < cw) ctx.drawImage(video, vw * pos, vh, vw * (1 - pos), vh, x, 0, cw - x, ch);  // right: graded
   }
   const queue = () => { if (drawQueued) return; drawQueued = true; requestAnimationFrame(() => { drawQueued = false; draw(); }); };
-  // redraw on every new video frame (only while it plays)
-  const frameLoop = () => { if (!visible || video.paused) return; draw(); 'requestVideoFrameCallback' in video ? video.requestVideoFrameCallback(frameLoop) : requestAnimationFrame(frameLoop); };
+  // redraw on every new video frame (only while it plays); at most one drawing per screen frame, shared with the divider
+  const frameLoop = () => { if (!visible || video.paused) return; queue(); 'requestVideoFrameCallback' in video ? video.requestVideoFrameCallback(frameLoop) : requestAnimationFrame(frameLoop); };
   video.addEventListener('playing', () => { cmp.classList.add('is-video'); frameLoop(); });
   video.addEventListener('loadeddata', () => { cmp.classList.add('is-video'); draw(); });
 
   // ---- the divider --------------------------------------------------------------------------
   function setPos(p, fromUser) {
     pos = Math.min(1, Math.max(0, p));
-    cmp.style.setProperty('--pos', (pos * 100).toFixed(2) + '%');
-    cmp.classList.toggle('show-before', pos > 0.12); cmp.classList.toggle('show-after', pos < 0.88);
-    range.value = (pos * 100).toFixed(1);
+    // the divider moves with a transform (no layout); the stills are only re-cut while they are what is showing
+    line.style.transform = 'translate3d(' + Math.round(boxW * pos) + 'px,0,0)';
+    if (!cmp.classList.contains('is-video')) cmp.style.setProperty('--pos', (pos * 100).toFixed(2) + '%');
+    const b = pos > 0.12, a = pos < 0.88;
+    if (b !== cmp.classList.contains('show-before')) cmp.classList.toggle('show-before', b);
+    if (a !== cmp.classList.contains('show-after')) cmp.classList.toggle('show-after', a);
+    if (!dragging) range.value = (pos * 100).toFixed(1);
     if (fromUser && !touched) { touched = true; cmp.classList.add('is-touched'); cancelAnimationFrame(sweeping); }
     queue();
   }
   const fromX = clientX => { const r = cmp.getBoundingClientRect(); return (clientX - r.left) / r.width; };
-  let dragging = false;
   cmp.addEventListener('pointerdown', e => { if (e.button !== 0) return; dragging = true; cmp.setPointerCapture(e.pointerId); cmp.classList.add('is-dragging'); setPos(fromX(e.clientX), true); });
   cmp.addEventListener('pointermove', e => { if (dragging) setPos(fromX(e.clientX), true); });
-  const end = () => { dragging = false; cmp.classList.remove('is-dragging'); };
+  const end = () => { if (!dragging) return; dragging = false; cmp.classList.remove('is-dragging'); range.value = (pos * 100).toFixed(1); };
   cmp.addEventListener('pointerup', end); cmp.addEventListener('pointercancel', end);
   range.addEventListener('input', () => setPos(range.value / 100, true));   // keyboard and screen readers
 
@@ -85,7 +92,7 @@
     shot.dataset.i18n = c.shot; shot.textContent = tr(c.shot);
     cmp.classList.add('is-switching');
     setTimeout(() => {
-      cmp.classList.remove('is-video'); imgB.src = c.before; imgA.src = c.after;
+      cmp.classList.remove('is-video'); cmp.style.setProperty('--pos', (pos * 100).toFixed(2) + '%'); imgB.src = c.before; imgA.src = c.after;
       video.src = c.src; video.preload = 'auto';
       const back = () => { cmp.classList.remove('is-switching'); draw(); };
       video.addEventListener('loadeddata', back, { once: true });

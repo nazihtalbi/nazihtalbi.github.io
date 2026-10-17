@@ -58,7 +58,7 @@
     box.classList.toggle('is-on', past && !document.body.classList.contains('is-gated') && !document.body.classList.contains('menu-open'));
     box.style.setProperty('--face', document.documentElement.dir === 'rtl' ? -1 : 1);
   };
-  if (top && 'IntersectionObserver' in window) new IntersectionObserver(es => { past = !es[0].isIntersecting; sync(); }, { threshold: .2 }).observe(top);
+  if (top && 'IntersectionObserver' in window) new IntersectionObserver(es => { past = !es[0].isIntersecting; document.body.classList.toggle('hero-off', past); sync(); }, { threshold: .2 }).observe(top);
   new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
 
