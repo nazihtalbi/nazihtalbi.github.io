@@ -18,8 +18,8 @@ const TROUSER = [[0, '#0F1114'], [.35, '#262931'], [.6, '#3A3F4A'], [1, '#14161A
 const SKIN = [[0, '#B47C5A'], [.45, '#D9A47F'], [.7, '#E6B591'], [1, '#B98262']];
 
 // joints (shoulder, elbow, wrist / hip, knee, ankle)
-const armL = limb([62, 104], [50, 127], 6.6, 6.2, SLEEVE) + limb([50, 127], [59, 145], 6.2, 5.6, SLEEVE);
-const armR = limb([98, 104], [110, 127], 6.6, 6.2, SLEEVE) + limb([110, 127], [101, 145], 6.2, 5.6, SLEEVE);
+const upL = limb([62, 104], [50, 127], 6.6, 6.2, SLEEVE), foreL = limb([50, 127], [59, 145], 6.2, 5.6, SLEEVE);
+const upR = limb([98, 104], [110, 127], 6.6, 6.2, SLEEVE), foreR = limb([110, 127], [101, 145], 6.2, 5.6, SLEEVE);
 const legL = limb([71, 176], [67, 215], 8.6, 7, TROUSER) + limb([67, 215], [61, 251], 7, 5.8, TROUSER);
 const legR = limb([89, 176], [95, 213], 8.6, 7, TROUSER) + limb([95, 213], [104, 246], 7, 5.8, TROUSER);
 
@@ -30,7 +30,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 290" width
     <radialGradient id="ear" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#C98F6C"/><stop offset="1" stop-color="#A86F50"/></radialGradient>
     <linearGradient id="neck" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9E6748"/><stop offset="1" stop-color="#C48D69"/></linearGradient>
     <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A322C"/><stop offset=".5" stop-color="#1D1916"/><stop offset="1" stop-color="#141110"/></linearGradient>
-    <linearGradient id="beard" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A2F28"/><stop offset="1" stop-color="#211B17"/></linearGradient>
+    <linearGradient id="beard" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A3C33"/><stop offset="1" stop-color="#2B231E"/></linearGradient>
     <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#EEF0F4"/><stop offset="1" stop-color="#C9CDD6"/></linearGradient>
     <linearGradient id="vest" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#43454D"/><stop offset=".35" stop-color="#2A2B31"/><stop offset=".75" stop-color="#1A1B20"/><stop offset="1" stop-color="#101114"/></linearGradient>
     <linearGradient id="tie" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3B4049"/><stop offset=".5" stop-color="#262A31"/><stop offset="1" stop-color="#181B20"/></linearGradient>
@@ -69,11 +69,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 290" width
     <path d="M100 110 L98.6 152 Q97.6 165 96.4 177" fill="none" stroke="rgba(246,214,150,.55)" stroke-width="1.2" stroke-linecap="round"/>
   </g>
 
-  <g id="arms">
-    <g id="armL">${armL}<path d="M54 141 L62 147" stroke="#C3C7D0" stroke-width="2.6" stroke-linecap="round"/></g>
-    <g id="armR">${armR}<path d="M106 141 L98 147" stroke="#C3C7D0" stroke-width="2.6" stroke-linecap="round"/></g>
-  </g>
-
   <g id="camera">
     <rect x="57" y="131" width="46" height="29" rx="5.5" fill="url(#cam)"/>
     <path d="M60 133 L100 133" stroke="#5A5E68" stroke-width="1" stroke-linecap="round" opacity=".8"/>
@@ -87,17 +82,22 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 290" width
     <circle cx="97" cy="137" r="1.6" fill="#E2584F"/>
   </g>
 
-  <g id="hands">
-    <g id="handL">
-      <path d="M54 139 Q51 148 56 156 Q60 159 65 156 Q63 148 62.5 140 Z" fill="url(#handG)"/>
-      <path d="M57 148 L63 147 M57.5 151.5 L63.5 150.6" stroke="#A86F50" stroke-width=".7" stroke-linecap="round"/>
-      <rect x="51.5" y="135.5" width="12" height="5.6" rx="2.2" fill="#0D0E10"/>
-      <circle cx="57.5" cy="138.3" r="2.4" fill="#2C2F36" stroke="#8A8F99" stroke-width=".6"/>
+  <!-- arms: shoulder -> elbow -> hand, so they bend like real arms (hands drawn on the forearms, in front of the camera) -->
+  <g id="arms">
+    <g id="armL">${upL}
+      <g id="foreL">${foreL}<path d="M54 141 L62 147" stroke="#C3C7D0" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M54 139 Q51 148 56 156 Q60 159 65 156 Q63 148 62.5 140 Z" fill="url(#handG)"/>
+        <path d="M57 148 L63 147 M57.5 151.5 L63.5 150.6" stroke="#A86F50" stroke-width=".7" stroke-linecap="round"/>
+        <rect x="51.5" y="135.5" width="12" height="5.6" rx="2.2" fill="#0D0E10"/>
+        <circle cx="57.5" cy="138.3" r="2.4" fill="#2C2F36" stroke="#8A8F99" stroke-width=".6"/>
+      </g>
     </g>
-    <g id="handR">
-      <path d="M106 139 Q109 148 104 156 Q100 159 95 156 Q97 148 97.5 140 Z" fill="url(#handG)"/>
-      <path d="M103 148 L97 147 M102.5 151.5 L96.5 150.6" stroke="#A86F50" stroke-width=".7" stroke-linecap="round"/>
-      <path d="M97.2 149.4 L101.4 148.6" stroke="#D4D8DF" stroke-width="1.6" stroke-linecap="round"/>
+    <g id="armR">${upR}
+      <g id="foreR">${foreR}<path d="M106 141 L98 147" stroke="#C3C7D0" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M106 139 Q109 148 104 156 Q100 159 95 156 Q97 148 97.5 140 Z" fill="url(#handG)"/>
+        <path d="M103 148 L97 147 M102.5 151.5 L96.5 150.6" stroke="#A86F50" stroke-width=".7" stroke-linecap="round"/>
+        <path d="M97.2 149.4 L101.4 148.6" stroke="#D4D8DF" stroke-width="1.6" stroke-linecap="round"/>
+      </g>
     </g>
   </g>
 
@@ -109,9 +109,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 290" width
     <path d="M63 46 Q63 27 80 26 Q97 27 97 46 L97 64 Q96.5 82 80 89 Q63.5 82 63 64 Z" fill="url(#face)"/>
     <path d="M66.5 45 Q67.5 39 72 37" stroke="#F4CDAE" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
     <!-- full beard from the sideburns along the jaw, thick on the chin -->
-    <path d="M63.4 48 Q62.8 72 72 84.5 Q80 91.5 88 84.5 Q97.2 72 96.6 48 L95.2 48 Q94.6 61 90.6 65.6 Q85.6 69.4 80 68.8 Q74.4 69.4 69.4 65.6 Q65.4 61 64.8 48 Z" fill="url(#beard)"/>
-    <path d="M68 66 Q69 74 74 79 M92 66 Q91 74 86 79" stroke="#4A3D34" stroke-width=".8" fill="none" opacity=".6"/>
-    <path d="M71 69.6 Q80 64.6 89 69.6 Q84.5 72 80 70.8 Q75.5 72 71 69.6 Z" fill="url(#beard)"/>
+    <path d="M63.7 50 Q63.5 70 71.6 82.4 Q80 89.4 88.4 82.4 Q96.5 70 96.3 50 L95.3 50 Q95 64 90.4 72 Q86.2 77.6 80 77.8 Q73.8 77.6 69.6 72 Q65 64 64.7 50 Z" fill="url(#beard)" opacity=".86"/>
+    <path d="M77.4 76.6 L82.6 76.6 L81.1 78.6 L78.9 78.6 Z" fill="url(#beard)" opacity=".86"/>
+    
+    <path d="M72.6 69.9 Q80 66.8 87.4 69.9 Q84 71.4 80 70.7 Q76 71.4 72.6 69.9 Z" fill="url(#beard)" opacity=".9"/>
     <!-- fuller lips -->
     <path d="M75.6 73.4 Q80 71.6 84.4 73.4 Q80 76.4 75.6 73.4 Z" fill="#B06A58"/>
     <path d="M77.2 74.6 Q80 75.8 82.8 74.6" stroke="#D4907C" stroke-width=".8" fill="none" stroke-linecap="round"/>

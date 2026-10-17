@@ -1367,3 +1367,18 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
 .buddy.is-watching .buddy__me svg, .buddy.is-talking .buddy__me svg { rotate: y calc(var(--face) * -30deg); }
 .buddy.is-watching .buddy__me { rotate: calc(var(--face) * -3deg); }
 @keyframes peek { 0%, 100% { rotate: y 0deg; } 35%, 70% { rotate: y calc(var(--face) * -40deg); } }
+
+/* ---------- Mini Nazih: jointed arms (shoulder -> elbow -> hand) ---------- */
+#mn-armL, #mn-armR, #mn-foreL, #mn-foreR { transform-box: view-box; transition: transform .5s cubic-bezier(.3, .7, .2, 1); }
+#mn-armL { transform-origin: 62px 104px; } #mn-armR { transform-origin: 98px 104px; }
+#mn-foreL { transform-origin: 50px 127px; } #mn-foreR { transform-origin: 110px 127px; }
+/* a real wave: the upper arm lifts a little, the forearm swings up from the elbow and waves */
+.motion .buddy.is-wave #mn-armR { animation: waveUpper 1.9s cubic-bezier(.4, 0, .3, 1); }
+.motion .buddy.is-wave #mn-foreR { animation: waveFore 1.9s cubic-bezier(.4, 0, .3, 1); }
+@keyframes waveUpper { 0%, 100% { transform: none; } 22%, 80% { transform: rotate(-36deg); } }
+@keyframes waveFore { 0%, 100% { transform: none; } 22% { transform: rotate(-182deg); } 38% { transform: rotate(-160deg); } 54% { transform: rotate(-184deg); } 68% { transform: rotate(-162deg); } 80% { transform: rotate(-180deg); } }
+/* taking a photo: both forearms bend up and the camera rises with the hands */
+.buddy.is-snap #mn-arms { transform: none; }
+.buddy.is-snap #mn-camera { transform: translateY(-7px); }
+.buddy.is-snap #mn-foreL { transform: rotate(-15deg); }
+.buddy.is-snap #mn-foreR { transform: rotate(15deg); }
