@@ -147,6 +147,7 @@
       cur = l; greet(l); const g = WELCOME[l];
       hello.lang = l; hello.dir = l === 'ar' ? 'rtl' : 'ltr';
       $('#gateContinueTx').textContent = g.go; $('#gateChangeTx').textContent = g.change; $('#gateBackTx').textContent = g.back;
+      const acts = $('.gate__actions'); if (acts) { acts.classList.remove('is-relabel'); void acts.offsetWidth; acts.classList.add('is-relabel'); }
       $('#gateBack').lang = l; $('#gateBack').dir = hello.dir;
     };
     // the greeting and the Continue button keep the size of their longest language, so nothing jumps while it cycles

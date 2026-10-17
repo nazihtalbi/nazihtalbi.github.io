@@ -1257,3 +1257,17 @@ html.vf-fast body.is-gated .vfx { transition-delay: 0s; }
 }
 /* desktop: he lives in the page margin, not over the work */
 @media (min-width: 761px) { .buddy { inset-inline-end: 6px; width: 62px; height: 112px; margin-top: -56px; } }
+
+/* ---------- welcome buttons stay put while the language cycles ----------
+   - same order in every language (Arabic no longer swaps them left/right)
+   - labels centred inside their fixed width
+   - the arrow turns for Arabic instantly (no squash animation); only the hover nudge animates
+   - the new label fades in softly instead of snapping */
+.gate__actions { direction: ltr; }
+.gate__hello[dir="rtl"] .gate__actions > * { direction: rtl; }
+.gate__continue, .gate__change { justify-content: center; }
+.gate__continue svg { transition: transform .35s var(--ease); scale: 1 1; }
+.gate__hello[dir="rtl"] .gate__continue svg { transform: none; scale: -1 1; }
+.gate__hello[dir="rtl"] .gate__continue:hover svg, .gate__hello[dir="rtl"] .gate__continue:focus-visible svg { transform: translateX(-4px); }
+.gate__actions.is-relabel .gate__continue > span, .gate__actions.is-relabel .gate__change > span { animation: relabel .4s ease both; }
+@keyframes relabel { from { opacity: 0; transform: translateY(5px); } }
