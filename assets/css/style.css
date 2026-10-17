@@ -1424,3 +1424,13 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
   body.is-gated .hero__me { height: 34svh; inset-inline-start: calc(100vw - 9.9svh - .4rem); bottom: .6rem; }
   .hero__glow { opacity: .6; }
 }
+
+/* smoother mini: poses cross-fade (quicker during a turn), the bubble text eases in when it changes */
+.buddy__bob { position: relative; }
+.buddy__pose { position: absolute; inset: 0; opacity: 0; transition: opacity .28s ease; }
+.buddy__pose.is-shown { opacity: 1; }
+.buddy__me.is-quick .buddy__pose { transition-duration: .09s; }
+.buddy.is-on { transition: opacity .6s ease, transform 2.4s cubic-bezier(.4, 0, .2, 1); }
+.buddy.is-watching { transition: opacity .6s ease, transform 1.3s cubic-bezier(.4, 0, .2, 1); }
+.motion .buddy__say.is-swap { animation: saySwap .4s cubic-bezier(.3, .7, .2, 1); }
+@keyframes saySwap { from { opacity: .2; transform: translateY(6px) scale(.97); } }

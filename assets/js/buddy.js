@@ -24,9 +24,14 @@
   // poses from his character sheet: one sprite, one cell per pose (front, turnaround, wave, arms crossed, walk, wow, joy)
   const F = { camera: 0, crossed: 1, q3: 2, left: 3, right: 4, back: 5, q3back: 6, wave: 7, walk: 8, wow: 9, present: 10 };
   const img = me.querySelector('img'), sheet = ((img && img.getAttribute('src')) || 'assets/media/site/mini-nazih.svg').replace(/mini-nazih\.svg$/, 'mini-sprite.webp');
-  me.innerHTML = '<span class="buddy__bob"><span class="buddy__pose"></span></span>';
-  const pose = me.querySelector('.buddy__pose'); pose.style.backgroundImage = `url("${sheet}")`;
-  const show = (name, flip) => { pose.style.setProperty('--f', F[name]); pose.style.setProperty('--flip', flip ? -1 : 1); };
+  // two layers: a new pose fades in over the last one, so he changes smoothly instead of jumping
+  me.innerHTML = '<span class="buddy__bob"><span class="buddy__pose is-shown"></span><span class="buddy__pose"></span></span>';
+  const layers = [...me.querySelectorAll('.buddy__pose')]; let front = 0, cur = '';
+  layers.forEach(l => { l.style.backgroundImage = `url("${sheet}")`; });
+  const show = (name, flip) => {
+    const key = name + (flip ? '-' : '+'); if (key === cur) return; cur = key;
+    const next = layers[1 - front]; next.style.setProperty('--f', F[name]); next.style.setProperty('--flip', flip ? -1 : 1);
+    next.classList.add('is-shown'); layers[front].classList.remove('is-shown'); front = 1 - front; };
   // the page is on his left when he stands on the right edge (and the other way round in Arabic)
   const toPage = () => document.documentElement.dir !== 'rtl';
   let idlePose = 'camera', busy = false, seqT = [];
@@ -36,9 +41,9 @@
     else if (box.classList.contains('is-watching')) show('q3', toPage()); else show(idlePose); };
   // a short sequence of poses, then back to rest
   const play = (frames, step = 110, hold = 0) => {
-    seqT.forEach(clearTimeout); seqT = []; busy = true;
+    seqT.forEach(clearTimeout); seqT = []; busy = true; me.classList.toggle('is-quick', frames.length > 1 && step < 200);
     frames.forEach(([n, fl], i) => seqT.push(setTimeout(() => show(n, fl), i * step)));
-    seqT.push(setTimeout(() => { busy = false; rest(); }, (frames.length - 1) * step + step + hold));
+    seqT.push(setTimeout(() => { busy = false; me.classList.remove('is-quick'); rest(); }, (frames.length - 1) * step + step + hold));
   };
   const wave = () => play([['wave', toPage()]], 0, 1700);
   // a real turn on the spot, through the turnaround views of the sheet
@@ -59,22 +64,24 @@
 
   // speech bubble
   let sayT = 0;
-  const speak = (text, ms = 3200) => { say.textContent = text; box.classList.add('is-talking'); clearTimeout(sayT); sayT = setTimeout(() => box.classList.remove('is-talking'), ms); };
+  const speak = (text, ms = 3200) => { if (box.classList.contains('is-talking') && say.textContent !== text) { say.classList.remove('is-swap'); void say.offsetWidth; say.classList.add('is-swap'); }
+    say.textContent = text; box.classList.add('is-talking'); clearTimeout(sayT); sayT = setTimeout(() => box.classList.remove('is-talking'), ms); };
   const once = (cls, ms) => { box.classList.remove(cls); void box.offsetWidth; box.classList.add(cls); setTimeout(() => box.classList.remove(cls), ms); };
   me.addEventListener('click', () => { speak(T('buddyHi')); once('is-hop', 800); wave(); });
   const contact = $('#contact'); let pointed = false;
   if (contact && 'IntersectionObserver' in window) new IntersectionObserver(es => { if (es[0].isIntersecting && !pointed && box.classList.contains('is-on')) { pointed = true; speak(T('buddyContact'), 4200); wave(); } }, { threshold: .35 }).observe(contact);
   document.addEventListener('click', e => { if (e.target.closest('#nav a, .gate__opt, .client__go, .case__item--reels')) { once('is-dash', 1000); play([['walk']], 0, 900); } });
-  // arriving in a section for the first time: he turns to it and says a word about the work there
-  const said = new Set(); let here = null, sayIn = 0;
+  // arriving in a section (also when scrolling back to it): he presents it and says a word about the work there
+  let here = null, sayIn = 0;
   if ('IntersectionObserver' in window) {
     const secIO = new IntersectionObserver(es => es.forEach(e => {
-      if (!e.isIntersecting) return; here = e.target.id; clearTimeout(sayIn);
+      if (!e.isIntersecting) { if (e.target.id === here) { here = null; clearTimeout(sayIn); } return; }
+      if (e.target.id === here) return; here = e.target.id; clearTimeout(sayIn);
       sayIn = setTimeout(() => {
-        const id = here; if (said.has(id) || !box.classList.contains('is-on') || box.classList.contains('is-talking')) return;
+        const id = here; if (!id || !box.classList.contains('is-on')) return;
         const line = T('buddy.' + id); if (!line || line === 'buddy.' + id) return;
-        said.add(id); speak(line, 4800);
-      }, 700);
+        speak(line, 4800);
+      }, 650);
     }), { rootMargin: '-42% 0px -42% 0px' });
     ['films', 'reels', 'cases', 'grade', 'snow', 'photos', 'clients', 'about', 'services'].forEach(id => { const s = document.getElementById(id); if (s) secIO.observe(s); });
   }
@@ -171,7 +178,7 @@
     if (!CW) size();
     const speed = Math.abs(vel);
     // flying fast: he strides through the air
-    const fast = speed > 900; if (fast !== striding) { striding = fast; if (fast && !busy) show('walk'); else rest(); }
+    const fast = striding ? speed > 550 : speed > 1100; if (fast !== striding) { striding = fast; if (fast && !busy) show('walk'); else rest(); }
     if (speed > 60 && P.length < MAX) {
       const n = Math.min(3, 1 + (speed / 900) | 0), b = me.getBoundingClientRect(), c = cv.getBoundingClientRect();
       for (let i = 0; i < n; i++) P.push({ x: b.left - c.left + b.width / 2 + (Math.random() - .5) * 18, y: b.top - c.top + b.height * .88 + (Math.random() - .5) * 10, vx: (Math.random() - .5) * 30, vy: -Math.sign(vel) * (30 + Math.random() * 60) + (Math.random() - .5) * 20, life: 0, max: .6 + Math.random() * .9, r: .8 + Math.random() * 1.8 });
