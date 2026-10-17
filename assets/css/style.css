@@ -1448,3 +1448,19 @@ body.hero-off .hero *, body.hero-off .hero *::before, body.hero-off .hero *::aft
 /* phones: the mini floats clear above the WhatsApp button (and its rings) */
 @media (max-width: 760px) { .buddy { bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 6rem); } }
 @media (max-width: 760px) { .buddy { width: 96px; height: 148px; } }
+
+/* Photography on a slow connection: the category photo shows blurred at once, sharpens when the full one arrives;
+   wall photos fade in as they load */
+.lead__img img { transition: transform 1.2s var(--ease), filter .6s ease; }
+.lead.is-loading .lead__img img { filter: blur(14px) saturate(1.1); }
+.tile img { opacity: 0; transition: opacity .55s ease, transform .8s var(--ease); }
+.tile img.is-ok { opacity: 1; }
+
+/* phones and tablets: lighter for the graphics chip while scrolling (no glass blur on every reel card,
+   the soft halos stay but stop drifting) */
+@media (max-width: 760px), (hover: none) {
+  .vcard__media::after { backdrop-filter: none; -webkit-backdrop-filter: none; background-color: rgba(0, 0, 0, .7); }
+  .motion .glow.is-live::before, .motion .glow.is-live::after { animation: none; }
+  .glow.is-live::before, .glow.is-live::after { will-change: auto; }
+  .glow::after { opacity: .3; }
+}

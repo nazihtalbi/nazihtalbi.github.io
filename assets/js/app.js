@@ -462,10 +462,19 @@
     visible = showCover ? [leadP, ...pool] : pool;
     const lead = $('#lead'); lead.hidden = !showCover;
     if (showCover) {
-      const img = $('#leadImg'); img.sizes = '(max-width: 1500px) 100vw, 1440px'; img.srcset = `${leadP.sm} 1400w, ${leadP.lg} 2400w`; img.src = leadP.sm; img.alt = t('cat.' + leadP.cat);
+      const img = $('#leadImg'); img.alt = t('cat.' + leadP.cat);
       $('#leadCat').textContent = t('cat.' + leadP.cat); $('#leadTitle').textContent = t('cat.' + leadP.cat);
-      // replay the reveal each time the category changes
-      if (lead.dataset.cat !== leadP.id) { lead.dataset.cat = leadP.id; lead.classList.remove('is-swap'); void lead.offsetWidth; lead.classList.add('is-swap'); }
+      if (lead.dataset.cat !== leadP.id) {
+        const id = leadP.id, SIZES = '(max-width: 1500px) 100vw, 1440px', SET = `${leadP.sm} 1400w, ${leadP.lg} 2400w`;
+        lead.dataset.cat = id;
+        // on a slow connection: the small copy shows at once (softly blurred), the sharp photo swaps in once it has arrived
+        img.loading = 'eager'; img.removeAttribute('srcset'); img.src = leadP.xs; lead.classList.add('is-loading');
+        const hi = new Image(); hi.fetchPriority = 'high'; hi.sizes = SIZES; hi.srcset = SET; hi.src = leadP.sm;
+        const done = () => { if (lead.dataset.cat !== id) return; img.sizes = SIZES; img.srcset = SET; img.src = leadP.sm; lead.classList.remove('is-loading'); };
+        (hi.decode ? hi.decode() : new Promise((ok, no) => { hi.onload = ok; hi.onerror = no; })).then(done, done);
+        // replay the reveal each time the category changes
+        lead.classList.remove('is-swap'); void lead.offsetWidth; lead.classList.add('is-swap');
+      }
     }
     const shown = !expanded ? pool.slice(0, LIMIT) : pool;
     const shapes = wallShapes(shown.length);
@@ -476,6 +485,9 @@
       const idx = i + (showCover ? 1 : 0);
       b.setAttribute('aria-label', `${t('cat.' + p.cat)}. ${t('photoOf').replace('{n}', idx + 1).replace('{t}', visible.length)}`);
       b.addEventListener('click', () => openLightbox(idx));
+      // each photo fades in when it has arrived (instead of popping in over a grey box)
+      const im = b.firstElementChild, ok = () => im.classList.add('is-ok');
+      if (im.complete && im.naturalWidth) ok(); else { im.addEventListener('load', ok, { once: true }); im.addEventListener('error', ok, { once: true }); }
       wall.append(b);
     });
     $('#photoCount').textContent = t('nPhotos').replace('{n}', visible.length);
@@ -484,6 +496,10 @@
     more.textContent = expanded ? t('showLess') : t('showMore');
   }
   $('#leadBtn').addEventListener('click', () => openLightbox(0));
+  // when Photography comes near, fetch the small copy of each category's cover, so a category opens at once
+  if ('IntersectionObserver' in window) new IntersectionObserver((es, o) => { if (!es[0].isIntersecting) return; o.disconnect();
+    const go = () => Object.values(D.COVERS || {}).forEach(c => { const i = new Image(); i.src = c.xs; });
+    'requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : setTimeout(go, 600); }, { rootMargin: '1500px 0px' }).observe($('#photos'));
   // the header photo's reveal waits until it is actually on screen
   if ('IntersectionObserver' in window) new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { $('#lead').classList.add('is-seen'); o.disconnect(); } }, { threshold: .25 }).observe($('#lead')); else $('#lead').classList.add('is-seen');
   $('#moreBtn').addEventListener('click', () => { expanded = !expanded; renderWall(); if (!expanded) $('#photos').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' }); });
