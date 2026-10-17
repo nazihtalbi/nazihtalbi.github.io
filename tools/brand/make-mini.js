@@ -116,11 +116,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 290" width
     <!-- a rounder, fuller face -->
     <path d="M63 46 Q63 27 80 26 Q97 27 97 46 L97 64 Q96.5 82 80 89 Q63.5 82 63 64 Z" fill="url(#face)"/>
     <path d="M66.5 45 Q67.5 39 72 37" stroke="#F4CDAE" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
-    <!-- full beard from the sideburns along the jaw, thick on the chin -->
-    <path d="M63.4 46 L65.6 46 Q66 55.6 68.4 60.4 Q71.4 62.8 74.4 64 Q76.2 66.4 80 66.6 Q83.8 66.4 85.6 64 Q88.6 62.8 91.6 60.4 Q94 55.6 94.4 46 L96.6 46 Q96.6 70 88.4 82.6 Q80 89.6 71.6 82.6 Q63.4 70 63.4 46 Z" fill="url(#beard)" opacity=".9"/>
-    <path d="M65.8 50 Q66.4 57 68.8 60.4 Q71.6 62.6 74.6 63.8 M94.2 50 Q93.6 57 91.2 60.4 Q88.4 62.6 85.4 63.8" stroke="#6A564A" stroke-width=".55" fill="none" opacity=".45"/>
     
-    <path d="M72.6 69.9 Q80 66.8 87.4 69.9 Q84 71.4 80 70.7 Q76 71.4 72.6 69.9 Z" fill="url(#beard)" opacity=".9"/>
     <!-- fuller lips -->
     <path d="M75.6 73.4 Q80 71.6 84.4 73.4 Q80 76.4 75.6 73.4 Z" fill="#B06A58"/>
     <path d="M77.2 74.6 Q80 75.8 82.8 74.6" stroke="#D4907C" stroke-width=".8" fill="none" stroke-linecap="round"/>
@@ -152,7 +148,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 290" width
     </g>
     <path d="M67 51.4 L70.8 50.8 M82.8 51.4 L86.6 50.8" stroke="#FFFFFF" stroke-width=".9" stroke-linecap="round" opacity=".75"/>
     <path d="M79 52.6 Q80 51.6 81 52.6 M79 50.4 L81 50.4 M65.2 52.4 L62.8 51.6 M94.8 52.4 L97.2 51.6" stroke="#D9D2C4" stroke-width="1.05" fill="none" stroke-linecap="round"/>
-    <path d="M97 52 Q97 70 89.4 81.6" stroke="rgba(246,214,150,.3)" stroke-width=".8" fill="none" stroke-linecap="round"/>
+    <path d="M96.7 50 L96.7 64 Q96.2 78 88.6 84.6" stroke="rgba(246,214,150,.3)" stroke-width=".8" fill="none" stroke-linecap="round"/>
   </g>
 </svg>
 `;
