@@ -1322,3 +1322,7 @@ body:not(.is-gated) .gate.is-leaving * { pointer-events: none !important; }
 .buddy.is-snap #mn-camera, .buddy.is-snap #mn-hands { transform: translateY(-22px) rotate(calc(var(--face) * -4deg)); transform-box: view-box; transform-origin: 80px 147px; }
 .buddy.is-snap #mn-arms { transform: scaleY(.8); }
 .buddy__flash { top: 43%; }
+
+/* the page stays still while the welcome is up. The lock must sit on <html>: with html { overflow-x: clip }
+   the browser no longer takes body's overflow for the window, so body.is-gated alone stopped locking scrolling */
+html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
