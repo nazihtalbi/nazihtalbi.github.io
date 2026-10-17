@@ -104,6 +104,49 @@
   const live = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('is-live', e.isIntersecting)), { rootMargin: '100px 0px' });
   $$('.glow').forEach(g => live.observe(g));
 
+  /* ---------- welcome: gold sparks drifting off the viewfinder, and cards that follow the finger ---------- */
+  $$('.gate__opt').forEach(o => o.addEventListener('pointermove', e => {
+    const r = o.getBoundingClientRect();
+    o.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%'); o.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+  }));
+  const sc = $('.vfx__sparks');
+  if (sc && document.body.classList.contains('is-gated')) {
+    const g = sc.getContext('2d'), M = 70, N = lite ? 34 : 70, P = [];
+    // one soft glow sprite, drawn once, reused for every spark
+    const sprite = document.createElement('canvas'); sprite.width = sprite.height = 32;
+    { const s = sprite.getContext('2d'), rg = s.createRadialGradient(16, 16, 0, 16, 16, 16);
+      rg.addColorStop(0, 'rgba(255,246,220,1)'); rg.addColorStop(.25, 'rgba(246,214,150,.85)'); rg.addColorStop(1, 'rgba(226,170,90,0)'); s.fillStyle = rg; s.fillRect(0, 0, 32, 32); }
+    let W = 0, Hh = 0;
+    const size = () => { const d = Math.min(devicePixelRatio || 1, 1.5); W = sc.clientWidth; Hh = sc.clientHeight; sc.width = W * d; sc.height = Hh * d; g.setTransform(d, 0, 0, d, 0, 0); };
+    // a spark is born on the edge of the frame and drifts outwards (and slightly up), twinkling as it fades
+    const born = p => {
+      const w = W - 2 * M, h = Hh - 2 * M, per = 2 * (w + h); let d = Math.random() * per, x, y, nx, ny;
+      if (d < w) { x = M + d; y = M; nx = 0; ny = -1; } else if ((d -= w) < h) { x = M + w; y = M + d; nx = 1; ny = 0; }
+      else if ((d -= h) < w) { x = M + w - d; y = M + h; nx = 0; ny = 1; } else { d -= w; x = M; y = M + h - d; nx = -1; ny = 0; }
+      const sp = 8 + Math.random() * 26;
+      Object.assign(p, { x, y, vx: nx * sp + (Math.random() - .5) * 10, vy: ny * sp - 6 - Math.random() * 8, life: 0, max: 1.4 + Math.random() * 2.2, r: Math.random() < .12 ? 3 + Math.random() * 3 : .9 + Math.random() * 2, tw: Math.random() * 6.28 });
+      p.big = p.r > 3;
+    };
+    let last = 0;
+    const tick = now => {
+      if (!document.body.classList.contains('is-gated')) { g.clearRect(0, 0, W, Hh); return; }   // stops for good once the visitor is in
+      requestAnimationFrame(tick);
+      if (document.hidden) return;
+      const dt = Math.min(.05, (now - last) / 1000 || 0); last = now;
+      if (sc.clientWidth !== W || sc.clientHeight !== Hh) size();
+      while (P.length < N) { const p = {}; born(p); p.life = Math.random() * p.max; P.push(p); }
+      g.clearRect(0, 0, W, Hh); g.globalCompositeOperation = 'lighter';
+      for (const p of P) {
+        p.life += dt; if (p.life > p.max) { born(p); continue; }
+        p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= .995;
+        const k = p.life / p.max, a = Math.sin(Math.PI * k) * (p.big ? .35 : .7 + .3 * Math.sin(p.tw + p.life * 9)), s = p.r * 8;
+        g.globalAlpha = Math.max(0, a); g.drawImage(sprite, p.x - s / 2, p.y - s / 2, s, s);
+      }
+      g.globalAlpha = 1;
+    };
+    size(); requestAnimationFrame(tick);
+  }
+
   /* ---------- falling snow over the sequence ---------- */
   const cv = $('#snowFlakes'); if (!cv) return;
   const ctx = cv.getContext('2d'); let flakes = [], W = 0, H = 0, running = false, last = 0;

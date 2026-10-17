@@ -134,9 +134,9 @@
       top.classList.remove('is-swap'); if (swap) { void top.offsetWidth; top.classList.add('is-swap'); }
     };
     // the welcome opens in English, then every 3 s it greets the visitor in the next language (French, Arabic, German, ...)
-    // until they choose. "Continue" always continues in the language currently shown. It holds still while a finger or
-    // the mouse is on the buttons, or once someone uses the keyboard.
-    const ORDER = ['en', 'fr', 'ar', 'de']; let cur = 'en', ci = 0, hold = false, cycleT = null;
+    // until they choose. "Continue" always continues in the language currently shown. It pauses briefly while the mouse
+    // rests on the buttons or someone uses the keyboard.
+    const ORDER = ['en', 'fr', 'ar', 'de']; let cur = 'en', ci = 0, cycleT = null;
     const setHello = l => {
       cur = l; greet(l); const g = WELCOME[l];
       hello.lang = l; hello.dir = l === 'ar' ? 'rtl' : 'ltr';
@@ -158,14 +158,20 @@
       }
       probe.remove(); goTx.textContent = keep; top.style.minHeight = h + 'px'; go.style.minWidth = Math.ceil(w) + 'px';
     };
-    setHello('en'); lockSizes();
+    // English first, except on the /fr/, /ar/ and /de/ pages (or a ?lang= link), which start in their own language
+    const first = start.why === 'link' && ORDER.includes(start.lang) ? start.lang : 'en';
+    ci = ORDER.indexOf(first); setHello(first); lockSizes();
     cycleT = setInterval(() => {
-      if (hold || gate.dataset.step !== 'hello' || document.hidden || !document.body.classList.contains('is-gated')) return;
+      if (window.__gateHold || gate.dataset.step !== 'hello' || document.hidden || !document.body.classList.contains('is-gated')) return;
       ci = (ci + 1) % ORDER.length; setHello(ORDER[ci]);
     }, 3000);
-    const actions = $('.gate__actions');
-    actions.addEventListener('pointerenter', () => (hold = true)); actions.addEventListener('pointerleave', () => (hold = false));
-    gate.addEventListener('keydown', () => (hold = true));
+    // a mouse resting on the buttons pauses the cycle for at most 6 s, a key press for 10 s; touch never pauses it
+    // (a tap is already the choice), so the greeting can never get stuck on one language
+    const actions = $('.gate__actions'); let holdUntil = 0;
+    actions.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') holdUntil = performance.now() + 6000; });
+    actions.addEventListener('pointerleave', () => (holdUntil = 0));
+    gate.addEventListener('keydown', () => (holdUntil = performance.now() + 10000));
+    Object.defineProperty(window, '__gateHold', { get: () => performance.now() < holdUntil, configurable: true });
     // on the language step, hovering or focusing a card previews the greeting in that language
     btns.forEach(b => { const show = () => greet(b.dataset.lang); b.addEventListener('mouseenter', show); b.addEventListener('focus', show); });
     $('#gatePick').addEventListener('mouseleave', () => greet(cur));

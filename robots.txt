@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /tools/
 
-Sitemap: https://nazih002.github.io/sitemap.xml
+Sitemap: https://nazihtalbi.github.io/sitemap.xml
