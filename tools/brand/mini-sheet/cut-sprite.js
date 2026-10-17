@@ -1,69 +1,73 @@
+// Cut Mini Nazih poses out of the green-screen renders (camera-green.jpg, crossed-green.jpg, sheet-green.jpg, saved as s4/s5/s6.png) and pack them into one sprite (one cell per pose).
+// run in headless Chrome through cdp.js: the page does the keying with canvas.
 const fs = require('fs'), path = require('path');
+const SRC = {
+  s4: { camera: [630, 500] },
+  s5: { crossed: [690, 500] },
+  s6: { q3: [320, 250], left: [500, 250], right: [650, 250], back: [785, 250], q3back: [920, 250], wave: [135, 600], walk: [665, 600], wow: [858, 600], joy: [1060, 600] },
+};
+const ORDER = ['camera', 'crossed', 'q3', 'left', 'right', 'back', 'q3back', 'wave', 'walk', 'wow', 'joy'];
+// the height a standing figure gets in its cell, per source (measured on a standing pose of that source)
+const STAND = { s4: 'camera', s5: 'crossed', s6: 'q3' };
 module.exports = async (ev) => {
-  const src = 'data:image/png;base64,' + fs.readFileSync(path.join(__dirname, 'ref.png')).toString('base64');
-  const out = await ev(`
-    const img = new Image(); img.src = ${JSON.stringify(src)}; await img.decode();
-    const W = img.width, H = img.height, c = document.createElement('canvas'); c.width = W; c.height = H;
-    const g = c.getContext('2d'); g.drawImage(img, 0, 0); const id = g.getImageData(0, 0, W, H), d = id.data;
-    const bg = new Uint8Array(W * H), q = new Int32Array(W * H); let qh = 0, qt = 0;
-    const lum = i => (d[i*4] + d[i*4+1] + d[i*4+2]) / 3, sat = i => Math.max(d[i*4], d[i*4+1], d[i*4+2]) - Math.min(d[i*4], d[i*4+1], d[i*4+2]);
-    const ok = i => lum(i) > 150 && sat(i) < 24;
-    for (let x = 0; x < W; x++) for (const y of [0, H - 1]) { const i = y * W + x; if (ok(i)) { bg[i] = 1; q[qt++] = i; } }
-    for (let y = 0; y < H; y++) for (const x of [0, W - 1]) { const i = y * W + x; if (!bg[i] && ok(i)) { bg[i] = 1; q[qt++] = i; } }
-    for (const x of [15, 150, 272, 390, 500, 618, 740]) for (let y = 30; y < 322; y += 3) { const i = y * W + x; if (!bg[i] && ok(i)) { bg[i] = 1; q[qt++] = i; } }
-    const T = ${process.env.T || 6};
-    while (qh < qt) { const p = q[qh++], x = p % W, y = (p / W) | 0;
-      for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
-        const n = ny * W + nx; if (bg[n] || !ok(n)) continue;
-        if (Math.max(Math.abs(d[n*4]-d[p*4]), Math.abs(d[n*4+1]-d[p*4+1]), Math.abs(d[n*4+2]-d[p*4+2])) > T) continue;
-        bg[n] = 1; q[qt++] = n; } }
-    // thin horizontal guide lines and text: grey fg runs at most 3 px tall
-    for (let x = 0; x < W; x++) { let y = 0; while (y < H) { if (bg[y*W+x]) { y++; continue; } let e = y; while (e < H && !bg[e*W+x]) e++;
-      if (e - y <= 3) { let grey = true; for (let k = y; k < e; k++) if (sat(k*W+x) > 20 || lum(k*W+x) < 120) grey = false; if (grey) for (let k = y; k < e; k++) bg[k*W+x] = 1; } y = e; } }
-
-    for (let y = 0; y <= 27; y++) for (let x = 0; x < 750; x++) bg[y*W+x] = 1;
-    // grey pockets between the legs (enclosed, so the flood never reached them)
-    const legs = (x, y) => (y > 170 && y < 330 && x < 750) || y > 515; const strict = (x, y) => !((y > 225 && y < 330) || y > 585);
-    const seen = new Uint8Array(W * H);
-    for (let i = 0; i < W * H; i++) { const x0 = i % W, y0 = (i / W) | 0; if (bg[i] || seen[i] || !legs(x0, y0)) continue;
-      // local background: the nearest flooded pixel to the left on this row
-      let k = i; while (k % W && !bg[k]) k--; if (!bg[k]) continue;
-      const near = j => ok(j) && Math.max(Math.abs(d[j*4]-d[k*4]), Math.abs(d[j*4+1]-d[k*4+1]), Math.abs(d[j*4+2]-d[k*4+2])) < (strict(j % W, (j / W) | 0) ? 5 : 12);
-      if (!near(i)) continue;
-      const blob = []; let h = 0; blob.push(i); seen[i] = 1;
-      while (h < blob.length) { const p = blob[h++], x = p % W, y = (p / W) | 0;
-        for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const m = (y+dy)*W + x+dx; if (seen[m] || bg[m] || !legs(x+dx, y+dy) || !near(m)) continue; seen[m] = 1; blob.push(m); } }
-      if (blob.length > 25) blob.forEach(p => bg[p] = 1); }
-    // components
-    const lab = new Int32Array(W * H), comps = []; let L = 0;
-    for (let i = 0; i < W * H; i++) { if (bg[i] || lab[i]) continue; L++; let h = 0, t = 0; q[t++] = i; lab[i] = L; let x0 = W, y0 = H, x1 = 0, y1 = 0, n = 0;
-      while (h < t) { const p = q[h++], x = p % W, y = (p / W) | 0; n++; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
-        for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue; const m = ny * W + nx; if (!bg[m] && !lab[m]) { lab[m] = L; q[t++] = m; } } }
-      if (n > 800) comps.push({ L, n, x0, y0, x1, y1 }); }
-
-    // sprite: one cell per pose, feet on the bottom line, head centred; soft 1px edge with the grey unmixed
-    const BG = [d[(5*W+5)*4], d[(5*W+5)*4+1], d[(5*W+5)*4+2]];
-    const POSES = { front: [86,175], q3: [211,175], left: [326,175], right: [447,175], back: [558,175], q3back: [682,175], wave: [95,515], crossed: [256,515], walk: [583,515], wow: [748,515], joy: [910,515] };
-    const CW = 200, CHh = 312, names = Object.keys(POSES), sp = document.createElement('canvas'); sp.width = CW * names.length; sp.height = CHh;
-    const sg = sp.getContext('2d'), od = sg.createImageData(sp.width, CHh), o = od.data;
-    names.forEach((nm, k) => { const [px, py] = POSES[nm], cp = comps.filter(c => c.x0 <= px && px <= c.x1 && c.y0 <= py && py <= c.y1).sort((a, b) => b.n - a.n)[0];
-      // head centre: mean x of the top 18% rows
-      let sx = 0, sn = 0; for (let y = cp.y0; y < cp.y0 + (cp.y1 - cp.y0) * .18; y++) for (let x = cp.x0; x <= cp.x1; x++) if (lab[y*W+x] === cp.L) { sx += x; sn++; }
-      const hx = Math.round(sx / sn), ox = k * CW + CW / 2 - hx, oy = CHh - 3 - cp.y1;
-      for (let y = cp.y0; y <= cp.y1; y++) for (let x = cp.x0; x <= cp.x1; x++) { const i = y*W+x; if (lab[i] !== cp.L) continue;
-        const X = x + ox, Y = y + oy; if (X < k*CW || X >= (k+1)*CW || Y < 0) continue;
-        let edge = false; for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const m = (y+dy)*W + x+dx; if (lab[m] !== cp.L) edge = true; }
-        let a = 1; if (edge) { const dist = Math.max(Math.abs(d[i*4]-BG[0]), Math.abs(d[i*4+1]-BG[1]), Math.abs(d[i*4+2]-BG[2])); if (dist < 45) continue; a = Math.min(1, dist / 110); }
-        const j = (Y * sp.width + X) * 4;
-        for (let ch = 0; ch < 3; ch++) o[j+ch] = Math.max(0, Math.min(255, Math.round((d[i*4+ch] - BG[ch] * (1 - a)) / a)));
-        o[j+3] = Math.round(a * 255); } });
-    sg.putImageData(od, 0, 0);
-    const sprite = sp.toDataURL('image/webp', .92), spritePng = sp.toDataURL('image/png');
-    // debug: fg on magenta
-    for (let i = 0; i < W * H; i++) if (bg[i]) { d[i*4] = 255; d[i*4+1] = 0; d[i*4+2] = 255; }
-    g.putImageData(id, 0, 0);
-    return { comps, dbg: c.toDataURL('image/png'), sprite, spritePng };
+  const files = {}; for (const k of Object.keys(SRC)) files[k] = 'data:image/png;base64,' + fs.readFileSync(path.join(__dirname, k + '.png')).toString('base64');
+  const r = await ev(`
+    const SRC = ${JSON.stringify(SRC)}, ORDER = ${JSON.stringify(ORDER)}, STAND = ${JSON.stringify(STAND)}, files = ${JSON.stringify(files)};
+    const CW = 260, CH = 400, FIG = 352, cuts = {}, info = {};
+    for (const k of Object.keys(SRC)) {
+      const img = new Image(); img.src = files[k]; await img.decode();
+      const W = img.width, H = img.height, c = document.createElement('canvas'); c.width = W; c.height = H;
+      const g = c.getContext('2d'); g.drawImage(img, 0, 0); const id = g.getImageData(0, 0, W, H), d = id.data;
+      const A = new Float32Array(W * H);
+      for (let i = 0; i < W * H; i++) { const R = d[i*4], G = d[i*4+1], B = d[i*4+2], gn = G - Math.max(R, B);
+        A[i] = gn >= 60 ? 0 : gn <= 8 ? 1 : 1 - (gn - 8) / 52; }
+      // guide lines and labels: rows (and columns) crossed by a long run of bright grey pixels; remove the thin parts
+      const bright = i => { const R = d[i*4], G = d[i*4+1], B = d[i*4+2]; return Math.min(R, G, B) > 150 && Math.max(R, G, B) - Math.min(R, G, B) < 50; };
+      for (let y = 0; y < H; y++) { let n = 0; for (let x = 0; x < W; x++) if (bright(y*W+x)) n++;
+        if (n > W * .3) for (let x = 0; x < W; x++) for (let yy = Math.max(0, y - 2); yy <= Math.min(H - 1, y + 2); yy++) { const i = yy*W+x;
+          if (bright(i) && ((yy > 4 && A[(yy-4)*W+x] === 0) || (yy < H - 5 && A[(yy+4)*W+x] === 0))) A[i] = 0; } }
+      for (let x = 0; x < W; x++) { let n = 0; for (let y = 0; y < H; y++) if (bright(y*W+x)) n++;
+        if (n > H * .3) for (let y = 0; y < H; y++) for (let xx = Math.max(0, x - 2); xx <= Math.min(W - 1, x + 2); xx++) { const i = y*W+xx;
+          if (bright(i) && ((xx > 4 && A[y*W+xx-4] === 0) || (xx < W - 5 && A[y*W+xx+4] === 0))) A[i] = 0; } }
+      // components of the solid part
+      const lab = new Int32Array(W * H), q = new Int32Array(W * H), comps = []; let L = 0;
+      for (let i = 0; i < W * H; i++) { if (A[i] < .5 || lab[i]) continue; L++; let h = 0, t = 0; q[t++] = i; lab[i] = L; let x0 = W, y0 = H, x1 = 0, y1 = 0, n = 0;
+        while (h < t) { const p = q[h++], x = p % W, y = (p / W) | 0; n++; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+          for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue; const m = ny*W+nx; if (A[m] >= .5 && !lab[m]) { lab[m] = L; q[t++] = m; } } }
+        if (n > 2000) comps.push({ L, n, x0, y0, x1, y1 }); }
+      // soften the edge by one pixel (3x3 average of the alpha)
+      const S = new Float32Array(W * H); for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) { let t = 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) t += A[(y+dy)*W+x+dx]; S[y*W+x] = t / 9; }
+      // un-spill: no pixel greener than its red/blue; colour unmixed from the green at soft edges
+      const BGc = [d[(10*W+10)*4], d[(10*W+10)*4+1], d[(10*W+10)*4+2]];
+      const pick = ([px, py]) => comps.filter(c => c.x0 <= px && px <= c.x1 && c.y0 <= py && py <= c.y1).sort((a, b) => b.n - a.n)[0];
+      const scale = FIG / ((cp => cp.y1 - cp.y0)(pick(SRC[k][STAND[k]])));
+      for (const [name, pt] of Object.entries(SRC[k])) {
+        const cp = pick(pt), pad = 3, x0 = Math.max(0, cp.x0 - pad), y0 = Math.max(0, cp.y0 - pad), x1 = Math.min(W - 1, cp.x1 + pad), y1 = Math.min(H - 1, cp.y1 + pad);
+        const cw = x1 - x0 + 1, chh = y1 - y0 + 1, cc = document.createElement('canvas'); cc.width = cw; cc.height = chh;
+        const cg = cc.getContext('2d'), od = cg.createImageData(cw, chh), o = od.data;
+        // keep only pixels near this component (soft edge allowed one step outside)
+        const near = (x, y) => { for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) { const xx = x + dx, yy = y + dy; if (xx >= 0 && yy >= 0 && xx < W && yy < H && lab[yy*W+xx] === cp.L) return true; } return false; };
+        let hx = 0, hn = 0;
+        for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const i = y*W+x; if (!A[i] || !(lab[i] === cp.L || (A[i] < .5 && near(x, y)))) continue;
+          const a = Math.min(A[i], S[i] * 1.15), j = ((y - y0) * cw + (x - x0)) * 4;
+          let R = d[i*4], G = d[i*4+1], B = d[i*4+2];
+          G = Math.min(G, Math.max(R, B) + 4); if (a < 1) { G = Math.min(G, B + .6 * Math.max(0, R - B), Math.max(R, B)); const m = .55 + .45 * a; R *= m; G *= m; B *= m; }
+          o[j] = Math.max(0, Math.min(255, R)); o[j+1] = Math.max(0, Math.min(255, G)); o[j+2] = Math.max(0, Math.min(255, B)); o[j+3] = Math.round(a * 255);
+          if (y < cp.y0 + (cp.y1 - cp.y0) * .18 && lab[i] === cp.L) { hx += x; hn++; } }
+        cg.putImageData(od, 0, 0);
+        cuts[name] = { cc, scale, headX: hx / hn - x0, feet: cp.y1 - y0 };
+        info[name] = { src: k, box: [cp.x0, cp.y0, cp.x1, cp.y1], scale: +scale.toFixed(3) };
+      }
+    }
+    const sp = document.createElement('canvas'); sp.width = CW * ORDER.length; sp.height = CH;
+    const sg = sp.getContext('2d'); sg.imageSmoothingQuality = 'high';
+    ORDER.forEach((name, k) => { const u = cuts[name], w = u.cc.width * u.scale, h = u.cc.height * u.scale;
+      const dx = k * CW + CW / 2 - u.headX * u.scale, dy = CH - 6 - u.feet * u.scale;
+      sg.save(); sg.beginPath(); sg.rect(k * CW, 0, CW, CH); sg.clip(); sg.drawImage(u.cc, dx, dy, w, h); sg.restore();
+      info[name].cell = [Math.round(dx - k * CW), Math.round(dy), Math.round(w), Math.round(h)]; });
+    return { info, webp: sp.toDataURL('image/webp', .9), png: sp.toDataURL('image/png') };
   `);
-  fs.writeFileSync(path.join(__dirname, 'dbg.png'), Buffer.from(out.dbg.split(',')[1], 'base64'));
-  fs.writeFileSync(path.join(__dirname, 'mini-sprite.webp'), Buffer.from(out.sprite.split(',')[1], 'base64')); fs.writeFileSync(path.join(__dirname, 'mini-sprite.png'), Buffer.from(out.spritePng.split(',')[1], 'base64')); return out.comps.length;
+  fs.writeFileSync(path.join(__dirname, 'mini-sprite.webp'), Buffer.from(r.webp.split(',')[1], 'base64'));
+  fs.writeFileSync(path.join(__dirname, 'mini-sprite.png'), Buffer.from(r.png.split(',')[1], 'base64'));
+  return r.info;
 };

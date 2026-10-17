@@ -1392,3 +1392,5 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
 .motion .buddy.is-dash .buddy__bob { animation: buddyDash 1s cubic-bezier(.3, .7, .2, 1), buddyBob 3.4s ease-in-out 1s infinite; }
 @media (min-width: 761px) { .buddy { width: 130px; height: 203px; margin-top: -101px; } }
 @media (max-width: 760px) { .buddy { width: 76px; height: 118px; } }
+/* the flash fires from the lens of the camera he holds */
+.buddy__flash { left: 51%; top: 55%; }

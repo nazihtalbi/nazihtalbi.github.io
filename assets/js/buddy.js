@@ -15,14 +15,14 @@
   const WORK = '.playlist__item, .screen__stage, .vcard, .spot__media, .tile, .lead, .case__media, .case__bts figure, .snow__frame, .cmp';
 
   // poses from his character sheet: one sprite, one cell per pose (front, turnaround, wave, arms crossed, walk, wow, joy)
-  const F = { front: 0, q3: 1, left: 2, right: 3, back: 4, q3back: 5, wave: 6, crossed: 7, walk: 8, wow: 9, joy: 10 };
+  const F = { camera: 0, crossed: 1, q3: 2, left: 3, right: 4, back: 5, q3back: 6, wave: 7, walk: 8, wow: 9, joy: 10 };
   const img = me.querySelector('img'), sheet = ((img && img.getAttribute('src')) || 'assets/media/site/mini-nazih.svg').replace(/mini-nazih\.svg$/, 'mini-sprite.webp');
   me.innerHTML = '<span class="buddy__bob"><span class="buddy__pose"></span></span>';
   const pose = me.querySelector('.buddy__pose'); pose.style.backgroundImage = `url("${sheet}")`;
   const show = (name, flip) => { pose.style.setProperty('--f', F[name]); pose.style.setProperty('--flip', flip ? -1 : 1); };
   // the page is on his left when he stands on the right edge (and the other way round in Arabic)
   const toPage = () => document.documentElement.dir !== 'rtl';
-  let idlePose = 'front', busy = false, seqT = [];
+  let idlePose = 'camera', busy = false, seqT = [];
   const rest = () => { if (busy) return;
     if (box.classList.contains('is-watching') || box.classList.contains('is-talking')) show('q3', toPage()); else show(idlePose); };
   // a short sequence of poses, then back to rest
@@ -33,9 +33,9 @@
   };
   const wave = () => play([['wave', toPage()]], 0, 1700);
   // a real turn on the spot, through the turnaround views of the sheet
-  const spin = () => play([['front'], ['q3'], ['left'], ['q3back'], ['back'], ['q3back', true], ['right'], ['q3', true], ['front']], 95);
+  const spin = () => play([['camera'], ['q3'], ['left'], ['q3back'], ['back'], ['q3back', true], ['right'], ['q3', true], ['camera']], 95);
   new MutationObserver(rest).observe(box, { attributes: true, attributeFilter: ['class'] });
-  show('front');
+  show('camera');
 
   // show after the hero, hide while the welcome screen or the phone menu is up
   let past = false;
@@ -85,11 +85,11 @@
       if (box.classList.contains('is-on') && !watching && !document.hidden) {
         const r = Math.random();
         if (r < .3) goTo((Math.random() * 2 - 1) * range());      // drift to a new spot
-        else if (r < .44) play([['q3', toPage()], ['front'], ['q3', !toPage()], ['front']], 520);   // look around
+        else if (r < .44) play([['q3', toPage()], [idlePose], ['q3', !toPage()], [idlePose]], 520);   // look around
         else if (r < .56) play([['q3', toPage()]], 0, 2400);     // turn towards the page for a moment
         else if (r < .62) spin();                                 // a full turn around (rare)
         else if (r < .74) wave();                                 // a wave
-        else if (r < .86) { idlePose = idlePose === 'front' ? 'crossed' : 'front'; rest(); }   // arms crossed, or back
+        else if (r < .86) { idlePose = idlePose === 'camera' ? 'crossed' : 'camera'; rest(); }   // arms crossed, or back
         else snap();                                             // a reaction
       }
       life();
@@ -121,12 +121,16 @@
     if (w) { watch(w); unwatch(6500); } else if (!hover) unwatch(0);
   }, 900); };
 
-  // ---------- a reaction to the work: wow or joy, with a little burst of sparks ----------
+  // ---------- taking a photo of the work (camera up, flash, sparks from the lens), and now and then a reaction ----------
+  let shots = 0;
   function snap() {
     if (!box.classList.contains('is-on')) return;
-    play([[Math.random() < .5 ? 'wow' : 'joy']], 0, 1300); once('is-hop', 800);
-    setTimeout(() => { const b = me.getBoundingClientRect(), c = cv.getBoundingClientRect();
-      burst(b.left - c.left + b.width * .5, b.top - c.top + b.height * .22, 14); }, 200);
+    if (++shots % 3 === 0) { play([[Math.random() < .5 ? 'wow' : 'joy']], 0, 1300); once('is-hop', 800);
+      setTimeout(() => { const b = me.getBoundingClientRect(), c = cv.getBoundingClientRect(); burst(b.left - c.left + b.width * .5, b.top - c.top + b.height * .22, 14); }, 200);
+      return; }
+    play([['camera']], 0, 1100);
+    setTimeout(() => { once('is-flash', 600); const b = me.getBoundingClientRect(), c = cv.getBoundingClientRect();
+      burst(b.left - c.left + b.width * .51, b.top - c.top + b.height * .55, 16); }, 300);
   }
 
   // ---------- flight: follows scroll speed with a soft spring, leaning into the direction of travel ----------
