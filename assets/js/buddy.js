@@ -35,10 +35,23 @@
   let sayT = 0;
   const speak = (text, ms = 3200) => { say.textContent = text; box.classList.add('is-talking'); clearTimeout(sayT); sayT = setTimeout(() => box.classList.remove('is-talking'), ms); };
   const once = (cls, ms) => { box.classList.remove(cls); void box.offsetWidth; box.classList.add(cls); setTimeout(() => box.classList.remove(cls), ms); };
-  me.addEventListener('click', () => { speak(T('buddyHi')); once('is-hop', 800); });
+  me.addEventListener('click', () => { speak(T('buddyHi')); once('is-hop', 800); once('is-wave', 1700); });
   const contact = $('#contact'); let pointed = false;
   if (contact && 'IntersectionObserver' in window) new IntersectionObserver(es => { if (es[0].isIntersecting && !pointed && box.classList.contains('is-on')) { pointed = true; speak(T('buddyContact'), 4200); } }, { threshold: .35 }).observe(contact);
   document.addEventListener('click', e => { if (e.target.closest('#nav a, .gate__opt, .client__go, .case__item--reels')) once('is-dash', 1000); });
+  // arriving in a section for the first time: he turns to it and says a word about the work there
+  const said = new Set(); let here = null, sayIn = 0;
+  if ('IntersectionObserver' in window) {
+    const secIO = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return; here = e.target.id; clearTimeout(sayIn);
+      sayIn = setTimeout(() => {
+        const id = here; if (said.has(id) || !box.classList.contains('is-on') || box.classList.contains('is-talking')) return;
+        const line = T('buddy.' + id); if (!line || line === 'buddy.' + id) return;
+        said.add(id); speak(line, 4800); once('is-wave', 1700);
+      }, 700);
+    }), { rootMargin: '-42% 0px -42% 0px' });
+    ['films', 'reels', 'cases', 'grade', 'snow', 'photos', 'clients', 'about', 'services'].forEach(id => { const s = document.getElementById(id); if (s) secIO.observe(s); });
+  }
 
   if (reduce) return;
 
@@ -52,9 +65,12 @@
     idleLife = setTimeout(() => {
       if (box.classList.contains('is-on') && !watching && !document.hidden) {
         const r = Math.random();
-        if (r < .45) goTo((Math.random() * 2 - 1) * range());
-        else if (r < .8) once('is-look', 1900);
-        else snap();
+        if (r < .32) goTo((Math.random() * 2 - 1) * range());     // drift to a new spot
+        else if (r < .47) once('is-look', 1900);                  // look around (head)
+        else if (r < .62) once('is-peek', 2600);                  // 3D turn towards the page, then back
+        else if (r < .72) once('is-spin', 1700);                  // a full turn around
+        else if (r < .84) once('is-wave', 1700);                  // a wave
+        else snap();                                             // a photo
       }
       life();
     }, 3500 + Math.random() * 3500);

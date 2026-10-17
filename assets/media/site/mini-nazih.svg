@@ -35,11 +35,16 @@
 
   <!-- arms: white sleeves bending from the shoulders down to the camera -->
   <g id="arms" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M63 104 Q52 112 51 128 Q51 140 60 146" stroke="#D2D5DC" stroke-width="13.5"/>
-    <path d="M63 104 Q52 112 51 128 Q51 140 60 146" stroke="url(#shirt)" stroke-width="12"/>
-    <path d="M97 104 Q108 112 109 128 Q109 140 100 146" stroke="#D2D5DC" stroke-width="13.5"/>
-    <path d="M97 104 Q108 112 109 128 Q109 140 100 146" stroke="url(#shirt)" stroke-width="12"/>
-    <path d="M52 124 Q55 128 54 134 M108 124 Q105 128 106 134" stroke="#D9DCE2" stroke-width="1"/>
+    <g id="armL">
+      <path d="M63 104 Q52 112 51 128 Q51 140 60 146" stroke="#D2D5DC" stroke-width="13.5"/>
+      <path d="M63 104 Q52 112 51 128 Q51 140 60 146" stroke="url(#shirt)" stroke-width="12"/>
+      <path d="M52 124 Q55 128 54 134" stroke="#D9DCE2" stroke-width="1"/>
+    </g>
+    <g id="armR">
+      <path d="M97 104 Q108 112 109 128 Q109 140 100 146" stroke="#D2D5DC" stroke-width="13.5"/>
+      <path d="M97 104 Q108 112 109 128 Q109 140 100 146" stroke="url(#shirt)" stroke-width="12"/>
+      <path d="M108 124 Q105 128 106 134" stroke="#D9DCE2" stroke-width="1"/>
+    </g>
   </g>
 
   <!-- camera with the site's gold lens ring -->
@@ -56,11 +61,15 @@
 
   <!-- hands, black watch on the left wrist, ring on the right hand -->
   <g id="hands">
-    <path d="M55 141 Q53 151 59 157 L65 155 Q63 148 62 141 Z" fill="url(#skin)"/>
-    <path d="M105 141 Q107 151 101 157 L95 155 Q97 148 98 141 Z" fill="url(#skin)"/>
-    <rect x="52" y="137" width="11" height="5.5" rx="2" fill="#111214"/>
-    <circle cx="57.5" cy="139.8" r="2.3" fill="#2C2F36" stroke="#5A5E66" stroke-width=".6"/>
-    <path d="M97.5 150 L101.5 149" stroke="#C9CDD4" stroke-width="1.5" stroke-linecap="round"/>
+    <g id="handL">
+      <path d="M55 141 Q53 151 59 157 L65 155 Q63 148 62 141 Z" fill="url(#skin)"/>
+      <rect x="52" y="137" width="11" height="5.5" rx="2" fill="#111214"/>
+      <circle cx="57.5" cy="139.8" r="2.3" fill="#2C2F36" stroke="#5A5E66" stroke-width=".6"/>
+    </g>
+    <g id="handR">
+      <path d="M105 141 Q107 151 101 157 L95 155 Q97 148 98 141 Z" fill="url(#skin)"/>
+      <path d="M97.5 150 L101.5 149" stroke="#C9CDD4" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
   </g>
 
   <!-- head -->

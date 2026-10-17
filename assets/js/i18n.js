@@ -49,6 +49,7 @@ window.I18N = {
     seoTitle: "Nazih Talbi | Videographer & Photographer in Algeria", seoDesc: "Nazih Talbi, videographer and photographer in Algeria: event films, documentaries, short films, ads, reels and photography for schools, institutions and brands.",
     introAsk: 'What would you like to explore?', introAll: 'Everything',
     buddyHi: "Hi! Let's film something together.", buddyContact: 'Say hi on WhatsApp',
+    'buddy.films': "I filmed all of these, from the shoot to the final grade.", 'buddy.reels': "Short films for Instagram and TikTok. In some of them, I'm the one on camera.", 'buddy.cases': "Two projects from the first idea to the last frame.", 'buddy.grade': "Drag the line: before and after my colour grade.", 'buddy.snow': "The first snow, frame by frame. Keep scrolling.", 'buddy.photos': "Real moments, never posed. Tap a photo to see it big.", 'buddy.clients': "The schools and brands that trusted me with their stories.", 'buddy.about': "That's me, the real one!", 'buddy.services': "This is what I can make for you.",
     sendWa: 'Send on WhatsApp', sendMail: 'Send by email', mailSubject: 'New project', msgHello: 'Hello Nazih,', msgFrom: 'Name', msgType: 'Project type',
     toTop: 'Back to top'
   },
@@ -101,6 +102,7 @@ window.I18N = {
     seoTitle: "Nazih Talbi | Vidéaste et photographe en Algérie", seoDesc: "Nazih Talbi, vidéaste et photographe en Algérie : films d'événements, documentaires, courts métrages, publicités, reels et photographie pour écoles, institutions et marques.",
     introAsk: 'Que souhaitez-vous explorer ?', introAll: 'Tout voir',
     buddyHi: 'Salut ! Filmons quelque chose ensemble.', buddyContact: "Écris-moi sur WhatsApp",
+    'buddy.films': "J'ai filmé tout ça, du tournage à l'étalonnage final.", 'buddy.reels': "Des films courts pour Instagram et TikTok. Dans certains, c'est moi devant la caméra.", 'buddy.cases': "Deux projets, de la première idée à la dernière image.", 'buddy.grade': "Glissez la ligne : avant et après mon étalonnage.", 'buddy.snow': "La première neige, image par image. Continuez à défiler.", 'buddy.photos': "De vrais moments, jamais posés. Touchez une photo pour l'agrandir.", 'buddy.clients': "Les écoles et les marques qui m'ont confié leurs histoires.", 'buddy.about': "C'est moi, le vrai !", 'buddy.services': "Voilà ce que je peux créer pour vous.",
     sendWa: 'Envoyer sur WhatsApp', sendMail: 'Envoyer par e-mail', mailSubject: 'Nouveau projet', msgHello: 'Bonjour Nazih,', msgFrom: 'Nom', msgType: 'Type de projet',
     toTop: 'Retour en haut'
   },
@@ -153,6 +155,7 @@ window.I18N = {
     seoTitle: "نزيه طالبي | مصور فيديو ومصور فوتوغرافي في الجزائر", seoDesc: "نزيه طالبي، مصور فيديو ومصور فوتوغرافي في الجزائر: أفلام فعاليات، أفلام وثائقية، أفلام قصيرة، إعلانات، ريلز وتصوير فوتوغرافي للمدارس والمؤسسات والعلامات التجارية.",
     introAsk: 'ماذا تودّ أن تستكشف؟', introAll: 'كل شيء',
     buddyHi: 'أهلًا! لنصوّر شيئًا معًا.', buddyContact: 'راسلني على واتساب',
+    'buddy.films': "صوّرت كل هذه الأفلام، من التصوير حتى التدريج اللوني النهائي.", 'buddy.reels': "أفلام قصيرة لإنستغرام وتيك توك. في بعضها أنا من يظهر أمام الكاميرا.", 'buddy.cases': "مشروعان من الفكرة الأولى حتى آخر لقطة.", 'buddy.grade': "اسحب الخط: قبل وبعد معالجة الألوان.", 'buddy.snow': "الثلج الأول، لقطة بعد لقطة. واصل التمرير.", 'buddy.photos': "لحظات حقيقية، بلا تصنّع. اضغط على صورة لتكبيرها.", 'buddy.clients': "المدارس والعلامات التي وثقت بي لرواية قصصها.", 'buddy.about': "هذا أنا، النسخة الحقيقية!", 'buddy.services': "هذا ما يمكنني صنعه لك.",
     sendWa: 'أرسل عبر واتساب', sendMail: 'أرسل عبر البريد', mailSubject: 'مشروع جديد', msgHello: 'مرحبًا نزيه،', msgFrom: 'الاسم', msgType: 'نوع المشروع',
     toTop: 'العودة إلى الأعلى'
   },
@@ -205,6 +208,7 @@ window.I18N = {
     seoTitle: "Nazih Talbi | Videograf & Fotograf in Algerien", seoDesc: "Nazih Talbi, Videograf und Fotograf in Algerien: Eventfilme, Dokumentarfilme, Kurzfilme, Werbung, Reels und Fotografie für Schulen, Institutionen und Marken.",
     introAsk: 'Was möchten Sie entdecken?', introAll: 'Alles',
     buddyHi: 'Hallo! Lass uns etwas zusammen drehen.', buddyContact: 'Schreib mir auf WhatsApp',
+    'buddy.films': "Das habe ich alles gedreht, vom Dreh bis zum finalen Grading.", 'buddy.reels': "Kurze Filme für Instagram und TikTok. In manchen stehe ich selbst vor der Kamera.", 'buddy.cases': "Zwei Projekte, von der ersten Idee bis zum letzten Bild.", 'buddy.grade': "Zieh die Linie: vor und nach meinem Grading.", 'buddy.snow': "Der erste Schnee, Bild für Bild. Scroll weiter.", 'buddy.photos': "Echte Momente, nie gestellt. Tipp auf ein Foto, um es groß zu sehen.", 'buddy.clients': "Die Schulen und Marken, die mir ihre Geschichten anvertraut haben.", 'buddy.about': "Das bin ich, in echt!", 'buddy.services': "Das kann ich für Sie machen.",
     sendWa: 'Per WhatsApp senden', sendMail: 'Per E-Mail senden', mailSubject: 'Neues Projekt', msgHello: 'Hallo Nazih,', msgFrom: 'Name', msgType: 'Projektart',
     toTop: 'Nach oben'
   }

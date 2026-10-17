@@ -1326,3 +1326,22 @@ body:not(.is-gated) .gate.is-leaving * { pointer-events: none !important; }
 /* the page stays still while the welcome is up. The lock must sit on <html>: with html { overflow-x: clip }
    the browser no longer takes body's overflow for the window, so body.is-gated alone stopped locking scrolling */
 html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
+
+/* ---------- Mini Nazih: bigger on computers, turns in 3D, waves, nods while he talks ---------- */
+@media (min-width: 761px) { .buddy { width: 112px; height: 203px; margin-top: -101px; } .buddy__say { font-size: .95rem; max-width: 240px; } }
+.buddy__me { perspective: 640px; }
+.buddy__me svg { transition: rotate .8s cubic-bezier(.3, .7, .2, 1); }
+/* turned towards the page while he watches the work or talks about it */
+.buddy.is-watching .buddy__me svg, .buddy.is-talking .buddy__me svg { rotate: y calc(var(--face) * -38deg); }
+/* idle: a 3D peek at the page, or a full turn around */
+.motion .buddy.is-peek .buddy__me svg { animation: peek 2.6s ease-in-out, buddyBob 3.4s ease-in-out infinite; }
+@keyframes peek { 0%, 100% { rotate: y 0deg; } 30%, 70% { rotate: y calc(var(--face) * -55deg); } }
+.motion .buddy.is-spin .buddy__me svg { animation: spinAround 1.7s cubic-bezier(.5, 0, .3, 1), buddyBob 3.4s ease-in-out infinite; }
+@keyframes spinAround { from { rotate: y 0deg; } to { rotate: y 360deg; } }
+/* the right arm waves from the shoulder while the left hand keeps the camera */
+#mn-armR, #mn-handR { transform-box: view-box; transform-origin: 97px 104px; }
+.motion .buddy.is-wave #mn-armR, .motion .buddy.is-wave #mn-handR { animation: wave 1.7s cubic-bezier(.4, 0, .3, 1); }
+@keyframes wave { 0%, 100% { transform: none; } 22% { transform: rotate(-150deg); } 36% { transform: rotate(-128deg); } 50% { transform: rotate(-152deg); } 64% { transform: rotate(-130deg); } 80% { transform: rotate(-148deg); } }
+/* he nods a little while he talks */
+.motion .buddy.is-talking #mn-head { animation: nod .9s ease-in-out infinite; }
+@keyframes nod { 0%, 100% { transform: rotate(calc(var(--face) * -6deg)); } 50% { transform: rotate(calc(var(--face) * -2deg)) translateY(1.5px); } }
