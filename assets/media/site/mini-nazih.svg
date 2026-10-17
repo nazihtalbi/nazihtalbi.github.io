@@ -7,6 +7,8 @@
     <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A322C"/><stop offset=".5" stop-color="#1D1916"/><stop offset="1" stop-color="#141110"/></linearGradient>
     <linearGradient id="beard" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A3C33"/><stop offset="1" stop-color="#2B231E"/></linearGradient>
     <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#EEF0F4"/><stop offset="1" stop-color="#C9CDD6"/></linearGradient>
+    <linearGradient id="suit" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3A3D46"/><stop offset=".3" stop-color="#25272E"/><stop offset=".75" stop-color="#17181D"/><stop offset="1" stop-color="#0E0F12"/></linearGradient>
+    <linearGradient id="lapel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#454954"/><stop offset="1" stop-color="#1B1C21"/></linearGradient>
     <linearGradient id="vest" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#43454D"/><stop offset=".35" stop-color="#2A2B31"/><stop offset=".75" stop-color="#1A1B20"/><stop offset="1" stop-color="#101114"/></linearGradient>
     <linearGradient id="tie" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3B4049"/><stop offset=".5" stop-color="#262A31"/><stop offset="1" stop-color="#181B20"/></linearGradient>
     <linearGradient id="shoe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3138"/><stop offset=".45" stop-color="#121316"/><stop offset="1" stop-color="#050506"/></linearGradient>
@@ -15,40 +17,46 @@
     <radialGradient id="lens" cx=".38" cy=".35" r=".75"><stop offset="0" stop-color="#4C6FB8"/><stop offset=".5" stop-color="#1B2746"/><stop offset="1" stop-color="#05070D"/></radialGradient>
     <radialGradient id="glassTint" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#E4ECFF" stop-opacity=".35"/><stop offset="1" stop-color="#8C7BE8" stop-opacity=".18"/></radialGradient>
     <linearGradient id="handG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E6B591"/><stop offset="1" stop-color="#B47C5A"/></linearGradient>
-    <linearGradient id="lg1" gradientUnits="userSpaceOnUse" x1="61.85" y1="118.55" x2="50.15" y2="112.45"><stop offset="0" stop-color="#B9BDC7"/><stop offset="0.3" stop-color="#E9EBF0"/><stop offset="0.62" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C4C8D1"/></linearGradient>
-    <linearGradient id="lg2" gradientUnits="userSpaceOnUse" x1="60.05" y1="133.23" x2="48.95" y2="138.77"><stop offset="0" stop-color="#B9BDC7"/><stop offset="0.3" stop-color="#E9EBF0"/><stop offset="0.62" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C4C8D1"/></linearGradient>
-    <linearGradient id="lg3" gradientUnits="userSpaceOnUse" x1="109.85" y1="112.45" x2="98.15" y2="118.55"><stop offset="0" stop-color="#B9BDC7"/><stop offset="0.3" stop-color="#E9EBF0"/><stop offset="0.62" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C4C8D1"/></linearGradient>
-    <linearGradient id="lg4" gradientUnits="userSpaceOnUse" x1="111.05" y1="138.77" x2="99.95" y2="133.23"><stop offset="0" stop-color="#B9BDC7"/><stop offset="0.3" stop-color="#E9EBF0"/><stop offset="0.62" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C4C8D1"/></linearGradient>
-    <linearGradient id="lg5" gradientUnits="userSpaceOnUse" x1="77.56" y1="196.38" x2="60.44" y2="194.62"><stop offset="0" stop-color="#0F1114"/><stop offset="0.35" stop-color="#262931"/><stop offset="0.6" stop-color="#3A3F4A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
-    <linearGradient id="lg6" gradientUnits="userSpaceOnUse" x1="70.9" y1="234.15" x2="57.1" y2="231.85"><stop offset="0" stop-color="#0F1114"/><stop offset="0.35" stop-color="#262931"/><stop offset="0.6" stop-color="#3A3F4A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
-    <linearGradient id="lg7" gradientUnits="userSpaceOnUse" x1="100.49" y1="193.12" x2="83.51" y2="195.88"><stop offset="0" stop-color="#0F1114"/><stop offset="0.35" stop-color="#262931"/><stop offset="0.6" stop-color="#3A3F4A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
-    <linearGradient id="lg8" gradientUnits="userSpaceOnUse" x1="106.25" y1="227.66" x2="92.75" y2="231.34"><stop offset="0" stop-color="#0F1114"/><stop offset="0.35" stop-color="#262931"/><stop offset="0.6" stop-color="#3A3F4A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
+    <linearGradient id="lg1" gradientUnits="userSpaceOnUse" x1="61.85" y1="118.55" x2="50.15" y2="112.45"><stop offset="0" stop-color="#0D0E11"/><stop offset="0.35" stop-color="#22242B"/><stop offset="0.62" stop-color="#363A44"/><stop offset="1" stop-color="#111216"/></linearGradient>
+    <linearGradient id="lg2" gradientUnits="userSpaceOnUse" x1="60.05" y1="133.23" x2="48.95" y2="138.77"><stop offset="0" stop-color="#0D0E11"/><stop offset="0.35" stop-color="#22242B"/><stop offset="0.62" stop-color="#363A44"/><stop offset="1" stop-color="#111216"/></linearGradient>
+    <linearGradient id="lg3" gradientUnits="userSpaceOnUse" x1="109.85" y1="112.45" x2="98.15" y2="118.55"><stop offset="0" stop-color="#0D0E11"/><stop offset="0.35" stop-color="#22242B"/><stop offset="0.62" stop-color="#363A44"/><stop offset="1" stop-color="#111216"/></linearGradient>
+    <linearGradient id="lg4" gradientUnits="userSpaceOnUse" x1="111.05" y1="138.77" x2="99.95" y2="133.23"><stop offset="0" stop-color="#0D0E11"/><stop offset="0.35" stop-color="#22242B"/><stop offset="0.62" stop-color="#363A44"/><stop offset="1" stop-color="#111216"/></linearGradient>
+    <linearGradient id="lg5" gradientUnits="userSpaceOnUse" x1="80.5" y1="197.14" x2="62.9" y2="196.86"><stop offset="0" stop-color="#0F1114"/><stop offset="0.35" stop-color="#262931"/><stop offset="0.6" stop-color="#3A3F4A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
+    <linearGradient id="lg6" gradientUnits="userSpaceOnUse" x1="78.7" y1="234.13" x2="63.5" y2="233.87"><stop offset="0" stop-color="#0F1114"/><stop offset="0.35" stop-color="#262931"/><stop offset="0.6" stop-color="#3A3F4A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
+    <linearGradient id="lg7" gradientUnits="userSpaceOnUse" x1="97.1" y1="196.86" x2="79.5" y2="197.14"><stop offset="0" stop-color="#0F1114"/><stop offset="0.35" stop-color="#262931"/><stop offset="0.6" stop-color="#3A3F4A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
+    <linearGradient id="lg8" gradientUnits="userSpaceOnUse" x1="96.5" y1="233.87" x2="81.3" y2="234.13"><stop offset="0" stop-color="#0F1114"/><stop offset="0.35" stop-color="#262931"/><stop offset="0.6" stop-color="#3A3F4A"/><stop offset="1" stop-color="#14161A"/></linearGradient>
   </defs>
 
   <g id="legs">
-    <g id="legL"><path d="M62.44 175.12 L60.04 214.29 A7 7 0 0 0 73.96 215.71 L79.56 176.88 A8.6 8.6 0 0 0 62.44 175.12 Z" fill="url(#lg5)"/><path d="M60.1 213.85 L55.28 250.05 A5.8 5.8 0 0 0 66.72 251.95 L73.9 216.15 A7 7 0 0 0 60.1 213.85 Z" fill="url(#lg6)"/>
-      <path d="M58 248 Q51 251 50 258 Q51 264 59 264 L70 263 Q74 261 71 255 L66 249 Z" fill="url(#shoe)"/>
-      <path d="M53 256 Q58 253 64 254" stroke="#5B606B" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+    <g id="legL"><path d="M63.2 177.86 L63.8 215.88 A7.6 7.6 0 0 0 79 216.12 L80.8 178.14 A8.8 8.8 0 0 0 63.2 177.86 Z" fill="url(#lg5)"/><path d="M63.8 215.87 L64.2 251.89 A6.6 6.6 0 0 0 77.4 252.11 L79 216.13 A7.6 7.6 0 0 0 63.8 215.87 Z" fill="url(#lg6)"/>
+      <path d="M64.2 250 Q60.6 256 61.4 261 Q63 264 70.8 264 Q78.4 264 79.2 261 Q79.6 256 77.4 250 Z" fill="url(#shoe)"/>
+      <path d="M63.8 257.5 Q70.8 255.4 77.6 257.5" stroke="#5B606B" stroke-width="1.1" fill="none" stroke-linecap="round"/>
     </g>
-    <g id="legR"><path d="M80.51 177.38 L88.09 214.12 A7 7 0 0 0 101.91 211.88 L97.49 174.62 A8.6 8.6 0 0 0 80.51 177.38 Z" fill="url(#lg7)"/><path d="M88.25 214.84 L98.4 247.53 A5.8 5.8 0 0 0 109.6 244.47 L101.75 211.16 A7 7 0 0 0 88.25 214.84 Z" fill="url(#lg8)"/>
-      <path d="M101 242 Q107 238 114 240 Q120 243 118 249 L108 256 Q101 255 100 249 Z" fill="url(#shoe)"/>
-      <path d="M106 244 Q110 242 114 243" stroke="#5B606B" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+    <g id="legR"><path d="M79.2 178.14 L81 216.12 A7.6 7.6 0 0 0 96.2 215.88 L96.8 177.86 A8.8 8.8 0 0 0 79.2 178.14 Z" fill="url(#lg7)"/><path d="M81 216.13 L82.6 252.11 A6.6 6.6 0 0 0 95.8 251.89 L96.2 215.87 A7.6 7.6 0 0 0 81 216.13 Z" fill="url(#lg8)"/>
+      <path d="M82.6 250 Q80.4 256 80.8 261 Q81.6 264 89.2 264 Q97 264 98.6 261 Q99.4 256 95.8 250 Z" fill="url(#shoe)"/>
+      <path d="M82.4 257.5 Q89.2 255.4 96.2 257.5" stroke="#5B606B" stroke-width="1.1" fill="none" stroke-linecap="round"/>
     </g>
-    <path d="M68 196 L66 212 M93 196 L95 210" stroke="#4A505C" stroke-width=".9" opacity=".7"/>
+    <path d="M72 192 L71.2 244 M88 192 L88.8 244" stroke="#4A505C" stroke-width=".9" opacity=".6"/>
   </g>
 
   <g id="body">
-    <path d="M58 109 Q58 98 70 95 L80 93 L90 95 Q102 98 102 109 L100.5 152 Q99.5 165 98 178 L62 178 Q60.5 165 59.5 152 Z" fill="url(#shirt)"/>
-    <path d="M60 108 Q61 99 70 96.5 L77 95 L80 120 L83 95 L90 96.5 Q99 99 100 108 L98.8 152 Q97.8 165 96.6 178 L63.4 178 Q62.2 165 61.2 152 Z" fill="url(#vest)"/>
-    <path d="M77 95 L80 120 L83 95" fill="none" stroke="#5A5D66" stroke-width=".8"/>
-    <path d="M71 96 L80 125 L89 96 Z" fill="url(#shirt)"/>
+    <path d="M56 110 Q56 99 69 95.5 L80 93 L91 95.5 Q104 99 104 110 L102.6 156 Q101.6 172 100.4 188 L59.6 188 Q58.4 172 57.4 156 Z" fill="url(#suit)"/>
+    <path d="M71 96 L80 131 L89 96 Z" fill="url(#shirt)"/>
     <path d="M77.4 97 L82.6 97 L81.8 102.5 L78.2 102.5 Z" fill="#4A505C"/>
-    <path d="M78.2 102.5 L81.8 102.5 L84.4 122 L80 127.5 L75.6 122 Z" fill="url(#tie)"/>
+    <path d="M78.2 102.5 L81.8 102.5 L84.2 124 L80 129.5 L75.8 124 Z" fill="url(#tie)"/>
     <path d="M78.6 108 L82.8 111.2 M77.9 115 L83.6 118.6" stroke="#525864" stroke-width=".9" stroke-linecap="round"/>
     <path d="M71 95.5 L76.5 103.5 L80 96.5 Z M89 95.5 L83.5 103.5 L80 96.5 Z" fill="#FFFFFF" stroke="#C9CDD6" stroke-width=".7"/>
-    <circle cx="80" cy="160" r="1.5" fill="#5A5F6A"/><circle cx="80" cy="169" r="1.5" fill="#5A5F6A"/>
-    <path d="M63.4 177 L96.6 177" stroke="#08090A" stroke-width="3"/>
-    <path d="M100 110 L98.6 152 Q97.6 165 96.4 177" fill="none" stroke="rgba(246,214,150,.55)" stroke-width="1.2" stroke-linecap="round"/>
+    <!-- notch lapels -->
+    <path d="M70.6 96.4 L80 131 L74.4 133 L65.6 113 L69.4 106.4 L66.8 103.6 Z" fill="url(#lapel)"/>
+    <path d="M89.4 96.4 L80 131 L85.6 133 L94.4 113 L90.6 106.4 L93.2 103.6 Z" fill="url(#lapel)"/>
+    <path d="M70.6 96.4 L80 131 M89.4 96.4 L80 131" stroke="#4E525C" stroke-width=".8" fill="none"/>
+    <path d="M80 131 L80 188" stroke="#0B0C0E" stroke-width="1.2"/>
+    <circle cx="82.6" cy="143" r="1.6" fill="#3E424B"/><circle cx="82.6" cy="157" r="1.6" fill="#3E424B"/>
+    <path d="M62.6 160 L73 159.4 M87 159.4 L97.4 160" stroke="#0B0C0E" stroke-width="1.1" stroke-linecap="round"/>
+    <!-- gold pocket square -->
+    <path d="M88.6 119.6 L98 118.8" stroke="#0B0C0E" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M89.6 119.4 L91.4 115.6 L93.4 118.4 L95.6 115 L97 119 Z" fill="url(#gold)"/>
+    <path d="M103.2 112 L101.6 156 Q100.6 172 99.4 187" fill="none" stroke="rgba(246,214,150,.5)" stroke-width="1.2" stroke-linecap="round"/>
   </g>
 
   <g id="camera">
@@ -67,7 +75,7 @@
   <!-- arms: shoulder -> elbow -> hand, so they bend like real arms (hands drawn on the forearms, in front of the camera) -->
   <g id="arms">
     <g id="armL"><path d="M56.15 100.95 L44.5 124.13 A6.2 6.2 0 0 0 55.5 129.87 L67.85 107.05 A6.6 6.6 0 0 0 56.15 100.95 Z" fill="url(#lg1)"/>
-      <g id="foreL"><path d="M44.45 129.77 L53.99 147.5 A5.6 5.6 0 0 0 64.01 142.5 L55.55 124.23 A6.2 6.2 0 0 0 44.45 129.77 Z" fill="url(#lg2)"/><path d="M54 141 L62 147" stroke="#C3C7D0" stroke-width="2.6" stroke-linecap="round"/>
+      <g id="foreL"><path d="M44.45 129.77 L53.99 147.5 A5.6 5.6 0 0 0 64.01 142.5 L55.55 124.23 A6.2 6.2 0 0 0 44.45 129.77 Z" fill="url(#lg2)"/><path d="M54 141 L62 147" stroke="#F2F3F6" stroke-width="3" stroke-linecap="round"/>
         <path d="M54 139 Q51 148 56 156 Q60 159 65 156 Q63 148 62.5 140 Z" fill="url(#handG)"/>
         <path d="M57 148 L63 147 M57.5 151.5 L63.5 150.6" stroke="#A86F50" stroke-width=".7" stroke-linecap="round"/>
         <rect x="51.5" y="135.5" width="12" height="5.6" rx="2.2" fill="#0D0E10"/>
@@ -75,7 +83,7 @@
       </g>
     </g>
     <g id="armR"><path d="M92.15 107.05 L104.5 129.87 A6.2 6.2 0 0 0 115.5 124.13 L103.85 100.95 A6.6 6.6 0 0 0 92.15 107.05 Z" fill="url(#lg3)"/>
-      <g id="foreR"><path d="M104.45 124.23 L95.99 142.5 A5.6 5.6 0 0 0 106.01 147.5 L115.55 129.77 A6.2 6.2 0 0 0 104.45 124.23 Z" fill="url(#lg4)"/><path d="M106 141 L98 147" stroke="#C3C7D0" stroke-width="2.6" stroke-linecap="round"/>
+      <g id="foreR"><path d="M104.45 124.23 L95.99 142.5 A5.6 5.6 0 0 0 106.01 147.5 L115.55 129.77 A6.2 6.2 0 0 0 104.45 124.23 Z" fill="url(#lg4)"/><path d="M106 141 L98 147" stroke="#F2F3F6" stroke-width="3" stroke-linecap="round"/>
         <path d="M106 139 Q109 148 104 156 Q100 159 95 156 Q97 148 97.5 140 Z" fill="url(#handG)"/>
         <path d="M103 148 L97 147 M102.5 151.5 L96.5 150.6" stroke="#A86F50" stroke-width=".7" stroke-linecap="round"/>
         <path d="M97.2 149.4 L101.4 148.6" stroke="#D4D8DF" stroke-width="1.6" stroke-linecap="round"/>
@@ -91,8 +99,8 @@
     <path d="M63 46 Q63 27 80 26 Q97 27 97 46 L97 64 Q96.5 82 80 89 Q63.5 82 63 64 Z" fill="url(#face)"/>
     <path d="M66.5 45 Q67.5 39 72 37" stroke="#F4CDAE" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
     <!-- full beard from the sideburns along the jaw, thick on the chin -->
-    <path d="M63.7 50 Q63.5 70 71.6 82.4 Q80 89.4 88.4 82.4 Q96.5 70 96.3 50 L95.3 50 Q95 64 90.4 72 Q86.2 77.6 80 77.8 Q73.8 77.6 69.6 72 Q65 64 64.7 50 Z" fill="url(#beard)" opacity=".86"/>
-    <path d="M77.4 76.6 L82.6 76.6 L81.1 78.6 L78.9 78.6 Z" fill="url(#beard)" opacity=".86"/>
+    <path d="M63.7 50 Q63.5 70 71.6 82.4 Q80 89.4 88.4 82.4 Q96.5 70 96.3 50 L95.3 50 Q95.1 59 92.4 64.6 Q89 68.2 84.6 68.8 L75.4 68.8 Q71 68.2 67.6 64.6 Q64.9 59 64.7 50 Z" fill="url(#beard)" opacity=".88"/>
+    <path d="M67.6 64.6 Q71 68.2 75.4 68.8 M92.4 64.6 Q89 68.2 84.6 68.8" stroke="#6A564A" stroke-width=".6" fill="none" opacity=".5"/>
     
     <path d="M72.6 69.9 Q80 66.8 87.4 69.9 Q84 71.4 80 70.7 Q76 71.4 72.6 69.9 Z" fill="url(#beard)" opacity=".9"/>
     <!-- fuller lips -->
