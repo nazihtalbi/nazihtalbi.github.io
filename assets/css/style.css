@@ -1202,3 +1202,17 @@ body:not(.is-gated) .vfx__sparks { display: none; }
 
 /* nothing may widen the page sideways (the snow sequence keeps its next frames just off screen) */
 html { overflow-x: clip; }
+
+/* ---------- welcome -> explore: one thing at a time, never two screens on top of each other ----------
+   0 - .22 s  the Continue / Change language buttons fade out
+   .22 s      the frame starts gliding to its new place
+   .28 s      the question rises in, then the four cards one by one */
+.gate[data-step="intent"] .gate__hello { transform: none; transition: opacity .22s ease, visibility 0s linear .22s; }
+.gate[data-step="intent"] .gate__intent { transition: opacity .45s ease .28s, transform .6s var(--ease) .28s, visibility 0s linear 0s; }
+.motion .gate[data-step="intent"] .gate__q { animation-delay: .28s; }
+.motion .gate[data-step="intent"] .gate__q::after { animation-delay: .6s; }
+.motion .gate[data-step="intent"] .gate__opt { animation-delay: calc(.36s + var(--i) * 70ms); }
+.motion .gate[data-step="intent"] .gate__shine { animation-delay: calc(.8s + var(--i) * 110ms); }
+/* on the way to "explore" the frame settles quickly, before the second row of cards arrives */
+html.vf-fast body.is-gated .hero__video, html.vf-fast .vf, html.vf-fast .gate__cam > *, html.vf-fast body.is-gated .vfx { transition-duration: .42s; }
+html.vf-fast body.is-gated .vfx { transition-delay: 0s; }

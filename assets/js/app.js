@@ -15,8 +15,11 @@
   const clientName = id => (id ? tx(D.CLIENTS[id].name) : '');
 
   /* ---------- language ---------- */
+  let applied = null;
   function applyLang(next) {
-    lang = LANGS.includes(next) ? next : 'en';
+    next = LANGS.includes(next) ? next : 'en';
+    if (next === applied) return;   // already rendered in this language: nothing to redo
+    applied = next; lang = next;
     const root = document.documentElement;
     root.lang = lang; root.dir = lang === 'ar' ? 'rtl' : 'ltr';
     $$('[data-i18n]').forEach(n => { const v = t(n.dataset.i18n); if (typeof v === 'string') n.textContent = v; });
@@ -71,7 +74,10 @@
   // after the language: "what would you like to see?" (films, photography, reels or everything)
   function choose(b) {
     if (choosing) return; choosing = true; chosen = b.dataset.lang;
-    applyLang(chosen);
+    // only the welcome texts change now; re-rendering the whole page in the new language waits until the
+    // welcome animation has settled (on a phone it is a few hundred ms of work that would freeze the animation)
+    lang = chosen;
+    setTimeout(() => (window.requestIdleCallback || (f => setTimeout(f, 0)))(() => applyLang(chosen), { timeout: 1500 }), 900);
     const ask = () => { gate.classList.remove('is-choosing'); gate.dispatchEvent(new CustomEvent('gate:step', { detail: 'intent' })); };
     if (reduceMotion || gate.dataset.step !== 'pick') return ask();
     gate.classList.add('is-choosing'); b.classList.add('is-picked');
@@ -200,7 +206,8 @@
     if (document.fonts) document.fonts.ready.then(() => { lockSizes(); fitFrame(); });
     const intent = $('#gateIntent');
     const step = s => {
-      gate.dataset.step = s; fitFrame();
+      // going to "explore": the old buttons fade out first, then the frame moves (see the CSS for the full order)
+      gate.dataset.step = s; document.documentElement.classList.toggle('vf-fast', s === 'intent'); if (s === 'intent') setTimeout(fitFrame, 120); else fitFrame();
       $('#gatePick').inert = s !== 'pick'; hello.inert = s !== 'hello'; intent.inert = s !== 'intent';
       requestAnimationFrame(() => (s === 'pick' ? suggestedBtn : s === 'intent' ? $('.gate__opt--all') : $('#gateContinue')).focus({ preventScroll: true }));
     };
