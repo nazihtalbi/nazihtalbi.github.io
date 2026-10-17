@@ -1073,3 +1073,55 @@ body.is-gated .wa-float { display: none; }
   .bar__nav .bar__cta.is-here { box-shadow: 0 0 0 3px rgba(245, 184, 65, .3); }
 }
 @media (max-width: 760px) { .bar__nav a.is-here:not(.bar__cta) { color: var(--tungsten); } }
+
+/* ---------- welcome, step 3: "what would you like to see?" ---------- */
+.gate__intent { display: grid; justify-items: center; gap: clamp(.9rem, 2.4vh, 1.4rem); text-align: center; transition: opacity .55s ease, transform .6s var(--ease), visibility 0s linear .6s; }
+.gate:not([data-step="intent"]) .gate__intent { position: absolute; inset-inline: 0; top: 0; opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(18px); }
+.gate[data-step="intent"] { grid-template-rows: auto auto 1fr; padding-top: clamp(1.8rem, 8vh, 5.5rem); }
+.gate[data-step="intent"] .gate__top { grid-row: 1; }
+.gate[data-step="intent"] .gate__choose { grid-row: 2; margin-top: clamp(1.2rem, 4vh, 2.4rem); }
+.gate[data-step="intent"] .gate__hello, .gate[data-step="intent"] .gate__pick { position: absolute; inset-inline: 0; top: 0; opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-14px); }
+.gate[data-step="intent"] .gate__intent { transition-delay: 0s; }
+.gate__q { margin: 0; color: #F6F0E4; font-weight: 700; font-size: clamp(1.1rem, 2.4vw, 1.45rem); }
+.gate__opts { display: grid; grid-template-columns: repeat(4, minmax(0, 9.5rem)); gap: .7rem; }
+.gate__opt {
+  display: grid; justify-items: center; align-content: center; gap: .55rem; min-height: 6.4rem; padding: 1rem .7rem; border-radius: 16px;
+  border: 1px solid rgba(246, 227, 180, .26); background: rgba(20, 18, 16, .66); color: #F6F0E4; font-weight: 700; font-size: 1rem;
+  transition: transform .35s var(--ease), border-color .3s, background .3s, box-shadow .35s;
+}
+.gate__opt svg { width: 1.9rem; height: 1.9rem; fill: none; stroke: var(--gold-2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.gate__opt:hover, .gate__opt:focus-visible { transform: translateY(-3px); border-color: var(--gold-2); background: rgba(58, 46, 28, .85); outline: none; }
+.gate__opt--all { color: #1a1408; border-color: transparent; background: linear-gradient(100deg, var(--gold-2), var(--gold-1)); box-shadow: 0 14px 34px -14px rgba(226, 184, 101, .7); }
+.gate__opt--all svg { stroke: #1a1408; }
+.gate__opt--all:hover, .gate__opt--all:focus-visible { background: linear-gradient(100deg, var(--gold-1), var(--gold-2)); }
+.motion .gate[data-step="intent"] .gate__opt { animation: card .7s var(--ease) both; animation-delay: calc(.08s + var(--i) * 70ms); }
+@media (max-width: 760px) {
+  .gate__opts { grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; max-width: 360px; }
+  .gate__opt { min-height: 5.6rem; }
+}
+
+/* ---------- welcome: lighter title sequence (no blur filters, the shine runs once) so it never stutters ---------- */
+@keyframes focusIn { 0% { opacity: 0; transform: scale(1.35); } 60% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+@keyframes wordIn { from { opacity: 0; transform: translateY(.6em); } to { opacity: 1; transform: none; } }
+.motion .gn { animation-iteration-count: 1, 1; }
+.gate__top { contain: layout; }
+
+/* ---------- header buttons: same height, text truly centred (Tajawal sits high in its line box) ---------- */
+.bar__langbtn, .bar__menu { display: inline-flex; align-items: center; justify-content: center; height: 2.5rem; line-height: 1; padding-top: .14em; }
+.bar__langbtn { min-width: 3.3rem; padding-inline: .85rem; font-size: .9rem; }
+.bar__menu { padding-inline: 1.1rem; font-size: .95rem; }
+@media (max-width: 900px) { .bar { gap: .55rem; } .bar__name { line-height: 1; } }
+
+/* ---------- phones and tablets: keep the GPU free for scrolling ---------- */
+@media (max-width: 760px), (hover: none) {
+  .motion .aura i { animation: none; }
+  .aura i { will-change: auto; }
+  .motion .hero__frame::before { animation: none; }
+}
+
+/* welcome: the frame moves faster (it animates layout and a clip on a playing video, which is heavy on phones),
+   and the greeting always fits a narrow phone */
+body.is-gated .hero__video { transition-duration: .7s; }
+.vf { transition-duration: .7s, .4s; }
+.gate__cam > * { transition-duration: .7s; }
+@media (max-width: 760px) { .gate__hey1 { font-size: clamp(2rem, 9.4vw, 3.1rem); } }

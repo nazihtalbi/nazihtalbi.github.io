@@ -3,6 +3,8 @@
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hoverable = matchMedia('(hover: hover)').matches;
+  // touch devices: no hover previews to prepare, smaller video files, and video decoders released as soon as they are not needed
+  const lite = !hoverable || innerWidth <= 760;
   let lang = 'en';
   const store = { get: k => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
 
@@ -47,14 +49,42 @@
     de: { a: 'Hey, ich bin', name: 'Nazih', b: 'und das ist mein Portfolio.', go: 'Auf Deutsch weiter', change: 'Sprache ändern', back: 'Zurück' },
   };
   const SUGGEST_LABEL = { en: 'Suggested for you', fr: 'Suggéré pour vous', ar: 'مقترحة لك', de: 'Für Sie empfohlen' };
-  let choosing = false;
-  function choose(b) {
-    if (choosing) return; choosing = true;
-    applyLang(b.dataset.lang);
-    if (reduceMotion) return enter(b.dataset.lang);
-    gate.classList.add('is-choosing'); b.classList.add('is-picked');
-    setTimeout(() => enter(b.dataset.lang), 650);
+  // smooth, eased scroll to a section; it keeps re-aiming while images above it load, and stops if the visitor scrolls
+  function glideTo(target, done) {
+    const barH = () => ($('#bar') ? $('#bar').offsetHeight : 0);
+    const aim = () => Math.max(0, target.getBoundingClientRect().top + scrollY - barH() + 2);
+    if (reduceMotion) { scrollTo(0, aim()); return done && done(); }
+    const root = document.documentElement, prev = root.style.scrollBehavior; root.style.scrollBehavior = 'auto';
+    const from = scrollY, dist = Math.abs(aim() - from), dur = Math.min(1700, Math.max(850, dist * .35)), t0 = performance.now();
+    let stop = false; const cancel = () => (stop = true);
+    addEventListener('wheel', cancel, { passive: true, once: true }); addEventListener('touchstart', cancel, { passive: true, once: true });
+    const ease = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    const frame = now => {
+      const p = Math.min(1, (now - t0) / dur);
+      if (!stop) scrollTo(0, from + (aim() - from) * ease(p));
+      if (p < 1 && !stop) requestAnimationFrame(frame);
+      else { root.style.scrollBehavior = prev; removeEventListener('wheel', cancel); removeEventListener('touchstart', cancel); done && done(); }
+    };
+    requestAnimationFrame(frame);
   }
+  let choosing = false, chosen = 'en';
+  // after the language: "what would you like to see?" (films, photography, reels or everything)
+  function choose(b) {
+    if (choosing) return; choosing = true; chosen = b.dataset.lang;
+    applyLang(chosen);
+    const ask = () => { gate.classList.remove('is-choosing'); gate.dispatchEvent(new CustomEvent('gate:step', { detail: 'intent' })); };
+    if (reduceMotion || gate.dataset.step !== 'pick') return ask();
+    gate.classList.add('is-choosing'); b.classList.add('is-picked');
+    setTimeout(ask, 600);
+  }
+  $$('.gate__opt').forEach(o => o.addEventListener('click', () => {
+    const go = o.dataset.go; enter(chosen);
+    if (go === 'all') return;
+    // skip the hero's opening and glide to the chosen section while the welcome screen fades away
+    document.body.classList.remove('is-entering');
+    const target = document.getElementById(go);
+    setTimeout(() => glideTo(target, () => { const h = target.querySelector('.sec-title'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }), reduceMotion ? 0 : 250);
+  }));
   function initGate() {
     const start = window.LANG_START || { lang: 'en', saved: false, suggested: 'en' };
     if (start.saved) { // returning visitor: their own choice wins, no gate
@@ -85,8 +115,7 @@
     const onKey = e => { if (!document.body.classList.contains('is-gated')) return; if (e.key === 'Escape' && gate.dataset.step === 'pick') return step('hello'); const k = +e.key; if (gate.dataset.step === 'pick' && k >= 1 && k <= btns.length) choose(btns[k - 1]); };
     document.addEventListener('keydown', onKey);
     // step 1: welcome in the suggested language, with "continue" or "change language"
-    const W = WELCOME[start.suggested] || WELCOME.en, hello = $('#gateHello');
-    hello.lang = start.suggested; hello.dir = start.suggested === 'ar' ? 'rtl' : 'ltr';
+    const hello = $('#gateHello');
     // the greeting is built as a small title sequence: letters rise, "Hey" waves, the name pulls into focus
     // under an autofocus box, then the second line types in. Arabic is animated by words (letters must stay joined).
     let greeted = null;
@@ -104,12 +133,42 @@
       // replaying for a language preview: restart the sequence, faster
       top.classList.remove('is-swap'); if (swap) { void top.offsetWidth; top.classList.add('is-swap'); }
     };
-    greet(start.suggested);
+    // the welcome opens in English, then every 3 s it greets the visitor in the next language (French, Arabic, German, ...)
+    // until they choose. "Continue" always continues in the language currently shown. It holds still while a finger or
+    // the mouse is on the buttons, or once someone uses the keyboard.
+    const ORDER = ['en', 'fr', 'ar', 'de']; let cur = 'en', ci = 0, hold = false, cycleT = null;
+    const setHello = l => {
+      cur = l; greet(l); const g = WELCOME[l];
+      hello.lang = l; hello.dir = l === 'ar' ? 'rtl' : 'ltr';
+      $('#gateContinueTx').textContent = g.go; $('#gateChangeTx').textContent = g.change; $('#gateBackTx').textContent = g.back;
+      $('#gateBack').lang = l; $('#gateBack').dir = hello.dir;
+    };
+    // the greeting and the Continue button keep the size of their longest language, so nothing jumps while it cycles
+    const lockSizes = () => {
+      const top = $('#gateTop'), probe = top.cloneNode(true);
+      probe.removeAttribute('id'); probe.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+      Object.assign(probe.style, { position: 'absolute', visibility: 'hidden', pointerEvents: 'none', minHeight: '0', width: top.offsetWidth + 'px' });
+      top.parentNode.append(probe);
+      const go = $('#gateContinue'), goTx = $('#gateContinueTx'), keep = goTx.textContent; go.style.minWidth = '';
+      let h = 0, w = 0;
+      for (const l of ORDER) {
+        const g = WELCOME[l], [a, n] = probe.querySelectorAll('.gate__hey1 > span'), b = probe.querySelector('.gate__hey2');
+        probe.lang = l; probe.dir = l === 'ar' ? 'rtl' : 'ltr'; a.textContent = g.a; n.textContent = g.name; b.textContent = g.b;
+        h = Math.max(h, probe.offsetHeight); goTx.textContent = g.go; w = Math.max(w, go.offsetWidth);
+      }
+      probe.remove(); goTx.textContent = keep; top.style.minHeight = h + 'px'; go.style.minWidth = Math.ceil(w) + 'px';
+    };
+    setHello('en'); lockSizes();
+    cycleT = setInterval(() => {
+      if (hold || gate.dataset.step !== 'hello' || document.hidden || !document.body.classList.contains('is-gated')) return;
+      ci = (ci + 1) % ORDER.length; setHello(ORDER[ci]);
+    }, 3000);
+    const actions = $('.gate__actions');
+    actions.addEventListener('pointerenter', () => (hold = true)); actions.addEventListener('pointerleave', () => (hold = false));
+    gate.addEventListener('keydown', () => (hold = true));
     // on the language step, hovering or focusing a card previews the greeting in that language
     btns.forEach(b => { const show = () => greet(b.dataset.lang); b.addEventListener('mouseenter', show); b.addEventListener('focus', show); });
-    $('#gatePick').addEventListener('mouseleave', () => greet(start.suggested));
-    $('#gateContinueTx').textContent = W.go; $('#gateChangeTx').textContent = W.change; $('#gateBackTx').textContent = W.back;
-    $('#gateBack').lang = start.suggested; $('#gateBack').dir = hello.dir;
+    $('#gatePick').addEventListener('mouseleave', () => greet(cur));
     const suggestedBtn = btns.find(b => b.dataset.lang === start.suggested) || btns[0];
     const root = document.documentElement, chooseBox = $('.gate__choose');
     // the camera frame: under the buttons on the welcome step, between greeting and cards on the language step
@@ -119,7 +178,7 @@
       if (!document.body.classList.contains('is-gated')) { ['--vf-t', '--vf-b', '--vf-x'].forEach(v => root.style.removeProperty(v)); return; }
       const W = innerWidth, H = innerHeight, gap = Math.max(20, H * .035), phone = W <= 760, tablet = !phone && W <= 1000;
       let t, b, x;
-      if (gate.dataset.step === 'hello') { // under the buttons, about half the screen high, centred in what is left
+      if (gate.dataset.step !== 'pick') { // under the buttons (or the "what to see" choices), centred in what is left
         const top = absTop(chooseBox) + chooseBox.offsetHeight + gap, space = H - top - 16;
         const h = Math.min(H * (phone ? .5 : tablet ? .52 : .54), space); t = top + Math.max(0, (space - h) / 2); b = H - t - h; x = W * (phone ? .06 : tablet ? .1 : .22);
       } else { // between the greeting and the language cards
@@ -130,9 +189,20 @@
       }
       root.style.setProperty('--vf-t', Math.round(t) + 'px'); root.style.setProperty('--vf-b', Math.round(Math.max(b, 12)) + 'px'); root.style.setProperty('--vf-x', Math.round(x) + 'px');
     };
-    addEventListener('resize', fitFrame); if (document.fonts) document.fonts.ready.then(fitFrame);
-    const step = s => { gate.dataset.step = s; fitFrame(); $('#gatePick').inert = s !== 'pick'; hello.inert = s !== 'hello'; requestAnimationFrame(() => (s === 'pick' ? suggestedBtn : $('#gateContinue')).focus({ preventScroll: true })); };
-    $('#gateContinue').addEventListener('click', () => choose(suggestedBtn));
+    let rz = 0;
+    addEventListener('resize', () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { if (document.body.classList.contains('is-gated')) lockSizes(); fitFrame(); }); });
+    if (document.fonts) document.fonts.ready.then(() => { lockSizes(); fitFrame(); });
+    const intent = $('#gateIntent');
+    const step = s => {
+      gate.dataset.step = s; fitFrame();
+      $('#gatePick').inert = s !== 'pick'; hello.inert = s !== 'hello'; intent.inert = s !== 'intent';
+      requestAnimationFrame(() => (s === 'pick' ? suggestedBtn : s === 'intent' ? $('.gate__opt--all') : $('#gateContinue')).focus({ preventScroll: true }));
+    };
+    gate.addEventListener('gate:step', e => {
+      clearInterval(cycleT); greet(chosen); $$('.gate__opt span, #gateQ').forEach(n => (n.textContent = t(n.dataset.i18n)));
+      intent.lang = chosen; intent.dir = chosen === 'ar' ? 'rtl' : 'ltr'; step(e.detail);
+    });
+    $('#gateContinue').addEventListener('click', () => choose(btns.find(b => b.dataset.lang === cur) || btns[0]));
     $('#gateChange').addEventListener('click', () => step('pick'));
     $('#gateBack').addEventListener('click', () => step('hello'));
     step('hello');
@@ -217,7 +287,7 @@
       const v = el('video', 'screen__preview'); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('aria-hidden', 'true');
       // big or sharp screens get the 1080p preview (falls back to the small one if a film has none); only metadata until it is shown
       const sd = D.V + f.slug + '-preview.mp4';
-      v.preload = 'none'; v.src = stage.clientWidth * (devicePixelRatio || 1) > 1100 ? D.V + f.slug + '-preview-hd.mp4' : sd;
+      v.preload = 'none'; v.src = !lite && stage.clientWidth * (devicePixelRatio || 1) > 1100 ? D.V + f.slug + '-preview-hd.mp4' : sd;
       v.addEventListener('error', () => { if (!v.src.endsWith(sd)) { v.src = sd; if (shown === v) v.play().catch(() => {}); } });
       pv[f.slug] = v; stage.insertBefore(v, $('#screenPlay'));
     }
@@ -230,6 +300,7 @@
     const idle = window.requestIdleCallback || (fn => setTimeout(fn, 300));
     const warm = new IntersectionObserver(es => {
       if (!es.some(e => e.isIntersecting)) return; warm.disconnect();
+      if (lite) return; // on touch screens only the selected film's preview is ever loaded
       const rest = D.FILMS.filter(filmHasPreview); filmPreview(D.FILMS[filmIdx] && filmHasPreview(D.FILMS[filmIdx]) ? D.FILMS[filmIdx] : rest[0]);
       const next = () => afterScroll(() => { const f = rest.find(x => !pv[x.slug]); if (f) { filmPreview(f); setTimeout(() => idle(next, { timeout: 2000 }), 400); } });
       setTimeout(() => idle(next, { timeout: 2000 }), 1200);
@@ -260,7 +331,12 @@
     $('.screen__stage').classList.toggle('is-blank', !posterSrc);
     const still = !filmHasPreview(f); stage.classList.remove('is-still'); if (still) { void stage.offsetWidth; stage.classList.add('is-still'); }
     if (posterSrc) { poster.onerror = () => $('.screen__stage').classList.add('is-blank'); poster.src = posterSrc; poster.alt = tx(f.title); } else { poster.removeAttribute('src'); poster.alt = ''; }
-    if (shown) { shown.pause(); shown.classList.remove('is-on'); shown = null; }
+    if (shown) {
+      shown.pause(); shown.classList.remove('is-on');
+      // phones: free the old preview's video decoder instead of keeping every film loaded
+      if (lite) { const old = shown, slug = Object.keys(pv).find(k => pv[k] === old); setTimeout(() => { old.removeAttribute('src'); old.load(); old.remove(); }, 500); if (slug) delete pv[slug]; }
+      shown = null;
+    }
     if (filmHasPreview(f) && !reduceMotion) {
       const v = filmPreview(f);
       shown = v; v.preload = 'auto';
@@ -395,11 +471,12 @@
   /* ---------- lightbox ---------- */
   const lb = $('#lightbox'), lbImg = $('#lbImg');
   let lbIdx = 0;
+  const big = () => innerWidth * (devicePixelRatio || 1) > 1500;
   function showPhoto(i) {
     lbIdx = (i + visible.length) % visible.length; const p = visible[lbIdx];
-    lbImg.classList.remove('is-loaded'); lbImg.src = p.lg; lbImg.alt = t('cat.' + p.cat);
+    lbImg.classList.remove('is-loaded'); lbImg.sizes = '100vw'; lbImg.srcset = `${p.sm} 1400w, ${p.lg} 2400w`; lbImg.src = big() ? p.lg : p.sm; lbImg.alt = t('cat.' + p.cat);
     $('#lbCap').textContent = `${t('cat.' + p.cat)}   ${t('photoOf').replace('{n}', lbIdx + 1).replace('{t}', visible.length)}`;
-    [visible[lbIdx + 1], visible[lbIdx - 1]].forEach(n => { if (n) new Image().src = n.lg; });
+    [visible[lbIdx + 1], visible[lbIdx - 1]].forEach(n => { if (n) new Image().src = big() ? n.lg : n.sm; });
   }
   lbImg.addEventListener('load', () => lbImg.classList.add('is-loaded'));
   function openLightbox(i) { lastFocus = document.activeElement; showPhoto(i); lb.showModal(); }

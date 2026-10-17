@@ -47,6 +47,7 @@ window.I18N = {
     waTip: "Let's talk about your project", ctaReel: 'Watch the showreel', reelTitle: 'Showreel 2026', waFloat: 'Message me on WhatsApp',
     casesTitle: 'Case studies', casesIntro: 'Two projects from start to finish: what the client asked for, how it was filmed, and what they received.', caseBrief: 'The brief', caseDid: 'What I did', caseBts: 'Behind the scenes', caseResult: 'The result', caseReels: '{n} reels', casePlay: 'Watch the film',
     seoTitle: "Nazih Talbi | Videographer & Photographer in Algeria", seoDesc: "Nazih Talbi, videographer and photographer in Algeria: event films, documentaries, short films, ads, reels and photography for schools, institutions and brands.",
+    introAsk: 'What would you like to see?', introAll: 'Everything',
     sendWa: 'Send on WhatsApp', sendMail: 'Send by email', mailSubject: 'New project', msgHello: 'Hello Nazih,', msgFrom: 'Name', msgType: 'Project type',
     toTop: 'Back to top'
   },
@@ -97,6 +98,7 @@ window.I18N = {
     waTip: 'Parlons de votre projet', ctaReel: 'Voir le showreel', reelTitle: 'Showreel 2026', waFloat: "M'écrire sur WhatsApp",
     casesTitle: 'Études de cas', casesIntro: "Deux projets du début à la fin : la demande du client, le tournage et ce qu'il a reçu.", caseBrief: 'La demande', caseDid: "Ce que j'ai fait", caseBts: 'Les coulisses', caseResult: 'Le résultat', caseReels: '{n} reels', casePlay: 'Voir le film',
     seoTitle: "Nazih Talbi | Vidéaste et photographe en Algérie", seoDesc: "Nazih Talbi, vidéaste et photographe en Algérie : films d'événements, documentaires, courts métrages, publicités, reels et photographie pour écoles, institutions et marques.",
+    introAsk: 'Que souhaitez-vous voir ?', introAll: 'Tout voir',
     sendWa: 'Envoyer sur WhatsApp', sendMail: 'Envoyer par e-mail', mailSubject: 'Nouveau projet', msgHello: 'Bonjour Nazih,', msgFrom: 'Nom', msgType: 'Type de projet',
     toTop: 'Retour en haut'
   },
@@ -147,6 +149,7 @@ window.I18N = {
     waTip: 'لنتحدث عن مشروعك', ctaReel: 'شاهد الشوريل', reelTitle: 'شوريل 2026', waFloat: 'راسلني على واتساب',
     casesTitle: 'دراسات حالة', casesIntro: 'مشروعان من البداية إلى النهاية: ما طلبه العميل، وكيف صُوّر العمل، وما الذي استلمه.', caseBrief: 'المطلوب', caseDid: 'ما قمت به', caseBts: 'كواليس التصوير', caseResult: 'النتيجة', caseReels: '{n} ريلز', casePlay: 'شاهد الفيلم',
     seoTitle: "نزيه طالبي | مصور فيديو ومصور فوتوغرافي في الجزائر", seoDesc: "نزيه طالبي، مصور فيديو ومصور فوتوغرافي في الجزائر: أفلام فعاليات، أفلام وثائقية، أفلام قصيرة، إعلانات، ريلز وتصوير فوتوغرافي للمدارس والمؤسسات والعلامات التجارية.",
+    introAsk: 'ماذا تودّ أن تشاهد؟', introAll: 'كل شيء',
     sendWa: 'أرسل عبر واتساب', sendMail: 'أرسل عبر البريد', mailSubject: 'مشروع جديد', msgHello: 'مرحبًا نزيه،', msgFrom: 'الاسم', msgType: 'نوع المشروع',
     toTop: 'العودة إلى الأعلى'
   },
@@ -197,6 +200,7 @@ window.I18N = {
     waTip: 'Lass uns über dein Projekt sprechen', ctaReel: 'Showreel ansehen', reelTitle: 'Showreel 2026', waFloat: 'Schreib mir auf WhatsApp',
     casesTitle: 'Fallstudien', casesIntro: 'Zwei Projekte von Anfang bis Ende: was der Kunde wollte, wie gedreht wurde und was er bekommen hat.', caseBrief: 'Die Aufgabe', caseDid: 'Was ich gemacht habe', caseBts: 'Hinter den Kulissen', caseResult: 'Das Ergebnis', caseReels: '{n} Reels', casePlay: 'Film ansehen',
     seoTitle: "Nazih Talbi | Videograf & Fotograf in Algerien", seoDesc: "Nazih Talbi, Videograf und Fotograf in Algerien: Eventfilme, Dokumentarfilme, Kurzfilme, Werbung, Reels und Fotografie für Schulen, Institutionen und Marken.",
+    introAsk: 'Was möchten Sie sehen?', introAll: 'Alles',
     sendWa: 'Per WhatsApp senden', sendMail: 'Per E-Mail senden', mailSubject: 'Neues Projekt', msgHello: 'Hallo Nazih,', msgFrom: 'Name', msgType: 'Projektart',
     toTop: 'Nach oben'
   }

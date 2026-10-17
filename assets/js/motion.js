@@ -2,6 +2,7 @@
    Everything here is decorative and switches off for visitors who ask their device for reduced motion. */
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lite = !matchMedia('(hover: hover)').matches || innerWidth <= 760;   // phones / tablets
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   document.documentElement.classList.toggle('motion', !reduce);
 
@@ -79,7 +80,8 @@
       const ex = ox + 479 * s, ey = oy + 193 * s, S = 2.3 * Math.hypot(w, h);
       Object.assign(iris.style, { left: ex - S / 2 + 'px', top: ey - S / 2 + 'px', width: S + 'px', height: S + 'px' });
     };
-    const load = () => vids.forEach(v => { v.src = window.DATA.V + reel[at % reel.length] + '-preview.mp4'; v.playbackRate = .6; v.play().catch(() => {}); });
+    // phones skip the two reflection videos (two extra decoders for a detail too small to see there)
+    const load = () => lite ? null : vids.forEach(v => { v.src = window.DATA.V + reel[at % reel.length] + '-preview.mp4'; v.playbackRate = .6; v.play().catch(() => {}); });
     // when a clip ends, both lenses move on to the next film together
     vids[0].addEventListener('ended', () => { at++; load(); });
     let started = false;
@@ -93,7 +95,7 @@
 
   /* ---------- decode big images ahead of time (about two screens early), so they never decode mid-scroll ---------- */
   if ('decode' in HTMLImageElement.prototype) {
-    const pre = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; pre.unobserve(e.target); const im = e.target; im.loading = 'eager'; im.decode().catch(() => {}); }), { rootMargin: '1800px 0px' });
+    const pre = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; pre.unobserve(e.target); const im = e.target; im.loading = 'eager'; im.decode().catch(() => {}); }), { rootMargin: lite ? '700px 0px' : '1800px 0px' });
     const watchImgs = () => $$('main img').forEach(im => { if (!im.dataset.pre) { im.dataset.pre = 1; pre.observe(im); } });
     watchImgs(); new MutationObserver(watchImgs).observe($('main'), { childList: true, subtree: true });
   }
