@@ -1345,3 +1345,25 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
 /* he nods a little while he talks */
 .motion .buddy.is-talking #mn-head { animation: nod .9s ease-in-out infinite; }
 @keyframes nod { 0%, 100% { transform: rotate(calc(var(--face) * -6deg)); } 50% { transform: rotate(calc(var(--face) * -2deg)) translateY(1.5px); } }
+
+/* ---------- Mini Nazih, natural version ---------- */
+/* the message sits beside his head, on the page side, so it is never cut off at the top of the screen */
+.buddy__say { bottom: auto; top: 2%; inset-inline-end: calc(100% + 8px); border-radius: 14px 4px 14px 14px; transform-origin: right top; }
+[dir="rtl"] .buddy__say { border-radius: 4px 14px 14px 14px; transform-origin: left top; }
+/* softer idle: a gentle float and a slow breath instead of a bob with a tilt */
+@keyframes buddyBob { 0%, 100% { transform: none; } 50% { transform: translateY(-5px); } }
+/* legs sway a little from the hips while he floats */
+#mn-legL { transform-box: view-box; transform-origin: 71px 176px; }
+#mn-legR { transform-box: view-box; transform-origin: 89px 176px; }
+.motion .buddy.is-on #mn-legL { animation: legSwayL 3.4s ease-in-out infinite; }
+.motion .buddy.is-on #mn-legR { animation: legSwayR 3.4s ease-in-out infinite; }
+@keyframes legSwayL { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(4deg); } }
+@keyframes legSwayR { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-3deg); } }
+#mn-body { transform-box: view-box; transform-origin: 80px 178px; }
+.motion .buddy.is-on #mn-body { animation: breathe 3.4s ease-in-out infinite; }
+@keyframes breathe { 50% { transform: scale(1.012, 1.018); } }
+/* a smaller, more human wave and a gentler turn */
+@keyframes wave { 0%, 100% { transform: none; } 22% { transform: rotate(-118deg); } 38% { transform: rotate(-104deg); } 54% { transform: rotate(-120deg); } 70% { transform: rotate(-106deg); } 84% { transform: rotate(-116deg); } }
+.buddy.is-watching .buddy__me svg, .buddy.is-talking .buddy__me svg { rotate: y calc(var(--face) * -30deg); }
+.buddy.is-watching .buddy__me { rotate: calc(var(--face) * -3deg); }
+@keyframes peek { 0%, 100% { rotate: y 0deg; } 35%, 70% { rotate: y calc(var(--face) * -40deg); } }

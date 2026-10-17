@@ -56,8 +56,10 @@
   if (reduce) return;
 
   // ---------- where he floats: a vertical spot on the edge (moved by --by, eased in CSS) ----------
-  const range = () => innerHeight * (lite ? .16 : .3);
-  const goTo = y => box.style.setProperty('--by', Math.round(Math.max(-range(), Math.min(range(), y))) + 'px');
+  const range = () => innerHeight * (lite ? .12 : .2);
+  const band = () => { const h = box.offsetHeight, base = box.getBoundingClientRect().top - (parseFloat(box.style.getPropertyValue('--by')) || 0);
+    return [Math.max(-range(), 96 - base), Math.min(range(), innerHeight - 24 - h - base)]; };
+  const goTo = y => { const [lo, hi] = band(); box.style.setProperty('--by', Math.round(Math.max(lo, Math.min(hi, y))) + 'px'); };
   // idle life: drift to a new spot, look around, now and then a photo
   let watching = null, idleLife = 0;
   const life = () => {
@@ -68,8 +70,8 @@
         if (r < .32) goTo((Math.random() * 2 - 1) * range());     // drift to a new spot
         else if (r < .47) once('is-look', 1900);                  // look around (head)
         else if (r < .62) once('is-peek', 2600);                  // 3D turn towards the page, then back
-        else if (r < .72) once('is-spin', 1700);                  // a full turn around
-        else if (r < .84) once('is-wave', 1700);                  // a wave
+        else if (r < .67) once('is-spin', 1900);                  // a full turn around (rare)
+        else if (r < .82) once('is-wave', 1700);                  // a wave
         else snap();                                             // a photo
       }
       life();
@@ -131,9 +133,9 @@
     const dt = Math.min(.05, (now - lastT) / 1000 || .016); lastT = now;
     const y = scrollY, dy = y - lastY; lastY = y;
     vel += (dy / Math.max(dt, .001) - vel) * .18;
-    const target = Math.max(-110, Math.min(110, vel * .07));
+    const target = Math.max(-46, Math.min(46, vel * .035));
     offV += ((target - off) * 90 - offV * 14) * dt; off += offV * dt;
-    rot += (Math.max(-22, Math.min(22, vel * .012)) - rot) * Math.min(1, dt * 8);
+    rot += (Math.max(-9, Math.min(9, vel * .006)) - rot) * Math.min(1, dt * 6);
     me.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg)`;
     if (!CW) size();
     const speed = Math.abs(vel);
