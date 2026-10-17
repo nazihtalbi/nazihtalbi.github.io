@@ -1,14 +1,15 @@
-// Cut Mini Nazih poses out of the green-screen renders (camera-green.jpg, crossed-green.jpg, sheet-green.jpg, saved as s4/s5/s6.png) and pack them into one sprite (one cell per pose).
+// Cut Mini Nazih poses out of the green-screen renders and pack them into one sprite (one cell per pose).
 // run in headless Chrome through cdp.js: the page does the keying with canvas.
 const fs = require('fs'), path = require('path');
 const SRC = {
   s4: { camera: [630, 500] },
   s5: { crossed: [690, 500] },
-  s6: { q3: [320, 250], left: [500, 250], right: [650, 250], back: [785, 250], q3back: [920, 250], wave: [135, 600], walk: [665, 600], wow: [858, 600], joy: [1060, 600] },
+  s7: { present: [700, 500] },
+  s6: { q3: [320, 250], left: [500, 250], right: [650, 250], back: [785, 250], q3back: [920, 250], wave: [135, 600], walk: [665, 600], wow: [858, 600] },
 };
-const ORDER = ['camera', 'crossed', 'q3', 'left', 'right', 'back', 'q3back', 'wave', 'walk', 'wow', 'joy'];
+const ORDER = ['camera', 'crossed', 'q3', 'left', 'right', 'back', 'q3back', 'wave', 'walk', 'wow', 'present'];
 // the height a standing figure gets in its cell, per source (measured on a standing pose of that source)
-const STAND = { s4: 'camera', s5: 'crossed', s6: 'q3' };
+const STAND = { s4: 'camera', s5: 'crossed', s6: 'q3', s7: 'present' };
 module.exports = async (ev) => {
   const files = {}; for (const k of Object.keys(SRC)) files[k] = 'data:image/png;base64,' + fs.readFileSync(path.join(__dirname, k + '.png')).toString('base64');
   const r = await ev(`
@@ -65,9 +66,11 @@ module.exports = async (ev) => {
       const dx = k * CW + CW / 2 - u.headX * u.scale, dy = CH - 6 - u.feet * u.scale;
       sg.save(); sg.beginPath(); sg.rect(k * CW, 0, CW, CH); sg.clip(); sg.drawImage(u.cc, dx, dy, w, h); sg.restore();
       info[name].cell = [Math.round(dx - k * CW), Math.round(dy), Math.round(w), Math.round(h)]; });
-    return { info, webp: sp.toDataURL('image/webp', .9), png: sp.toDataURL('image/png') };
+    const big = cuts.crossed.cc; info.big = [big.width, big.height];
+    return { info, big: big.toDataURL('image/webp', .9), webp: sp.toDataURL('image/webp', .9), png: sp.toDataURL('image/png') };
   `);
   fs.writeFileSync(path.join(__dirname, 'mini-sprite.webp'), Buffer.from(r.webp.split(',')[1], 'base64'));
   fs.writeFileSync(path.join(__dirname, 'mini-sprite.png'), Buffer.from(r.png.split(',')[1], 'base64'));
+  fs.writeFileSync(path.join(__dirname, 'nazih-crossed.webp'), Buffer.from(r.big.split(',')[1], 'base64'));
   return r.info;
 };

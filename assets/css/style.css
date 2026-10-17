@@ -1394,3 +1394,27 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
 @media (max-width: 760px) { .buddy { width: 76px; height: 118px; } }
 /* the flash fires from the lens of the camera he holds */
 .buddy__flash { left: 51%; top: 55%; }
+
+/* Nazih, arms crossed, standing big beside his name: rises in once the welcome opens, a warm glow behind him,
+   a slow float, a light sweep across him now and then, and a slight lean towards the pointer */
+.hero__me { position: absolute; z-index: 2; bottom: 0; inset-inline-end: clamp(1rem, 8vw, 10rem); height: min(88vh, 900px); aspect-ratio: 214 / 738;
+  pointer-events: none; translate: calc(var(--mx, 0) * 14px) calc(var(--my, 0) * 8px); transition: opacity 1.3s ease, transform 1.5s var(--ease), filter 1.3s ease, translate .9s var(--ease); }
+body.is-gated .hero__me { opacity: 0; transform: translateY(14%) scale(.92); filter: blur(10px); }
+body.is-entering .hero__me { transition-delay: .9s, .9s, .9s, 0s; }
+.hero__float { position: absolute; inset: 0; }
+.hero__float img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 34px 44px rgba(0, 0, 0, .6)); }
+.hero__glow { position: absolute; left: -70%; right: -70%; top: 4%; bottom: 8%; border-radius: 50%; opacity: .85;
+  background: radial-gradient(ellipse at 50% 40%, rgba(246, 196, 120, .32), rgba(226, 150, 70, .12) 38%, transparent 66%); }
+.hero__shine { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: .9;
+  -webkit-mask: url(../media/site/nazih-crossed.webp) center / 100% 100% no-repeat; mask: url(../media/site/nazih-crossed.webp) center / 100% 100% no-repeat;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 236, 200, .55) 50%, transparent 58%) 120% 0 / 320% 100% no-repeat; }
+.motion .hero__float { animation: heroFloat 6.5s ease-in-out infinite; }
+@keyframes heroFloat { 0%, 100% { transform: none; } 50% { transform: translateY(-1.6%); } }
+.motion .hero__glow { animation: heroGlow 5s ease-in-out infinite alternate; }
+@keyframes heroGlow { from { opacity: .55; transform: scale(.94); } to { opacity: 1; transform: scale(1.04); } }
+.motion body:not(.is-gated) .hero__shine { animation: heroShine 8s ease-in-out 2.4s infinite; }
+@keyframes heroShine { 0% { background-position: 120% 0; } 22%, 100% { background-position: -20% 0; } }
+@media (max-width: 760px) {
+  .hero__me { height: min(40svh, calc(100svh - 30rem)); inset-inline-end: auto; inset-inline-start: calc(var(--pad) - 2vw); bottom: max(25.5rem, 50svh); }
+  .hero__glow { opacity: .6; }
+}

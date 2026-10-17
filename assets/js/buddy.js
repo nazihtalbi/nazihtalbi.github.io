@@ -7,6 +7,13 @@
    - only animates while something happens; still and spark-free for visitors who ask for reduced motion */
 (() => {
   const $ = s => document.querySelector(s);
+  // the big Nazih beside the name leans a little towards the pointer (mouse only, not for reduced motion)
+  const big = $('.hero__me');
+  if (big && matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let raf = 0;
+    addEventListener('pointermove', e => { if (raf || scrollY > innerHeight) return; raf = requestAnimationFrame(() => { raf = 0;
+      big.style.setProperty('--mx', (e.clientX / innerWidth * 2 - 1).toFixed(3)); big.style.setProperty('--my', (e.clientY / innerHeight * 2 - 1).toFixed(3)); }); }, { passive: true });
+  }
   const box = $('#buddy'); if (!box) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hover = matchMedia('(hover: hover)').matches, lite = !hover || innerWidth <= 760;
@@ -15,7 +22,7 @@
   const WORK = '.playlist__item, .screen__stage, .vcard, .spot__media, .tile, .lead, .case__media, .case__bts figure, .snow__frame, .cmp';
 
   // poses from his character sheet: one sprite, one cell per pose (front, turnaround, wave, arms crossed, walk, wow, joy)
-  const F = { camera: 0, crossed: 1, q3: 2, left: 3, right: 4, back: 5, q3back: 6, wave: 7, walk: 8, wow: 9, joy: 10 };
+  const F = { camera: 0, crossed: 1, q3: 2, left: 3, right: 4, back: 5, q3back: 6, wave: 7, walk: 8, wow: 9, present: 10 };
   const img = me.querySelector('img'), sheet = ((img && img.getAttribute('src')) || 'assets/media/site/mini-nazih.svg').replace(/mini-nazih\.svg$/, 'mini-sprite.webp');
   me.innerHTML = '<span class="buddy__bob"><span class="buddy__pose"></span></span>';
   const pose = me.querySelector('.buddy__pose'); pose.style.backgroundImage = `url("${sheet}")`;
@@ -24,7 +31,9 @@
   const toPage = () => document.documentElement.dir !== 'rtl';
   let idlePose = 'camera', busy = false, seqT = [];
   const rest = () => { if (busy) return;
-    if (box.classList.contains('is-watching') || box.classList.contains('is-talking')) show('q3', toPage()); else show(idlePose); };
+    // talking: he presents the section with an open hand towards the page; watching: he turns to the work
+    if (box.classList.contains('is-talking')) show('present', !toPage());
+    else if (box.classList.contains('is-watching')) show('q3', toPage()); else show(idlePose); };
   // a short sequence of poses, then back to rest
   const play = (frames, step = 110, hold = 0) => {
     seqT.forEach(clearTimeout); seqT = []; busy = true;
@@ -64,7 +73,7 @@
       sayIn = setTimeout(() => {
         const id = here; if (said.has(id) || !box.classList.contains('is-on') || box.classList.contains('is-talking')) return;
         const line = T('buddy.' + id); if (!line || line === 'buddy.' + id) return;
-        said.add(id); speak(line, 4800); wave();
+        said.add(id); speak(line, 4800);
       }, 700);
     }), { rootMargin: '-42% 0px -42% 0px' });
     ['films', 'reels', 'cases', 'grade', 'snow', 'photos', 'clients', 'about', 'services'].forEach(id => { const s = document.getElementById(id); if (s) secIO.observe(s); });
@@ -125,7 +134,7 @@
   let shots = 0;
   function snap() {
     if (!box.classList.contains('is-on')) return;
-    if (++shots % 3 === 0) { play([[Math.random() < .5 ? 'wow' : 'joy']], 0, 1300); once('is-hop', 800);
+    if (++shots % 3 === 0) { play([['wow']], 0, 1300); once('is-hop', 800);
       setTimeout(() => { const b = me.getBoundingClientRect(), c = cv.getBoundingClientRect(); burst(b.left - c.left + b.width * .5, b.top - c.top + b.height * .22, 14); }, 200);
       return; }
     play([['camera']], 0, 1100);
