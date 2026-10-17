@@ -1,34 +1,97 @@
-/* Mini Nazih: a small illustrated Nazih that flies along the edge of the screen with the visitor.
-   - appears once the visitor is past the hero, slides along the edge, leans into the scroll and trails gold sparks
-   - rests (gently bobbing) when scrolling stops, then fades to half strength so it never nags
-   - a tap makes him say hello in the visitor's language; near Contact he points to WhatsApp once
-   - only animates while something is happening; still and spark-free for visitors who ask for reduced motion */
+/* Mini Nazih: a small illustrated Nazih that lives on the edge of the screen and watches the work with the visitor.
+   - flies in after the hero, leans into the scroll and trails gold sparks
+   - alive when idle: drifts up and down, looks around, blinks
+   - when the visitor hovers or stops on a film, reel or photo, he flies level with it, turns to it and takes
+     a photo of it (camera up, flash, sparks)
+   - a tap: he says hello in the visitor's language; near Contact he points to WhatsApp once
+   - only animates while something happens; still and spark-free for visitors who ask for reduced motion */
 (() => {
   const $ = s => document.querySelector(s);
   const box = $('#buddy'); if (!box) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const lite = !matchMedia('(hover: hover)').matches || innerWidth <= 760;
+  const hover = matchMedia('(hover: hover)').matches, lite = !hover || innerWidth <= 760;
   const me = box.querySelector('.buddy__me'), say = box.querySelector('.buddy__say'), cv = box.querySelector('.buddy__trail'), g = cv.getContext('2d');
   const T = k => { const I = window.I18N || {}, l = document.documentElement.lang; return (I[l] && I[l][k]) || (I.en && I.en[k]) || ''; };
+  const WORK = '.playlist__item, .screen__stage, .vcard, .spot__media, .tile, .lead, .case__media, .case__bts figure, .snow__frame, .cmp';
 
-  // show after the hero, hide while the welcome screen is up
+  // the drawing is placed inline so his head, eyes and camera can move (ids prefixed so they never clash with the page)
+  const img = me.querySelector('img');
+  if (img && 'fetch' in window) fetch(img.getAttribute('src')).then(r => (r.ok ? r.text() : Promise.reject())).then(svg => {
+    me.innerHTML = svg.replace(/id="([\w-]+)"/g, 'id="mn-$1"').replace(/url\(#([\w-]+)\)/g, 'url(#mn-$1)');
+  }).catch(() => {});
+
+  // show after the hero, hide while the welcome screen or the phone menu is up
   let past = false;
   const top = $('#top');
+  const sync = () => {
+    box.classList.toggle('is-on', past && !document.body.classList.contains('is-gated') && !document.body.classList.contains('menu-open'));
+    box.style.setProperty('--face', document.documentElement.dir === 'rtl' ? -1 : 1);
+  };
   if (top && 'IntersectionObserver' in window) new IntersectionObserver(es => { past = !es[0].isIntersecting; sync(); }, { threshold: .2 }).observe(top);
-  const sync = () => box.classList.toggle('is-on', past && !document.body.classList.contains('is-gated') && !document.body.classList.contains('menu-open'));
   new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
 
   // speech bubble
   let sayT = 0;
   const speak = (text, ms = 3200) => { say.textContent = text; box.classList.add('is-talking'); clearTimeout(sayT); sayT = setTimeout(() => box.classList.remove('is-talking'), ms); };
-  me.addEventListener('click', () => { speak(T('buddyHi')); box.classList.remove('is-hop'); void box.offsetWidth; box.classList.add('is-hop'); wake(); });
+  const once = (cls, ms) => { box.classList.remove(cls); void box.offsetWidth; box.classList.add(cls); setTimeout(() => box.classList.remove(cls), ms); };
+  me.addEventListener('click', () => { speak(T('buddyHi')); once('is-hop', 800); });
   const contact = $('#contact'); let pointed = false;
   if (contact && 'IntersectionObserver' in window) new IntersectionObserver(es => { if (es[0].isIntersecting && !pointed && box.classList.contains('is-on')) { pointed = true; speak(T('buddyContact'), 4200); } }, { threshold: .35 }).observe(contact);
-
-  // menu links and "explore" choices: he dashes ahead
-  document.addEventListener('click', e => { if (e.target.closest('#nav a, .gate__opt, .client__go, .case__item--reels')) { box.classList.remove('is-dash'); void box.offsetWidth; box.classList.add('is-dash'); } });
+  document.addEventListener('click', e => { if (e.target.closest('#nav a, .gate__opt, .client__go, .case__item--reels')) once('is-dash', 1000); });
 
   if (reduce) return;
+
+  // ---------- where he floats: a vertical spot on the edge (moved by --by, eased in CSS) ----------
+  const range = () => innerHeight * (lite ? .16 : .3);
+  const goTo = y => box.style.setProperty('--by', Math.round(Math.max(-range(), Math.min(range(), y))) + 'px');
+  // idle life: drift to a new spot, look around, now and then a photo
+  let watching = null, idleLife = 0;
+  const life = () => {
+    clearTimeout(idleLife);
+    idleLife = setTimeout(() => {
+      if (box.classList.contains('is-on') && !watching && !document.hidden) {
+        const r = Math.random();
+        if (r < .45) goTo((Math.random() * 2 - 1) * range());
+        else if (r < .8) once('is-look', 1900);
+        else snap();
+      }
+      life();
+    }, 3500 + Math.random() * 3500);
+  };
+  life();
+
+  // ---------- watching the work ----------
+  let snapT = 0, unwatchT = 0;
+  function watch(el) {
+    if (!box.classList.contains('is-on')) return;
+    clearTimeout(unwatchT);
+    const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+    goTo(r.top + r.height / 2 - innerHeight / 2);
+    if (watching === el) return;
+    watching = el; box.classList.add('is-watching');
+    clearInterval(snapT); setTimeout(() => watching === el && snap(), 900); snapT = setInterval(() => watching === el && snap(), 4200);
+  }
+  function unwatch(delay = 1200) { clearTimeout(unwatchT); unwatchT = setTimeout(() => { watching = null; clearInterval(snapT); box.classList.remove('is-watching'); }, delay); }
+  if (hover) {
+    document.addEventListener('pointerover', e => { const w = e.target.closest && e.target.closest(WORK); if (w) watch(w); }, { passive: true });
+    document.addEventListener('pointerout', e => { const w = e.target.closest && e.target.closest(WORK); if (w && !(e.relatedTarget && w.contains(e.relatedTarget))) unwatch(); }, { passive: true });
+  }
+  // when the visitor stops scrolling on a piece of work, he looks at it too (this is how it works on phones)
+  let settleT = 0;
+  const settle = () => { clearTimeout(settleT); settleT = setTimeout(() => {
+    if (!box.classList.contains('is-on')) return;
+    const el = document.elementFromPoint(innerWidth / 2, innerHeight / 2), w = el && el.closest(WORK);
+    if (w) { watch(w); unwatch(6500); } else if (!hover) unwatch(0);
+  }, 900); };
+
+  // ---------- taking a photo: camera up, flash, sparks from the lens ----------
+  function snap() {
+    if (!box.classList.contains('is-on')) return;
+    once('is-snap', 1200);
+    setTimeout(() => { once('is-flash', 600); const b = me.getBoundingClientRect(), c = cv.getBoundingClientRect();
+      burst(b.left - c.left + b.width * .5, b.top - c.top + b.height * .46, 16); }, 380);
+  }
 
   // ---------- flight: follows scroll speed with a soft spring, leaning into the direction of travel ----------
   let lastY = scrollY, vel = 0, off = 0, offV = 0, rot = 0, running = false, idleT = 0, lastT = 0;
@@ -37,34 +100,38 @@
     rg.addColorStop(0, 'rgba(255,246,220,1)'); rg.addColorStop(.25, 'rgba(246,214,150,.85)'); rg.addColorStop(1, 'rgba(226,170,90,0)'); s.fillStyle = rg; s.fillRect(0, 0, 32, 32); }
   let CW = 0, CH = 0;
   const size = () => { CW = cv.clientWidth; CH = cv.clientHeight; cv.width = CW; cv.height = CH; };
-  const MAX = lite ? 22 : 40;
-  const wake = () => { box.classList.remove('is-resting'); clearTimeout(idleT); idleT = setTimeout(() => box.classList.add('is-resting'), 4000); if (!running) { running = true; lastT = performance.now(); requestAnimationFrame(step); } };
-  addEventListener('scroll', () => { if (box.classList.contains('is-on')) wake(); }, { passive: true });
+  const MAX = lite ? 26 : 46;
+  function burst(x, y, n) {
+    for (let i = 0; i < n && P.length < MAX + 20; i++) { const a = Math.random() * Math.PI * 2, s = 40 + Math.random() * 90;
+      P.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 0, max: .4 + Math.random() * .6, r: .8 + Math.random() * 1.6 }); }
+    run();
+  }
+  const run = () => { if (!running) { running = true; lastT = performance.now(); requestAnimationFrame(step); } };
+  const wake = () => { box.classList.remove('is-resting'); clearTimeout(idleT); idleT = setTimeout(() => box.classList.add('is-resting'), 5000); run(); };
+  addEventListener('scroll', () => { if (box.classList.contains('is-on')) { wake(); settle(); } }, { passive: true });
   addEventListener('resize', size);
 
   function step(now) {
     const dt = Math.min(.05, (now - lastT) / 1000 || .016); lastT = now;
     const y = scrollY, dy = y - lastY; lastY = y;
-    vel += (dy / Math.max(dt, .001) - vel) * .18;                  // px per second, smoothed
-    const target = Math.max(-110, Math.min(110, vel * .07));          // flies a little ahead in the scroll direction
-    offV += ((target - off) * 90 - offV * 14) * dt; off += offV * dt;  // spring
+    vel += (dy / Math.max(dt, .001) - vel) * .18;
+    const target = Math.max(-110, Math.min(110, vel * .07));
+    offV += ((target - off) * 90 - offV * 14) * dt; off += offV * dt;
     rot += (Math.max(-22, Math.min(22, vel * .012)) - rot) * Math.min(1, dt * 8);
     me.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg)`;
-    // sparks leave from his feet, drifting against the direction of flight
     if (!CW) size();
     const speed = Math.abs(vel);
     if (speed > 60 && P.length < MAX) {
-      const n = Math.min(3, 1 + (speed / 900) | 0);
-      for (let i = 0; i < n; i++) P.push({ x: CW / 2 + (Math.random() - .5) * 18, y: CH / 2 + off + 34 + (Math.random() - .5) * 10, vx: (Math.random() - .5) * 30, vy: -Math.sign(vel) * (30 + Math.random() * 60) + (Math.random() - .5) * 20, life: 0, max: .6 + Math.random() * .9, r: .8 + Math.random() * 1.8 });
+      const n = Math.min(3, 1 + (speed / 900) | 0), b = me.getBoundingClientRect(), c = cv.getBoundingClientRect();
+      for (let i = 0; i < n; i++) P.push({ x: b.left - c.left + b.width / 2 + (Math.random() - .5) * 18, y: b.top - c.top + b.height * .88 + (Math.random() - .5) * 10, vx: (Math.random() - .5) * 30, vy: -Math.sign(vel) * (30 + Math.random() * 60) + (Math.random() - .5) * 20, life: 0, max: .6 + Math.random() * .9, r: .8 + Math.random() * 1.8 });
     }
     g.clearRect(0, 0, CW, CH); g.globalCompositeOperation = 'lighter';
     for (let i = P.length - 1; i >= 0; i--) {
       const p = P[i]; p.life += dt; if (p.life > p.max) { P.splice(i, 1); continue; }
-      p.x += p.vx * dt; p.y += p.vy * dt; p.vy *= .97;
+      p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= .97; p.vy *= .97;
       const a = Math.sin(Math.PI * p.life / p.max), s = p.r * 7; g.globalAlpha = a; g.drawImage(sprite, p.x - s / 2, p.y - s / 2, s, s);
     }
     g.globalAlpha = 1;
-    // keep going while moving or while sparks are alive; then stop completely
     if (speed > 4 || Math.abs(off) > .5 || Math.abs(rot) > .2 || P.length) requestAnimationFrame(step);
     else { running = false; me.style.transform = ''; off = offV = rot = 0; g.clearRect(0, 0, CW, CH); }
   }

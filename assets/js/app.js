@@ -36,13 +36,15 @@
   const gate = $('#gate'), main = $('#main'), bar = $('#bar'), foot = $('.foot');
   // scrolling is held while the opening plays, but a link clicked during it (e.g. "Watch the films") ends the opening at once
   document.addEventListener('click', e => { if (document.body.classList.contains('is-entering') && e.target.closest('a[href^="#"]')) document.body.classList.remove('is-entering'); }, true);
-  function enter(choice) {
+  function enter(choice, quick) {
     applyLang(choice);
     document.body.classList.remove('is-gated');
     document.body.classList.add('is-entering');
     [main, bar, foot].forEach(n => (n.inert = false));
     gate.inert = true;
-    setTimeout(() => { document.body.classList.remove('is-entering'); gate.hidden = true; }, reduceMotion ? 0 : 1400);
+    // quick: the visitor picked a section, so the welcome leaves in 0.35 s and is removed (it must never sit over the work)
+    if (quick) gate.classList.add('is-leaving');
+    setTimeout(() => { document.body.classList.remove('is-entering'); gate.hidden = true; }, reduceMotion ? 0 : quick ? 380 : 1400);
     $('.hero__title').setAttribute('tabindex', '-1'); $('.hero__title').focus({ preventScroll: true });
   }
   const WELCOME = {
@@ -56,6 +58,7 @@
   function glideTo(target, done) {
     const barH = () => ($('#bar') ? $('#bar').offsetHeight : 0);
     const aim = () => Math.max(0, target.getBoundingClientRect().top + scrollY - barH() + 2);
+    if (window.__smoothStop) window.__smoothStop();
     if (reduceMotion) { scrollTo(0, aim()); return done && done(); }
     const root = document.documentElement, prev = root.style.scrollBehavior; root.style.scrollBehavior = 'auto';
     const from = scrollY, dist = Math.abs(aim() - from), dur = Math.min(1700, Math.max(850, dist * .35)), t0 = performance.now();
@@ -84,12 +87,14 @@
     setTimeout(ask, 600);
   }
   $$('.gate__opt').forEach(o => o.addEventListener('click', () => {
-    const go = o.dataset.go; enter(chosen);
-    if (go === 'all') return;
+    const go = o.dataset.go;
+    if (go === 'all') return enter(chosen);
+    enter(chosen, true);
     // skip the hero's opening and glide to the chosen section while the welcome screen fades away
     document.body.classList.remove('is-entering');
     const target = document.getElementById(go);
-    setTimeout(() => glideTo(target, () => { const h = target.querySelector('.sec-title'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }), reduceMotion ? 0 : 250);
+    // the glide starts once the welcome is gone
+    setTimeout(() => glideTo(target, () => { const h = target.querySelector('.sec-title'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }), reduceMotion ? 0 : 400);
   }));
   function initGate() {
     const start = window.LANG_START || { lang: 'en', saved: false, suggested: 'en' };

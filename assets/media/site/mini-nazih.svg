@@ -86,8 +86,10 @@
     </g>
     <!-- brows, eyes, nose -->
     <path d="M68.8 49.5 Q72.6 47.2 76.4 49 M83.6 49 Q87.4 47.2 91.2 49.5" stroke="#1D1916" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <ellipse cx="73" cy="55" rx="1.9" ry="2.2" fill="#1A1412"/><ellipse cx="87" cy="55" rx="1.9" ry="2.2" fill="#1A1412"/>
-    <circle cx="73.6" cy="54.3" r=".6" fill="#FFFFFF"/><circle cx="87.6" cy="54.3" r=".6" fill="#FFFFFF"/>
+    <g id="eyes">
+      <ellipse cx="73" cy="55" rx="1.9" ry="2.2" fill="#1A1412"/><ellipse cx="87" cy="55" rx="1.9" ry="2.2" fill="#1A1412"/>
+      <circle cx="73.6" cy="54.3" r=".6" fill="#FFFFFF"/><circle cx="87.6" cy="54.3" r=".6" fill="#FFFFFF"/>
+    </g>
     <path d="M80 56 Q79 62.5 77.6 63.5 Q80 65 82.4 63.5" stroke="#A8775A" stroke-width="1.15" fill="none" stroke-linecap="round"/>
     <!-- thin metal glasses -->
     <g stroke="#CFC8BA" stroke-width="1.2" fill="url(#glassTint)">
