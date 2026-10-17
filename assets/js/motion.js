@@ -111,13 +111,13 @@
   }));
   const sc = $('.vfx__sparks');
   if (sc && document.body.classList.contains('is-gated')) {
-    const g = sc.getContext('2d'), M = 70, N = lite ? 34 : 70, P = [];
+    const g = sc.getContext('2d'), M = 70, N = lite ? 26 : 50, P = [];
     // one soft glow sprite, drawn once, reused for every spark
     const sprite = document.createElement('canvas'); sprite.width = sprite.height = 32;
     { const s = sprite.getContext('2d'), rg = s.createRadialGradient(16, 16, 0, 16, 16, 16);
       rg.addColorStop(0, 'rgba(255,246,220,1)'); rg.addColorStop(.25, 'rgba(246,214,150,.85)'); rg.addColorStop(1, 'rgba(226,170,90,0)'); s.fillStyle = rg; s.fillRect(0, 0, 32, 32); }
     let W = 0, Hh = 0;
-    const size = () => { const d = Math.min(devicePixelRatio || 1, 1.5); W = sc.clientWidth; Hh = sc.clientHeight; sc.width = W * d; sc.height = Hh * d; g.setTransform(d, 0, 0, d, 0, 0); };
+    const size = () => { const d = 1; W = sc.clientWidth; Hh = sc.clientHeight; sc.width = W * d; sc.height = Hh * d; g.setTransform(d, 0, 0, d, 0, 0); };
     // a spark is born on the edge of the frame and drifts outwards (and slightly up), twinkling as it fades
     const born = p => {
       const w = W - 2 * M, h = Hh - 2 * M, per = 2 * (w + h); let d = Math.random() * per, x, y, nx, ny;
@@ -132,7 +132,9 @@
       if (!document.body.classList.contains('is-gated')) { g.clearRect(0, 0, W, Hh); return; }   // stops for good once the visitor is in
       requestAnimationFrame(tick);
       if (document.hidden) return;
-      const dt = Math.min(.05, (now - last) / 1000 || 0); last = now;
+      // 30 frames a second is plenty for drifting sparks and halves the work
+      if (now - last < 30) return;
+      const dt = Math.min(.07, (now - last) / 1000 || 0); last = now;
       if (sc.clientWidth !== W || sc.clientHeight !== Hh) size();
       while (P.length < N) { const p = {}; born(p); p.life = Math.random() * p.max; P.push(p); }
       g.clearRect(0, 0, W, Hh); g.globalCompositeOperation = 'lighter';

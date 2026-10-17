@@ -116,7 +116,7 @@
     });
     const tc = $('#gateTc'), t0 = performance.now();
     const tick = () => { if (document.body.classList.contains('is-gated') === false) return; const f = Math.floor((performance.now() - t0) / (1000 / 24)), s = Math.floor(f / 24);
-      tc.textContent = [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60, f % 24].map(n => String(n).padStart(2, '0')).join(':'); setTimeout(tick, 1000 / 24); };
+      tc.textContent = [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60, f % 24].map(n => String(n).padStart(2, '0')).join(':'); setTimeout(tick, 1000 / 12); };
     tick();
     const onKey = e => { if (!document.body.classList.contains('is-gated')) return; if (e.key === 'Escape' && gate.dataset.step === 'pick') return step('hello'); const k = +e.key; if (gate.dataset.step === 'pick' && k >= 1 && k <= btns.length) choose(btns[k - 1]); };
     document.addEventListener('keydown', onKey);
@@ -156,13 +156,14 @@
       Object.assign(probe.style, { position: 'absolute', visibility: 'hidden', pointerEvents: 'none', minHeight: '0', width: top.offsetWidth + 'px' });
       top.parentNode.append(probe);
       const go = $('#gateContinue'), goTx = $('#gateContinueTx'), keep = goTx.textContent; go.style.minWidth = '';
+      const ch = $('#gateChange'), chTx = $('#gateChangeTx'), keepCh = chTx.textContent; ch.style.minWidth = ''; let wc = 0;
       let h = 0, w = 0;
       for (const l of ORDER) {
         const g = WELCOME[l], [a, n] = probe.querySelectorAll('.gate__hey1 > span'), b = probe.querySelector('.gate__hey2');
         probe.lang = l; probe.dir = l === 'ar' ? 'rtl' : 'ltr'; a.textContent = g.a; n.textContent = g.name; b.textContent = g.b;
-        h = Math.max(h, probe.offsetHeight); goTx.textContent = g.go; w = Math.max(w, go.offsetWidth);
+        h = Math.max(h, probe.offsetHeight); goTx.textContent = g.go; w = Math.max(w, go.offsetWidth); chTx.textContent = g.change; wc = Math.max(wc, ch.offsetWidth);
       }
-      probe.remove(); goTx.textContent = keep; top.style.minHeight = h + 'px'; go.style.minWidth = Math.ceil(w) + 'px';
+      probe.remove(); goTx.textContent = keep; chTx.textContent = keepCh; top.style.minHeight = h + 'px'; go.style.minWidth = Math.ceil(w) + 'px'; ch.style.minWidth = Math.ceil(wc) + 'px';
     };
     // English first, except on the /fr/, /ar/ and /de/ pages (or a ?lang= link), which start in their own language
     const first = start.why === 'link' && ORDER.includes(start.lang) ? start.lang : 'en';
