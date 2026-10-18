@@ -280,7 +280,15 @@
     window.stat && window.stat('play/' + item.slug, tx(item.title));
   }
   function closePlayer() { pMedia.innerHTML = ''; player.close(); }
-  player.addEventListener('close', () => { pMedia.innerHTML = ''; heroResume(); lastFocus && lastFocus.focus(); });
+  player.addEventListener('close', () => { pMedia.innerHTML = ''; heroResume(); lastFocus && lastFocus.focus({ preventScroll: true }); });
+  // while a film or photo is open, the page under it is pinned in place (iPhone Safari ignores overflow: hidden for
+  // finger scrolling, so the page is held with position: fixed and put back exactly where it was on close)
+  let pinnedY = null;
+  const pin = () => { if (pinnedY !== null) return; pinnedY = scrollY; const b = document.body.style;
+    b.position = 'fixed'; b.top = -pinnedY + 'px'; b.left = '0'; b.right = '0'; b.width = '100%'; };
+  const unpin = () => { if (pinnedY === null || document.querySelector('dialog[open]')) return; const y = pinnedY; pinnedY = null; const b = document.body.style;
+    b.position = b.top = b.left = b.right = b.width = ''; const r = document.documentElement, prev = r.style.scrollBehavior; r.style.scrollBehavior = 'auto'; scrollTo(0, y); r.style.scrollBehavior = prev; };
+  $$('dialog').forEach(d => { new MutationObserver(() => (d.open ? pin() : unpin())).observe(d, { attributes: true, attributeFilter: ['open'] }); });
   $('#playerClose').addEventListener('click', closePlayer);
   player.addEventListener('click', e => { if (e.target === player) closePlayer(); });
   heroPause.addEventListener('click', () => heroPause.classList.toggle('user-paused', heroVideo.paused));
@@ -521,7 +529,7 @@
   const step = d => showPhoto(lbIdx + (document.documentElement.dir === 'rtl' ? -d : d));
   $('#lbPrev').addEventListener('click', () => step(-1)); $('#lbNext').addEventListener('click', () => step(1));
   $('#lbClose').addEventListener('click', () => lb.close());
-  lb.addEventListener('close', () => lastFocus && lastFocus.focus());
+  lb.addEventListener('close', () => lastFocus && lastFocus.focus({ preventScroll: true }));
   lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lightbox__fig')) lb.close(); });
   lb.addEventListener('keydown', e => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
   let tx0 = null;
