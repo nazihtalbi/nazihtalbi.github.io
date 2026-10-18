@@ -1424,7 +1424,7 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
   /* phones: he stands behind the end of the name, his feet on its baseline (--name-b is measured by buddy.js) */
   .hero__me { --h: min(46svh, 24rem, calc(100svh - var(--name-b, 26rem) - 9.5rem)); height: var(--h); inset-inline-end: auto; inset-inline-start: calc(100vw - var(--h) * .29 - 3vw); bottom: calc(var(--name-b, 26rem) - .2rem); }
   /* on the welcome screen: right beside "Hey, I'm Nazih", behind its last word; afterwards he moves down to stand behind the name */
-  body.is-gated .hero__me { height: min(10.4rem, 21svh); inset-inline-start: calc(100vw - min(3.1rem, 6.3svh)); bottom: calc(100svh - min(11.1rem, 23.5svh)); }
+  body.is-gated .hero__me { height: min(10.4rem, 21svh); inset-inline-start: calc(100vw - min(3.1rem, 6.3svh)); bottom: calc(var(--hey-b, calc(100svh - 9rem)) - 1.6rem); }
   .hero__glow { opacity: .6; }
 }
 
