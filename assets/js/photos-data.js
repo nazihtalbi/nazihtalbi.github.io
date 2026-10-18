@@ -389,11 +389,6 @@ window.PHOTO_LIST = {
    "r": 1.5
   },
   {
-   "id": "food-16",
-   "cat": "food",
-   "r": 1.5
-  },
-  {
    "id": "outdoors-01",
    "cat": "outdoors",
    "r": 1.5

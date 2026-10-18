@@ -54,8 +54,8 @@ window.DATA = (() => {
       title: { en: 'Industrial land for investors', fr: 'Foncier industriel pour investisseurs', ar: 'العقار الصناعي للمستثمرين', de: 'Industrieflächen für Investoren' },
       desc: { en: 'A promotional film presenting available industrial plots, with drone footage and 3D motion graphics that map each plot.', fr: 'Un film promotionnel qui présente les parcelles industrielles disponibles, avec images de drone et motion design 3D pour situer chaque parcelle.', ar: 'فيلم ترويجي يعرض القطع الصناعية المتاحة، بلقطات درون وموشن غرافيك ثلاثي الأبعاد يحدّد كل قطعة.', de: 'Ein Imagefilm über verfügbare Industrieflächen, mit Drohnenaufnahmen und 3D-Motion-Graphics, die jede Parzelle verorten.' } },
     { slug: 'dilzone-vlog', client: 'dilzone', type: 'vlog', dur: '2:26',
-      title: { en: 'Dil Zone Academy launch', fr: 'Lancement de Dil Zone Academy', ar: 'إطلاق أكاديمية Dil Zone', de: 'Eröffnung der Dil Zone Academy' },
-      desc: { en: "The official launch of a Turkish language school, attended by prominent Turkish figures and members of parliament: the guests' arrival, the flowers and a long table of conversation.", fr: "Le lancement officiel d'une école de langue turque, en présence de personnalités turques et de membres du parlement : l'arrivée des invités, les fleurs et une longue table de discussions.", ar: 'الإطلاق الرسمي لمدرسة لتعليم اللغة التركية بحضور شخصيات تركية بارزة وأعضاء في البرلمان: وصول الضيوف والورود ومائدة طويلة من الحوار.', de: 'Der offizielle Start einer Türkisch-Sprachschule in Anwesenheit namhafter türkischer Persönlichkeiten und Parlamentsabgeordneter: die Ankunft der Gäste, Blumen und eine lange Tafel voller Gespräche.' } },
+      title: { en: 'A meeting between diplomats, FLN party members and Dil Zone Academy representatives', fr: 'Une rencontre entre diplomates, membres du parti FLN et représentants de Dil Zone Academy', ar: 'لقاء بين دبلوماسيين وأعضاء من حزب جبهة التحرير الوطني وممثلين عن أكاديمية Dil Zone', de: 'Ein Treffen von Diplomaten, Mitgliedern der FLN-Partei und Vertretern der Dil Zone Academy' },
+      desc: { en: "Diplomats, members of the FLN party and representatives of Dil Zone Academy, a Turkish language school, meet around one table: the guests' arrival, the flowers and a long conversation.", fr: "Des diplomates, des membres du parti FLN et des représentants de Dil Zone Academy, une école de langue turque, réunis autour d'une même table : l'arrivée des invités, les fleurs et une longue discussion.", ar: 'دبلوماسيون وأعضاء من حزب جبهة التحرير الوطني وممثلون عن أكاديمية Dil Zone لتعليم اللغة التركية حول طاولة واحدة: وصول الضيوف والورود وحوار طويل.', de: 'Diplomaten, Mitglieder der FLN-Partei und Vertreter der Dil Zone Academy, einer Türkisch-Sprachschule, an einem Tisch: die Ankunft der Gäste, Blumen und ein langes Gespräch.' } },
     { slug: 'funleem-podcast', client: 'memo', type: 'podcast', youtube: 'nVQ2vl1cMPc', preview: true, poster: 'https://i.ytimg.com/vi/nVQ2vl1cMPc/maxresdefault.jpg',
       title: { en: 'Secrets of baccalaureate success', fr: 'Les secrets de la réussite au bac', ar: 'أسرار التفوق في البكالوريا', de: 'Erfolgreich durchs Abitur' },
       desc: { en: 'A podcast episode with Manal Belkadi on tips, strategies and motivation for baccalaureate students. Filmed with several cameras and published on YouTube.', fr: 'Un épisode de podcast avec Manal Belkadi : conseils, stratégies et motivation pour les élèves du bac. Tourné en multicaméra et publié sur YouTube.', ar: 'حلقة بودكاست مع منال بلقاضي: نصائح واستراتيجيات وتحفيز لطلبة البكالوريا. مصوّرة بعدة كاميرات ومنشورة على يوتيوب.', de: 'Eine Podcast-Folge mit Manal Belkadi über Tipps, Strategien und Motivation fürs Abitur. Mit mehreren Kameras gedreht und auf YouTube veröffentlicht.' } },
@@ -183,16 +183,16 @@ window.DATA = (() => {
    },
    "dilzone": {
     "role": {
-     "en": "Launch event photography & film",
-     "fr": "Photo et film du lancement",
-     "ar": "تصوير وفيلم حفل الإطلاق",
-     "de": "Foto & Film zur Eröffnung"
+     "en": "Meeting photography & film",
+     "fr": "Photo et film de la rencontre",
+     "ar": "تصوير وفيلم اللقاء",
+     "de": "Foto & Film des Treffens"
     },
     "summary": {
-     "en": "I covered the official launch of Dil Zone Academy, a Turkish language school. It was a landmark evening for Turkish–Algerian cultural exchange, attended by prominent Turkish figures and members of parliament, and I captured it in both photos and an event film.",
-     "fr": "J'ai couvert le lancement officiel de Dil Zone Academy, une école de langue turque. Une soirée marquante pour les échanges culturels turco-algériens, en présence de personnalités turques de premier plan et de membres du parlement, que j'ai immortalisée en photos et en film.",
-     "ar": "غطّيت الإطلاق الرسمي لأكاديمية Dil Zone لتعليم اللغة التركية، في أمسية بارزة للتبادل الثقافي التركي الجزائري حضرتها شخصيات تركية مرموقة وأعضاء في البرلمان، ووثّقتها بالصور وبفيلم للحدث.",
-     "de": "Ich habe den offiziellen Start der Dil Zone Academy, einer Türkisch-Sprachschule, begleitet. Ein bedeutender Abend für den türkisch-algerischen Kulturaustausch, an dem namhafte türkische Persönlichkeiten und Parlamentsabgeordnete teilnahmen, festgehalten in Fotos und einem Eventfilm."
+     "en": "I covered a meeting between diplomats, members of the FLN party and representatives of Dil Zone Academy, a Turkish language school. It was a landmark evening for Turkish–Algerian cultural exchange, and I captured it in both photos and an event film.",
+     "fr": "J'ai couvert une rencontre entre diplomates, membres du parti FLN et représentants de Dil Zone Academy, une école de langue turque. Une soirée marquante pour les échanges culturels turco-algériens, que j'ai immortalisée en photos et en film.",
+     "ar": "غطّيت لقاءً بين دبلوماسيين وأعضاء من حزب جبهة التحرير الوطني وممثلين عن أكاديمية Dil Zone لتعليم اللغة التركية، في أمسية بارزة للتبادل الثقافي التركي الجزائري، ووثّقته بالصور وبفيلم للحدث.",
+     "de": "Ich habe ein Treffen von Diplomaten, Mitgliedern der FLN-Partei und Vertretern der Dil Zone Academy, einer Türkisch-Sprachschule, begleitet. Ein bedeutender Abend für den türkisch-algerischen Kulturaustausch, festgehalten in Fotos und einem Eventfilm."
     },
     "services": [
      {

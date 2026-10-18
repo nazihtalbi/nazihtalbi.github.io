@@ -9,6 +9,10 @@
   const $ = s => document.querySelector(s);
   // the big Nazih beside the name leans a little towards the pointer (mouse only, not for reduced motion)
   const big = $('.hero__me');
+  // phones: he stands behind the end of the name, so the name's distance from the bottom of the first screen is measured
+  const title = $('.hero__title'), heroEl = $('#top');
+  const placeBig = () => { if (big && title && heroEl) big.style.setProperty('--name-b', Math.round(heroEl.getBoundingClientRect().bottom - title.getBoundingClientRect().bottom) + 'px'); };
+  placeBig(); addEventListener('resize', placeBig); addEventListener('load', placeBig); if (document.fonts) document.fonts.ready.then(placeBig);
   if (big && matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let raf = 0;
     addEventListener('pointermove', e => { if (raf || scrollY > innerHeight) return; raf = requestAnimationFrame(() => { raf = 0;

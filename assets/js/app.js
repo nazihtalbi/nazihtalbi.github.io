@@ -456,10 +456,10 @@
     // the big photo on top: Events' cover for "All", otherwise the category's own cover
     const leadP = photoFilter === 'all' ? D.COVER : covers[photoFilter] || null;
     const pool = D.PHOTOS.filter(p => photoFilter === 'all' || p.cat === photoFilter);
-    // in "All", the other categories' covers join the wall, spread through it
-    if (photoFilter === 'all') Object.values(covers).filter(c => c !== leadP).forEach((c, k) => pool.splice(Math.min(pool.length, 3 + k * 9), 0, c));
+    // the covers are part of their groups too: in a category its cover joins the wall, in "All" every cover does (spread through it)
+    (photoFilter === 'all' ? Object.values(covers) : leadP ? [leadP] : []).forEach((c, k) => pool.splice(Math.min(pool.length, 3 + k * 9), 0, c));
     const showCover = !!leadP;
-    visible = showCover ? [leadP, ...pool] : pool;
+    visible = pool;
     const lead = $('#lead'); lead.hidden = !showCover;
     if (showCover) {
       const img = $('#leadImg'); img.alt = t('cat.' + leadP.cat);
@@ -482,7 +482,7 @@
       const b = el('button', 'tile tile--' + shapes[i] + (p.r < 1 ? ' tile--portrait' : ''));
       const shape = shapes[i], sizes = shape === 'big' ? '(max-width: 760px) 100vw, 50vw' : shape === 'wide' ? '(max-width: 760px) 100vw, 50vw' : '(max-width: 760px) 50vw, 25vw';
       b.innerHTML = `<img src="${p.xs}" srcset="${p.xs} 800w, ${p.sm} 1400w" sizes="${sizes}" alt="${esc(t('cat.' + p.cat))}" loading="lazy" decoding="async"><span class="tile__cat">${esc(t('cat.' + p.cat))}</span>`;
-      const idx = i + (showCover ? 1 : 0);
+      const idx = i;
       b.setAttribute('aria-label', `${t('cat.' + p.cat)}. ${t('photoOf').replace('{n}', idx + 1).replace('{t}', visible.length)}`);
       b.addEventListener('click', () => openLightbox(idx));
       // each photo fades in when it has arrived (instead of popping in over a grey box)
@@ -495,7 +495,7 @@
     more.hidden = pool.length <= LIMIT;
     more.textContent = expanded ? t('showLess') : t('showMore');
   }
-  $('#leadBtn').addEventListener('click', () => openLightbox(0));
+  $('#leadBtn').addEventListener('click', () => { const i = visible.findIndex(p => p.id === $('#lead').dataset.cat); openLightbox(Math.max(0, i)); });
   // when Photography comes near, fetch the small copy of each category's cover, so a category opens at once
   if ('IntersectionObserver' in window) new IntersectionObserver((es, o) => { if (!es[0].isIntersecting) return; o.disconnect();
     const go = () => Object.values(D.COVERS || {}).forEach(c => { const i = new Image(); i.src = c.xs; });
