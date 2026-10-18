@@ -1490,3 +1490,14 @@ body.hero-off .hero *, body.hero-off .hero *::before, body.hero-off .hero *::aft
   60% { filter: brightness(1.45) drop-shadow(0 0 26px rgba(255, 236, 200, .9)); }
   100% { filter: brightness(1) drop-shadow(0 34px 44px rgba(0, 0, 0, .6)); } }
 body.hero-off .hero__beam, body.hero-off .hero__flash, body.hero-off .hero__ring { display: none; }
+
+/* while a film, reel or photo is open, the page behind it stays put (no scrolling away under the video) */
+html:has(dialog[open]) { overflow: hidden; }
+dialog.player, dialog.lightbox { overscroll-behavior: contain; touch-action: none; }
+dialog.player video, dialog.player iframe { touch-action: auto; }
+
+/* phones: the snow photos are shown whole (several are very wide), on the black of the section instead of cropped */
+@media (max-width: 760px) {
+  .snow__frames { aspect-ratio: 3 / 2; }
+  .snow__frame img { object-fit: contain; transform: translate3d(calc((var(--t) - 1) * 100% * var(--dir)), 0, 0); }
+}
