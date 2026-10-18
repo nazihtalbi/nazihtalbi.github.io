@@ -53,6 +53,12 @@ if (!src.includes(START)) {
 const block = new RegExp(START.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[\\s\\S]*?' + END);
 src = src.replace(block, head('en'));
 src = src.replace(/<html lang="[^"]*" dir="[^"]*"( data-page-lang="[^"]*")?>/, '<html lang="en" dir="ltr">');
+// cache busting: each script and the stylesheet carry a short fingerprint of their content, so a visitor's browser
+// fetches the new file as soon as it changes instead of showing an old copy (e.g. an old film title)
+src = src.replace(/((?:src|href)=")(assets\/(?:js|css)\/[\w-]+\.(?:js|css))(?:\?v=\w+)?"/g, (m, a, f) => {
+  const file = path.join(ROOT, f); if (!fs.existsSync(file)) return m;
+  return a + f + '?v=' + require('crypto').createHash('md5').update(fs.readFileSync(file)).digest('hex').slice(0, 8) + '"';
+});
 fs.writeFileSync(path.join(ROOT, 'index.html'), src);
 
 for (const l of LANGS.slice(1)) {

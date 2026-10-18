@@ -80,6 +80,8 @@
     // only the welcome texts change now; re-rendering the whole page in the new language waits until the
     // welcome animation has settled (on a phone it is a few hundred ms of work that would freeze the animation)
     lang = chosen;
+    // the welcome's own next step (the question and the four choices) must already speak the new language
+    $$('#gate [data-i18n]').forEach(n => { const v = t(n.dataset.i18n); if (typeof v === 'string') n.textContent = v; });
     setTimeout(() => (window.requestIdleCallback || (f => setTimeout(f, 0)))(() => applyLang(chosen), { timeout: 1500 }), 900);
     const ask = () => { gate.classList.remove('is-choosing'); gate.dispatchEvent(new CustomEvent('gate:step', { detail: 'intent' })); };
     if (reduceMotion || gate.dataset.step !== 'pick') return ask();
