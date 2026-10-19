@@ -1503,35 +1503,45 @@ dialog.player video, dialog.player iframe { touch-action: auto; }
   .snow__frame img { object-fit: contain; transform: translate3d(calc((var(--t) - 1) * 100% * var(--dir)), 0, 0); }
 }
 
-/* his tools in orbit: camera, film reel, clapperboard, drone, microphone and lens circle him like moons, passing in
-   front of him and behind him. Each orbit = a side-to-side swing (cosine) + a depth swing (sine: lower, bigger and in
-   front / higher, smaller and behind), so it is all transform and opacity; only the front/back order flips twice a turn */
+/* his gear in orbit: camera, lens, flash, tripod, drone and memory card circle him like moons on three tilted rings,
+   passing in front of him (lower, bigger, bright) and behind him (higher, smaller, dimmer). Each orbit is an ellipse
+   (semi-axes --a and --b in % of his width, tilted by --phi), built from two swings: along the long axis (cosine) and
+   along the short axis (sine), so it is all transform and opacity; only the front/back order flips twice a turn */
 .hero__me { container-type: inline-size; }
 .hero__float { z-index: 2; }
 .orbit { position: absolute; inset: 0; pointer-events: none; }
-.orb { --T: 9s; --d: 0s; --r: 95; --y: 46%; --tx: 0px; --ty: 22px; --s: 52px;
-  position: absolute; left: 50%; top: var(--y); width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); z-index: 3; }
+.orb, .ring { --k: 1; --OA: calc(var(--oa) * var(--k)); --OB: calc(var(--ob) * var(--k)); }
+.orb--1, .orb--2, .ring--a { --oa: 82; --ob: 24; --phi: -12deg; --y: 45%; --T: 10s; }
+.orb--3, .orb--4, .ring--b { --oa: 66; --ob: 17; --phi: 15deg; --y: 19%; --T: 13s; }
+.orb--5, .orb--6, .ring--c { --oa: 74; --ob: 20; --phi: -6deg; --y: 73%; --T: 8s; }
+.orb--2 { --d: calc(var(--T) / -2); } .orb--4 { --d: calc(var(--T) / -2.6); } .orb--6 { --d: calc(var(--T) / -1.7); }
+.orb { --d: 0s; --s: 96px; position: absolute; left: 50%; top: var(--y); width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); z-index: 3; }
+.orb--camera { --s: 150px; } .orb--lens { --s: 128px; } .orb--flash { --s: 104px; } .orb--tripod { --s: 112px; } .orb--drone { --s: 156px; } .orb--card { --s: 82px; }
 .orb__d, .orb__c { display: block; width: 100%; height: 100%; }
-.orb__c { display: grid; place-items: center; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(70, 64, 56, .95), rgba(18, 17, 16, .95) 70%); border: 1px solid rgba(246, 214, 150, .7);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .15), 0 0 16px rgba(245, 184, 65, .25); }
-.orb svg { width: 56%; height: 56%; fill: none; stroke: #F6D696; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.motion .orb { animation: orbX var(--T) ease-in-out var(--d) infinite, orbZ var(--T) step-end var(--d) infinite; }
+.orb__c svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 10px 12px rgba(0, 0, 0, .55)); }
 .motion .orb__d { animation: orbD var(--T) ease-in-out calc(var(--d) - var(--T) / 4) infinite; }
-@keyframes orbX { 0%, 100% { transform: translateX(calc(var(--r) * var(--k, 1) * 1cqw)); } 50% { transform: translateX(calc(var(--r) * var(--k, 1) * -1cqw)); } }
+.motion .orb__c { animation: orbSpin 5s ease-in-out infinite alternate; }
+.motion .orb:nth-child(odd) .orb__c { animation-duration: 6.5s; animation-direction: alternate-reverse; }
+@keyframes orbX { 0%, 100% { transform: translate(calc(var(--OA) * cos(var(--phi)) * 1cqw), calc(var(--OA) * sin(var(--phi)) * 1cqw)); }
+  50% { transform: translate(calc(var(--OA) * cos(var(--phi)) * -1cqw), calc(var(--OA) * sin(var(--phi)) * -1cqw)); } }
 @keyframes orbZ { 0% { z-index: 3; } 50% { z-index: 1; } 100% { z-index: 1; } }
-@keyframes orbD { 0%, 100% { transform: translate(calc(var(--tx) * -1), calc(var(--ty) * -1)) scale(.62); opacity: .5; }
-  50% { transform: translate(var(--tx), var(--ty)) scale(1.12); opacity: 1; } }
-.orb--1 { --T: 9s;   --d: 0s;     --r: 78;  --y: 48%; --tx: -12px; --ty: 34px; --s: 78px; }
-.orb--2 { --T: 9s;   --d: -4.5s;  --r: 78;  --y: 48%; --tx: -12px; --ty: 34px; --s: 70px; }
-.orb--3 { --T: 12s;  --d: -2s;    --r: 92;  --y: 28%; --tx: 16px;  --ty: 26px; --s: 62px; }
-.orb--4 { --T: 12s;  --d: -8s;    --r: 92;  --y: 28%; --tx: 16px;  --ty: 26px; --s: 72px; }
-.orb--5 { --T: 7.5s; --d: -1.2s;  --r: 66;  --y: 68%; --tx: 0px;   --ty: 22px; --s: 60px; }
-.orb--6 { --T: 7.5s; --d: -5s;    --r: 66;  --y: 68%; --tx: 0px;   --ty: 22px; --s: 64px; }
-/* they arrive after his entrance */
-.motion .orbit { animation: orbitIn 1.4s ease 2.4s both; }
+@keyframes orbD { 0%, 100% { transform: translate(calc(var(--OB) * sin(var(--phi)) * 1cqw), calc(var(--OB) * cos(var(--phi)) * -1cqw)) scale(.58); opacity: .45; }
+  50% { transform: translate(calc(var(--OB) * sin(var(--phi)) * -1cqw), calc(var(--OB) * cos(var(--phi)) * 1cqw)) scale(1.08); opacity: 1; } }
+@keyframes orbSpin { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
+/* the rings themselves: the far half sits behind him, the near half in front */
+.ring { position: absolute; left: 50%; top: var(--y); width: calc(var(--OA) * 2cqw); height: calc(var(--OB) * 2cqw); translate: -50% -50%; rotate: var(--phi);
+  border-radius: 50%; border: 1.5px solid rgba(246, 214, 150, .38); box-shadow: 0 0 14px rgba(245, 184, 65, .22), inset 0 0 14px rgba(245, 184, 65, .12); }
+.ring--back { clip-path: inset(0 0 50% 0); z-index: 1; opacity: .7; }
+.ring--front { clip-path: inset(50% 0 0 0); z-index: 3; }
+/* they arrive after his entrance (the fade sits on each piece: an opacity on .orbit itself would make it one layer
+   and push every piece behind him) */
+.motion .orb { animation: orbX var(--T) ease-in-out var(--d) infinite, orbZ var(--T) step-end var(--d) infinite, orbitIn 1.4s ease 2.4s backwards; }
+.motion .ring { animation: orbitIn 1.4s ease 2.4s backwards; }
 @keyframes orbitIn { from { opacity: 0; } }
-@media (max-width: 760px) { .orb.orb { --s: 34px; --ty: 12px; --tx: 0px; --k: .78; } .orb.orb--3, .orb.orb--5 { --s: 30px; } }
-/* no motion wanted: they simply sit around him */
-html:not(.motion) .orb { transform: translateX(calc(var(--r) * .7cqw)); }
-html:not(.motion) .orb:nth-child(even) { transform: translateX(calc(var(--r) * -.7cqw)); }
+@media (max-width: 760px) {
+  .orb, .ring { --k: .8; }
+  .orb--camera { --s: 60px; } .orb--lens { --s: 52px; } .orb--flash { --s: 42px; } .orb--tripod { --s: 46px; } .orb--drone { --s: 64px; } .orb--card { --s: 34px; }
+}
+/* no motion wanted: they simply sit on their rings */
+html:not(.motion) .orb { transform: translate(calc(var(--OA) * .8cqw), 0); }
+html:not(.motion) .orb:nth-child(even) { transform: translate(calc(var(--OA) * -.8cqw), 0); }
