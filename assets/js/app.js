@@ -189,7 +189,8 @@
     Object.defineProperty(window, '__gateHold', { get: () => performance.now() < holdUntil, configurable: true });
     // on the language step, hovering or focusing a card previews the greeting in that language
     btns.forEach(b => { const show = () => greet(b.dataset.lang); b.addEventListener('mouseenter', show); b.addEventListener('focus', show); });
-    $('#gatePick').addEventListener('mouseleave', () => greet(cur));
+    // (once a language is picked, the mouse leaving the cards must not bring the cycling language back)
+    $('#gatePick').addEventListener('mouseleave', () => greet(choosing ? chosen : cur));
     const suggestedBtn = btns.find(b => b.dataset.lang === start.suggested) || btns[0];
     const root = document.documentElement, chooseBox = $('.gate__choose');
     // the camera frame: under the buttons on the welcome step, between greeting and cards on the language step
