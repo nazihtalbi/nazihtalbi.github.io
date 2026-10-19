@@ -1568,7 +1568,7 @@ main > section.snow { contain-intrinsic-size: auto 340vh; }
 
 /* the speech bubble comes out of his mouth: centred on his face height, a small tail pointing at him, and it grows
    from that side (it used to hang from a top corner, so it looked like it came from above him) */
-.buddy__say { top: 17%; translate: 0 -50%; border-radius: 14px; transform-origin: right center; overflow: visible; }
+.buddy__say { top: 34%; translate: 0 -50%; border-radius: 14px; transform-origin: right center; overflow: visible; }
 [dir="rtl"] .buddy__say { border-radius: 14px; transform-origin: left center; }
 .buddy__say::after { content: ''; position: absolute; top: 50%; inset-inline-end: -5px; width: 11px; height: 11px; margin-top: -5.5px;
   background: inherit; transform: rotate(45deg); border-radius: 2px; }
