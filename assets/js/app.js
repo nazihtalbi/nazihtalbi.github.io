@@ -313,7 +313,7 @@
 
   /* ---------- showreel: the hero's main button plays it in the same player as the films ---------- */
   const reelTitle = () => Object.fromEntries(Object.keys(window.I18N).map(l => [l, window.I18N[l].reelTitle]));
-  $('#reelBtn').addEventListener('click', () => openPlayer({ slug: 'showreel', title: reelTitle(), dur: '1:22' }));
+  $('#reelBtn').addEventListener('click', () => openPlayer({ slug: 'showreel', title: reelTitle(), dur: '1:45' }));
 
   /* ---------- WhatsApp button on phones: appears once the visitor scrolls past the hero ---------- */
   const waFloat = $('#waFloat');
