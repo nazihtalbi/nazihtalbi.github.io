@@ -73,7 +73,8 @@
 
   // speech bubble
   let sayT = 0;
-  const speak = (text, ms = 3200) => { if (box.classList.contains('is-talking') && say.textContent !== text) { say.classList.remove('is-swap'); void say.offsetWidth; say.classList.add('is-swap'); }
+  // the bubble stays long enough to read comfortably: about 1 s per 12 characters, never less than 6 s
+  const speak = (text, ms = 6000) => { ms = Math.max(ms, 2500 + text.length * 85); if (box.classList.contains('is-talking') && say.textContent !== text) { say.classList.remove('is-swap'); void say.offsetWidth; say.classList.add('is-swap'); }
     say.textContent = text; box.classList.add('is-talking'); clearTimeout(sayT); sayT = setTimeout(() => box.classList.remove('is-talking'), ms); };
   const once = (cls, ms) => { box.classList.remove(cls); void box.offsetWidth; box.classList.add(cls); setTimeout(() => box.classList.remove(cls), ms); };
   me.addEventListener('click', () => { speak(T('buddyHi')); once('is-hop', 800); wave(); });
@@ -88,7 +89,7 @@
         const id = here; if (!id || !box.classList.contains('is-on')) return;
         // at Contact he waves and invites the visitor to write on WhatsApp
         const line = id === 'contact' ? T('buddyContact') : T('buddy.' + id); if (!line || line === 'buddy.' + id) return;
-        speak(line, 4800); if (id === 'contact') wave();
+        speak(line, 8000); if (id === 'contact') wave();
       }, 650);
     }), { rootMargin: '-42% 0px -42% 0px' });
     ['films', 'reels', 'cases', 'grade', 'snow', 'photos', 'clients', 'about', 'services', 'contact'].forEach(id => { const s = document.getElementById(id); if (s) secIO.observe(s); });

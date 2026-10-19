@@ -32,12 +32,12 @@ window.DATA = (() => {
   };
 
   const FILMS = [
-    { slug: 'graduation-2026', youtube: 'ku6pvqQO4W0', preview: true, client: 'almaahed', type: 'event', dur: '3:43',
-      title: { en: "Graduation & World Teachers' Day", fr: 'Remise des diplômes et Journée des enseignants', ar: 'حفل التخرج واليوم العالمي للمعلم', de: 'Abschlussfeier & Weltlehrertag' },
-      desc: { en: 'The graduation day of Almaahed International: speeches, certificates and the families who came to celebrate.', fr: "La journée de remise des diplômes d'Almaahed International : discours, certificats et familles venues célébrer.", ar: 'يوم تخرج طلبة المعهد الدولي Almaahed: كلمات وشهادات وعائلات حضرت للاحتفال.', de: 'Der Abschlusstag von Almaahed International: Reden, Zertifikate und die Familien, die mitgefeiert haben.' } },
     { slug: 'almaahed-documentary', youtube: 'dMOPadsR2ic', preview: true, client: 'almaahed', type: 'doc', dur: '5:26',
       title: { en: 'Almaahed, in their words', fr: 'Almaahed, par ceux qui la font', ar: 'Almaahed بأصوات أهله', de: 'Almaahed, in eigenen Worten' },
       desc: { en: 'Teachers, students and parents tell what the institute means to them. Interviews, classroom scenes and a careful grade.', fr: "Enseignants, élèves et parents racontent ce que l'institut représente pour eux. Interviews, scènes de classe et étalonnage soigné.", ar: 'أساتذة وطلبة وأولياء يروون ما يعنيه المعهد لهم. مقابلات ومشاهد من الأقسام وتدريج لوني دقيق.', de: 'Lehrkräfte, Schüler und Eltern erzählen, was das Institut für sie bedeutet. Interviews, Szenen aus dem Unterricht und sorgfältiges Grading.' } },
+    { slug: 'graduation-2026', youtube: 'ku6pvqQO4W0', preview: true, client: 'almaahed', type: 'event', dur: '3:43',
+      title: { en: "Graduation & World Teachers' Day", fr: 'Remise des diplômes et Journée des enseignants', ar: 'حفل التخرج واليوم العالمي للمعلم', de: 'Abschlussfeier & Weltlehrertag' },
+      desc: { en: 'The graduation day of Almaahed International: speeches, certificates and the families who came to celebrate.', fr: "La journée de remise des diplômes d'Almaahed International : discours, certificats et familles venues célébrer.", ar: 'يوم تخرج طلبة المعهد الدولي Almaahed: كلمات وشهادات وعائلات حضرت للاحتفال.', de: 'Der Abschlusstag von Almaahed International: Reden, Zertifikate und die Familien, die mitgefeiert haben.' } },
     { slug: 'almaahed-shortfilm', youtube: 'YafX7TqXUL8', preview: true, client: 'almaahed', type: 'short', dur: '2:12',
       title: { en: 'Almaahed short film', fr: 'Le court métrage Almaahed', ar: 'فيلم Almaahed القصير', de: 'Der Almaahed-Kurzfilm' },
       desc: { en: 'The official short film of Almaahed International: what the institute is, told through its classrooms, its team and its students.', fr: "Le court métrage officiel d'Almaahed International : l'institut raconté à travers ses classes, son équipe et ses élèves.", ar: 'الفيلم القصير الرسمي للمعهد الدولي Almaahed: المعهد من خلال أقسامه وفريقه وطلبته.', de: 'Der offizielle Kurzfilm von Almaahed International: das Institut, erzählt durch seine Klassen, sein Team und seine Schüler.' } },

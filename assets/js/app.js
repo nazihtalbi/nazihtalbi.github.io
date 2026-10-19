@@ -91,12 +91,21 @@
   $$('.gate__opt').forEach(o => o.addEventListener('click', () => {
     const go = o.dataset.go;
     if (go === 'all') return enter(chosen);
-    enter(chosen, true);
-    // skip the hero's opening and glide to the chosen section while the welcome screen fades away
-    document.body.classList.remove('is-entering');
+    // a straight cut to the chosen section, like an edit: a short dip to black, the page moves while it is black, then
+    // it fades up on the section. No long glide over the hero and the films (it made phones stutter: videos and photos
+    // starting up while the page was still moving)
     const target = document.getElementById(go);
-    // the glide starts once the welcome is gone
-    setTimeout(() => glideTo(target, () => { const h = target.querySelector('.sec-title'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }), reduceMotion ? 0 : 400);
+    const land = () => { const r = document.documentElement, prev = r.style.scrollBehavior; r.style.scrollBehavior = 'auto';
+      if (window.__smoothStop) window.__smoothStop();
+      scrollTo(0, Math.max(0, target.getBoundingClientRect().top + scrollY - ($('#bar') ? $('#bar').offsetHeight : 0) + 2)); r.style.scrollBehavior = prev;
+      const h = target.querySelector('.sec-title'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } };
+    if (reduceMotion) { enter(chosen, true); document.body.classList.remove('is-entering'); return land(); }
+    const cut = document.getElementById('cut') || document.body.appendChild(Object.assign(document.createElement('div'), { id: 'cut', className: 'cut' }));
+    cut.classList.add('is-on');
+    setTimeout(() => {
+      enter(chosen, true); document.body.classList.remove('is-entering'); land();
+      requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(() => cut.classList.remove('is-on'), 120)));
+    }, 280);
   }));
   function initGate() {
     const start = window.LANG_START || { lang: 'en', saved: false, suggested: 'en' };

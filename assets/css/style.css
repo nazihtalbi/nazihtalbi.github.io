@@ -1547,3 +1547,7 @@ dialog.player video, dialog.player iframe { touch-action: auto; }
 /* no motion wanted: they simply sit on their rings */
 html:not(.motion) .orb { transform: translate(calc(var(--OA) * .8cqw), 0); }
 html:not(.motion) .orb:nth-child(even) { transform: translate(calc(var(--OA) * -.8cqw), 0); }
+
+/* the cut from the welcome to a chosen section: a short dip to black */
+.cut { position: fixed; inset: 0; z-index: 80; background: #050505; opacity: 0; pointer-events: none; transition: opacity .45s ease; }
+.cut.is-on { opacity: 1; transition-duration: .26s; }
