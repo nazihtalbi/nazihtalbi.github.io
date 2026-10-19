@@ -14,7 +14,7 @@
   // on the welcome screen he stands beside "Hey, I'm Nazih": its position is measured too, so he sits right next to it on any phone
   const hey = $('#gate-name');
   const placeBig = () => { if (!big || !heroEl) return; const hb = heroEl.getBoundingClientRect().bottom;
-    if (title) big.style.setProperty('--name-b', Math.round(hb - title.getBoundingClientRect().bottom) + 'px');
+    if (title) { const r = title.getBoundingClientRect(); big.style.setProperty('--name-b', Math.round(hb - r.bottom) + 'px'); big.style.setProperty('--name-t', Math.round(hb - r.top) + 'px'); }
     if (hey && document.body.classList.contains('is-gated')) { const r = hey.getBoundingClientRect(); if (r.height) big.style.setProperty('--hey-b', Math.round(hb - r.bottom) + 'px'); } };
   placeBig(); addEventListener('resize', placeBig); addEventListener('load', placeBig); if (document.fonts) document.fonts.ready.then(placeBig);
   setTimeout(placeBig, 600); setTimeout(placeBig, 1800);

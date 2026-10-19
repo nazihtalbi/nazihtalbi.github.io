@@ -1421,10 +1421,11 @@ html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
 /* (the repeating light sweep across him was removed: on the tall figure it read as a light stuck on his legs) */
 @keyframes heroShine { 0% { transform: translateX(-110%); } 22%, 100% { transform: translateX(110%); } }
 @media (max-width: 760px) {
-  /* phones: he stands behind the end of the name, his feet on its baseline (--name-b is measured by buddy.js) */
-  .hero__me { --h: min(46svh, 24rem, calc(100svh - var(--name-b, 26rem) - 9.5rem)); height: var(--h); inset-inline-end: auto; inset-inline-start: calc(100vw - var(--h) * .29 - 3vw); bottom: calc(var(--name-b, 26rem) - .2rem); }
+  /* phones: he stands in the middle, on top of the name, his feet just behind its top edge (--name-t is measured by buddy.js) */
+  .hero__me { --h: min(40svh, 22rem, calc(100svh - var(--name-t, 30rem) - 5.5rem)); height: var(--h); inset-inline-end: auto; inset-inline-start: calc(50vw - var(--h) * .145); bottom: calc(var(--name-t, 30rem) - .9rem); }
   /* on the welcome screen: right beside "Hey, I'm Nazih", behind its last word; afterwards he moves down to stand behind the name */
-  body.is-gated .hero__me { height: min(10.4rem, 21svh); inset-inline-start: calc(100vw - min(3.1rem, 6.3svh)); bottom: calc(var(--hey-b, calc(100svh - 9rem)) - 1.6rem); }
+  /* on the welcome screen: in the middle, standing on the bottom of the video frame */
+  body.is-gated .hero__me { --h: min(36svh, 20rem); height: var(--h); inset-inline-start: calc(50vw - var(--h) * .145); bottom: max(2.6rem, 5svh); }
   .hero__glow { opacity: .6; }
 }
 
