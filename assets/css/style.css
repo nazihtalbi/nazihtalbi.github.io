@@ -1511,17 +1511,18 @@ dialog.player video, dialog.player iframe { touch-action: auto; }
 .hero__float { z-index: 2; }
 .orbit { position: absolute; inset: 0; pointer-events: none; }
 .orb, .ring { --k: 1; --OA: calc(var(--oa) * var(--k)); --OB: calc(var(--ob) * var(--k)); }
-.orb--1, .orb--2, .ring--a { --oa: 82; --ob: 24; --phi: -12deg; --y: 45%; --T: 10s; }
-.orb--3, .orb--4, .ring--b { --oa: 66; --ob: 17; --phi: 15deg; --y: 19%; --T: 13s; }
-.orb--5, .orb--6, .ring--c { --oa: 74; --ob: 20; --phi: -6deg; --y: 73%; --T: 8s; }
+/* rings: one at the chest (wide enough that the gear is clear of his shoulders when it turns from front to back),
+   one like a halo above his hair (it never crosses his face), one around his legs */
+.orb--1, .orb--2, .ring--a { --oa: 104; --ob: 20; --phi: -9deg; --y: 50%; --T: 11s; }
+.orb--3, .orb--4, .ring--b { --oa: 74; --ob: 9; --phi: 6deg; --y: 4%; --T: 14s; }
+.orb--5, .orb--6, .ring--c { --oa: 88; --ob: 16; --phi: -5deg; --y: 76%; --T: 9s; }
 .orb--2 { --d: calc(var(--T) / -2); } .orb--4 { --d: calc(var(--T) / -2.6); } .orb--6 { --d: calc(var(--T) / -1.7); }
 .orb { --d: 0s; --s: 96px; position: absolute; left: 50%; top: var(--y); width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); z-index: 3; }
-.orb--camera { --s: 150px; } .orb--lens { --s: 128px; } .orb--flash { --s: 104px; } .orb--tripod { --s: 112px; } .orb--drone { --s: 156px; } .orb--card { --s: 82px; }
+.orb--camera { --s: 150px; } .orb--lens { --s: 128px; } .orb--flash { --s: 74px; } .orb--tripod { --s: 78px; } .orb--drone { --s: 150px; } .orb--card { --s: 80px; }
 .orb__d, .orb__c { display: block; width: 100%; height: 100%; }
 .orb__c svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 10px 12px rgba(0, 0, 0, .55)); }
 .motion .orb__d { animation: orbD var(--T) ease-in-out calc(var(--d) - var(--T) / 4) infinite; }
-.motion .orb__c { animation: orbSpin 5s ease-in-out infinite alternate; }
-.motion .orb:nth-child(odd) .orb__c { animation-duration: 6.5s; animation-direction: alternate-reverse; }
+
 @keyframes orbX { 0%, 100% { transform: translate(calc(var(--OA) * cos(var(--phi)) * 1cqw), calc(var(--OA) * sin(var(--phi)) * 1cqw)); }
   50% { transform: translate(calc(var(--OA) * cos(var(--phi)) * -1cqw), calc(var(--OA) * sin(var(--phi)) * -1cqw)); } }
 @keyframes orbZ { 0% { z-index: 3; } 50% { z-index: 1; } 100% { z-index: 1; } }
@@ -1540,7 +1541,7 @@ dialog.player video, dialog.player iframe { touch-action: auto; }
 @keyframes orbitIn { from { opacity: 0; } }
 @media (max-width: 760px) {
   .orb, .ring { --k: .8; }
-  .orb--camera { --s: 60px; } .orb--lens { --s: 52px; } .orb--flash { --s: 42px; } .orb--tripod { --s: 46px; } .orb--drone { --s: 64px; } .orb--card { --s: 34px; }
+  .orb--camera { --s: 60px; } .orb--lens { --s: 52px; } .orb--flash { --s: 32px; } .orb--tripod { --s: 34px; } .orb--drone { --s: 60px; } .orb--card { --s: 34px; }
 }
 /* no motion wanted: they simply sit on their rings */
 html:not(.motion) .orb { transform: translate(calc(var(--OA) * .8cqw), 0); }
