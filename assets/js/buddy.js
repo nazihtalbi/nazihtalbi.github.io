@@ -188,7 +188,7 @@
     offV += ((target - off) * 90 - offV * 14) * dt; off += offV * dt; if (off > room) { off = room; offV = Math.min(0, offV); }
     rot += (Math.max(-9, Math.min(9, vel * .006)) - rot) * Math.min(1, dt * 6);
     me.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg)`;
-    say.style.translate = `0 ${off.toFixed(1)}px`;   // the speech bubble travels with him, so it stays beside his head
+    say.style.translate = `0 calc(-50% + ${off.toFixed(1)}px)`;   // the speech bubble travels with him, so it stays beside his head
     if (!CW) size();
     const speed = Math.abs(vel);
     // flying fast: he strides through the air
