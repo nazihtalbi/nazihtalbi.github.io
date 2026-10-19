@@ -82,6 +82,8 @@ function build() {
       if (vert) pv(720, 1280, 24, slug + '-preview.mp4'); else pv(960, 540, 26, slug + '-preview.mp4');
       if (film) { if (vert) pv(1080, 1920, 23, slug + '-preview-hd.mp4'); else pv(1920, 1080, 23, slug + '-preview-hd.mp4'); }
       run(['-ss', String(cs), '-i', it.file, '-frames:v', '1', '-vf', vert ? 'scale=1080:-2' : 'scale=1920:-2', '-c:v', 'libwebp', '-quality', '86', path.join(OUT, slug + '.webp')]);
+      // a light copy for the small reel cards (a 1080 x 1920 cover per card was heavy for phones to decode while scrolling)
+      if (vert) run(['-i', path.join(OUT, slug + '.webp'), '-vf', 'scale=540:-2', '-c:v', 'libwebp', '-quality', '80', path.join(OUT, slug + '-card.webp')]);
       meta = cache[slug] = { key, dur: clock(m.dur), vert };
       made++; console.log('ok');
     }

@@ -404,13 +404,13 @@
   const idle = fn => { idleQ.push(fn); if (idleBusy) return; idleBusy = true; const run = () => { const f = idleQ.shift(); if (!f) { idleBusy = false; return; } f(); (window.requestIdleCallback || (cb => setTimeout(cb, 120)))(run, { timeout: 600 }); }; (window.requestIdleCallback || (cb => setTimeout(cb, 120)))(run, { timeout: 600 }); };
   function vcard(item) {
     const b = el('button', 'vcard');
-    b.innerHTML = `<span class="vcard__media"><img src="${D.V + item.slug}.webp" alt="" loading="lazy"></span><span class="vcard__cap"><span class="vcard__title">${esc(tx(item.title))}</span><span class="vcard__dur" dir="ltr">${item.dur}</span></span><span class="sr">${esc(t('play'))}</span>`;
+    b.innerHTML = `<span class="vcard__media"><img src="${D.V + item.slug}-card.webp" data-full="${D.V + item.slug}.webp" onerror="this.onerror=null;this.src=this.dataset.full" alt="" loading="lazy" decoding="async" width="540" height="960"></span><span class="vcard__cap"><span class="vcard__title">${esc(tx(item.title))}</span><span class="vcard__dur" dir="ltr">${item.dur}</span></span><span class="sr">${esc(t('play'))}</span>`;
     let v = null, want = false;
     const make = () => { if (!v) { v = el('video'); v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none'; v.src = D.V + item.slug + '-preview.mp4'; b.firstElementChild.append(v); } };
     const start = () => { if (reduceMotion) return; want = true; make(); v.preload = 'auto'; const show = () => { b.classList.remove('is-loading'); if (want) b.classList.add('is-playing'); }; if (v.readyState >= 2) show(); else { b.classList.add('is-loading'); v.addEventListener('canplay', show, { once: true }); v.addEventListener('playing', show, { once: true }); } afterScroll(() => { if (want) v.play().catch(() => {}); }); };
     const stop = () => { want = false; if (v) { v.pause(); b.classList.remove('is-playing', 'is-loading'); } };
     // on mouse devices, load the preview as soon as the card is on screen so hover starts instantly
-    if (hoverable && !reduceMotion && 'IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { idle(make); io.disconnect(); } }, { rootMargin: '200px 0px' }); io.observe(b); }
+    if (hoverable && !reduceMotion && 'IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { (window.afterScroll || (f => f()))(() => idle(make)); io.disconnect(); } }, { rootMargin: '200px 0px' }); io.observe(b); }
     if (hoverable) { b.addEventListener('mouseenter', start); b.addEventListener('mouseleave', stop); }
     b.addEventListener('focus', start); b.addEventListener('blur', stop);
     b.addEventListener('click', () => { stop(); openPlayer(item, 'vertical'); });
