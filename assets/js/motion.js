@@ -135,7 +135,6 @@
       // 30 frames a second is plenty for drifting sparks and halves the work
       if (now - last < 30) return;
       const dt = Math.min(.07, (now - last) / 1000 || 0); last = now;
-      if (sc.clientWidth !== W || sc.clientHeight !== Hh) size();
       while (P.length < N) { const p = {}; born(p); p.life = Math.random() * p.max; P.push(p); }
       g.clearRect(0, 0, W, Hh); g.globalCompositeOperation = 'lighter';
       for (const p of P) {
@@ -146,7 +145,9 @@
       }
       g.globalAlpha = 1;
     };
-    size(); requestAnimationFrame(tick);
+    // the canvas size is watched instead of read on every frame (reading it forced a layout of the page 30 times a second)
+    size(); if ('ResizeObserver' in window) new ResizeObserver(size).observe(sc); else addEventListener('resize', size);
+    requestAnimationFrame(tick);
   }
 
   /* ---------- falling snow over the sequence ---------- */

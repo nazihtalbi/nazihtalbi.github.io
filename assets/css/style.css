@@ -1325,7 +1325,8 @@ body:not(.is-gated) .gate.is-leaving * { pointer-events: none !important; }
 
 /* the page stays still while the welcome is up. The lock must sit on <html>: with html { overflow-x: clip }
    the browser no longer takes body's overflow for the window, so body.is-gated alone stopped locking scrolling */
-html:has(> body.is-gated), html:has(> body.is-entering) { overflow: hidden; }
+/* (set by app.js; a :has() rule here made every change on the page re-style the whole document) */
+html.is-locked { overflow: hidden; }
 
 /* ---------- Mini Nazih: bigger on computers, turns in 3D, waves, nods while he talks ---------- */
 @media (min-width: 761px) { .buddy { width: 112px; height: 203px; margin-top: -101px; } .buddy__say { font-size: .95rem; max-width: 240px; } }
@@ -1493,7 +1494,7 @@ body.hero-off .hero *, body.hero-off .hero *::before, body.hero-off .hero *::aft
 body.hero-off .hero__beam, body.hero-off .hero__flash, body.hero-off .hero__ring { display: none; }
 
 /* while a film, reel or photo is open, the page behind it stays put (no scrolling away under the video) */
-html:has(dialog[open]) { overflow: hidden; }
+html.is-pinned { overflow: hidden; }
 dialog.player, dialog.lightbox { overscroll-behavior: contain; touch-action: none; }
 dialog.player video, dialog.player iframe { touch-action: auto; }
 
@@ -1551,3 +1552,16 @@ html:not(.motion) .orb:nth-child(even) { transform: translate(calc(var(--OA) * -
 /* the cut from the welcome to a chosen section: a short dip to black */
 .cut { position: fixed; inset: 0; z-index: 80; background: #050505; opacity: 0; pointer-events: none; transition: opacity .45s ease; }
 .cut.is-on { opacity: 1; transition-duration: .26s; }
+
+/* lighter page: sections far from the screen are not laid out or painted until the visitor gets near them
+   (the whole page used to be laid out several times while the welcome played, which made the entrance stutter) */
+main > section:not(.hero):not(.films) { content-visibility: auto; contain-intrinsic-size: auto 1400px; }
+main > section.snow { contain-intrinsic-size: auto 340vh; }
+@media (max-width: 760px) { main > section.reels { contain-intrinsic-size: auto 3600px; } main > section.photos { contain-intrinsic-size: auto 3200px; } }
+
+/* the soft halos behind the film screen, the featured reel, the grading box and the form: soft radial light instead of
+   a 42 px blur filter (a moving blurred layer is recomputed by the graphics chip on every frame, which made Films stutter) */
+.glow::before, .glow::after { filter: none; inset: -8% -6%; border-radius: 50%; }
+.glow::before { background: radial-gradient(closest-side, rgba(245, 184, 65, .62), rgba(240, 110, 100, .3) 55%, transparent); }
+.glow::after { background: radial-gradient(closest-side, rgba(79, 160, 232, .58), rgba(150, 105, 240, .28) 55%, transparent); }
+@media (max-width: 760px) { .glow::before, .glow::after { filter: none; } }

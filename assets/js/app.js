@@ -33,6 +33,9 @@
   }
 
   /* ---------- gate ---------- */
+  // the page does not scroll while the welcome plays (a class on <html>, kept in step with the body's state)
+  const syncLock = () => document.documentElement.classList.toggle('is-locked', document.body.classList.contains('is-gated') || document.body.classList.contains('is-entering'));
+  syncLock(); new MutationObserver(syncLock).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   const gate = $('#gate'), main = $('#main'), bar = $('#bar'), foot = $('.foot');
   // scrolling is held while the opening plays, but a link clicked during it (e.g. "Watch the films") ends the opening at once
   document.addEventListener('click', e => { if (document.body.classList.contains('is-entering') && e.target.closest('a[href^="#"]')) document.body.classList.remove('is-entering'); }, true);
@@ -95,9 +98,14 @@
     // it fades up on the section. No long glide over the hero and the films (it made phones stutter: videos and photos
     // starting up while the page was still moving)
     const target = document.getElementById(go);
-    const land = () => { const r = document.documentElement, prev = r.style.scrollBehavior; r.style.scrollBehavior = 'auto';
-      if (window.__smoothStop) window.__smoothStop();
-      scrollTo(0, Math.max(0, target.getBoundingClientRect().top + scrollY - ($('#bar') ? $('#bar').offsetHeight : 0) + 2)); r.style.scrollBehavior = prev;
+    const land = () => { if (window.__smoothStop) window.__smoothStop();   // first: it resets the scroll behaviour
+      const r = document.documentElement, prev = r.style.scrollBehavior; r.style.scrollBehavior = 'auto';
+      // sections far down are only laid out when they come near (content-visibility), so their real heights arrive
+      // just after the jump: keep re-aiming for a few frames until the section sits under the header
+      const aim = () => Math.max(0, target.getBoundingClientRect().top + scrollY - ($('#bar') ? $('#bar').offsetHeight : 0) + 2);
+      scrollTo(0, aim()); let n = 0;
+      const settle = () => { const y = aim(); if (Math.abs(y - scrollY) > 2) scrollTo(0, y); if (++n < 14) requestAnimationFrame(settle); else r.style.scrollBehavior = prev; };
+      requestAnimationFrame(settle);
       const h = target.querySelector('.sec-title'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } };
     if (reduceMotion) { enter(chosen, true); document.body.classList.remove('is-entering'); return land(); }
     const cut = document.getElementById('cut') || document.body.appendChild(Object.assign(document.createElement('div'), { id: 'cut', className: 'cut' }));
@@ -295,9 +303,9 @@
   // finger scrolling, so the page is held with position: fixed and put back exactly where it was on close)
   let pinnedY = null;
   const pin = () => { if (pinnedY !== null) return; pinnedY = scrollY; const b = document.body.style;
-    b.position = 'fixed'; b.top = -pinnedY + 'px'; b.left = '0'; b.right = '0'; b.width = '100%'; };
+    b.position = 'fixed'; b.top = -pinnedY + 'px'; b.left = '0'; b.right = '0'; b.width = '100%'; document.documentElement.classList.add('is-pinned'); };
   const unpin = () => { if (pinnedY === null || document.querySelector('dialog[open]')) return; const y = pinnedY; pinnedY = null; const b = document.body.style;
-    b.position = b.top = b.left = b.right = b.width = ''; const r = document.documentElement, prev = r.style.scrollBehavior; r.style.scrollBehavior = 'auto'; scrollTo(0, y); r.style.scrollBehavior = prev; };
+    b.position = b.top = b.left = b.right = b.width = ''; document.documentElement.classList.remove('is-pinned'); const r = document.documentElement, prev = r.style.scrollBehavior; r.style.scrollBehavior = 'auto'; scrollTo(0, y); r.style.scrollBehavior = prev; };
   $$('dialog').forEach(d => { new MutationObserver(() => (d.open ? pin() : unpin())).observe(d, { attributes: true, attributeFilter: ['open'] }); });
   $('#playerClose').addEventListener('click', closePlayer);
   player.addEventListener('click', e => { if (e.target === player) closePlayer(); });
